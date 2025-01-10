@@ -489,11 +489,14 @@
                         <div class="field">
                             <input type="email" placeholder="Email Address" name="email" required>
                         </div>
-                        <div class="field" id="spesialis" style="display: none;">
-                            <input type="text" placeholder="spesialis" name="spesialis">
+                        <div class="field" id="specialty-field">
+                            <input type="text" id="specialty" placeholder="Specialty" name="specialty">
                         </div>
-                        <div class="field" id="phone-field" style="display: none;">
-                            <input type="text" placeholder="Phone Number" name="phone" >
+                        <div class="field" id="nohp-field">
+                            <input type="text" id="nohp" placeholder="Phone Number" name="phone" required>
+                            @error('phone')
+                                   <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="field">
                             <input type="password" placeholder="Password" name="password" required>
