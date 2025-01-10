@@ -26,7 +26,7 @@ Auth::routes();
 
 // Home route after login
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    
+
 // Admin Dashboard (accessible by admin only)
 Route::get('/admin', function () {
     $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -42,7 +42,7 @@ Route::get('/notifikasi', function () {
     return view('notifikasi.index', compact('notifications'));
 })->name('notifikasi.index');
 Route::get('/notifications/{id}', function() {
-    
+
 });
 
 Route::get('/home-dokter', [KunjunganController::class, 'dashboard'])->middleware(['auth', 'role:dokter'])->name('home-dokter');
@@ -68,7 +68,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:dokter|admin'])->group(function () {
     Route::resource('dokter', DokterController::class);
     Route::resource('jadwal_praktek', JadwalPraktekController::class);
-    
+
 });
 
 // Dokter-only routes (accessible only by users with the 'dokter' role)
@@ -80,7 +80,7 @@ Route::middleware(['auth', 'role:dokter|admin'])->group(function () {
     Route::resource('resep', ResepController::class);
     Route::resource('rekam_medis', RekamMedisController::class);
 
-    
+
 });
 
 

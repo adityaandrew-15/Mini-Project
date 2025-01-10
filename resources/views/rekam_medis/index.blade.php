@@ -289,23 +289,21 @@
                                                         @endforeach
                                                     </div>
 
-                                                    <!-- Peralatan Input Section -->
-                                                    <div class="mb-3 row">
-                                                        <label for="peralatan_id"
-                                                            class="col-sm-2 col-form-label">Peralatan</label>
-                                                        <div class="col-sm-10">
-                                                            <select name="peralatan_id[]" id="peralatan_id"
-                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                multiple>
-                                                                @foreach ($peralatans as $peralatan)
-                                                                    <option value="{{ $peralatan->id }}"
-                                                                        {{ in_array($peralatan->id, $rm->peralatans->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                                                        {{ $peralatan->nama_peralatan }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
+
+                                            <!-- Peralatan Input Section -->
+                                            <div class="mb-3 row">
+                                                <label for="peralatan_id" class="col-sm-2 col-form-label">Peralatan</label>
+                                                <div class="col-sm-10">
+                                                    <select name="peralatan_id[]" id="peralatan_id" class="form-control" multiple>
+                                                        @foreach ($peralatans as $peralatan)
+                                                            <option value="{{ $peralatan->id }}"
+                                                                {{ in_array($peralatan->id, $rm->peralatans->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                                                {{ $peralatan->nama_peralatan }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
 
 
 
