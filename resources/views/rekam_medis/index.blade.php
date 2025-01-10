@@ -90,12 +90,11 @@
                                     @if (auth()->user()->hasRole('admin'))
                                         <td class="action-icons">
                                             <a data-bs-toggle="modal" data-bs-target="#detailModal{{ $rm->id }}">
-                                                <i class="fas fa-info-circle detail"></i>
-                                            </a>
+                                                <i class="fa-solid fa-circle-info h3 mr-1 "></i></a>
                                             <button type="button"
                                                 style="border: none; outline: none; background: transparent;"
                                                 data-bs-toggle="modal" data-bs-target="#editModal{{ $rm->id }}">
-                                                <i class="fas fa-edit edit"></i>
+                                                <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
                                             </button>
                                             <form id="delete-form-{{ $rm->id }}"
                                                 action="{{ route('rekam_medis.destroy', $rm->id) }}" method="POST"
@@ -106,10 +105,12 @@
                                             <button type="submit"
                                                 style="background: transparent; outline: none; border: none"
                                                 onclick="confirmDelete({{ $rm->id }})">
-                                                <i class="fas fa-trash delete"></i>
+                                                <i class="fas fa-trash delete h3 mr-1 red pointer"></i>
                                             </button>
                                             <a href="{{ route('rekam_medis.nota', $rm->id) }}"
-                                                class="btn btn-sm btn-info">Nota</a>
+                                                class="btn btn-sm btn-info">
+                                            <i class="fa-solid fa-print"></i>
+                                        </a>
                                             <script>
                                                 function confirmDelete(id) {
                                                     Swal.fire({
@@ -145,10 +146,18 @@
                                                         <p><strong>Pasien:</strong> {{ $rm->kunjungan->pasien->nama }}</p>
                                                         <p><strong>Diagnosa:</strong> {{ $rm->diagnosa }}</p>
                                                         <p><strong>Tindakan:</strong> {{ $rm->tindakan }}</p>
-                                                        <p><strong>Obat:</strong> {{ $obat->obat }} - Jumlah:
-                                                            {{ $obat->pivot->jumlah }}
+                                                        <p><strong>Obat:</strong></p>
+                                                        @if ($rm->obats && $rm->obats->count() > 0)
+                                                            @foreach ($rm->obats as $obat)
+                                                                <p>{{ $obat->obat }} - Jumlah:
+                                                                    {{ $obat->pivot->jumlah }}</p>
+                                                            @endforeach
+                                                        @else
+                                                            <p>Tidak ada obat yang terkait</p>
+                                                        @endif
                                                         <p><strong>Resep</strong> {{ $resep->deskripsi }}</p>
                                                         <p><strong>Peralatan</strong> {{ $peralatan->nama_peralatan }}</p>
+
                                                         <p><strong>Gambar:</strong></p>
                                                         @foreach ($rm->images as $image)
                                                             <img src="{{ asset('storage/' . $image->image_path) }}"
@@ -156,7 +165,7 @@
                                                         @endforeach
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
+                                                        <button type="button" class="px-2 py-1 btn-close red-hover"
                                                             data-bs-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
@@ -182,8 +191,7 @@
                                                 <div class="modal-body">
                                                     <!-- Pasien Selection -->
                                                     <div class="mb-3 row">
-                                                        <label for="kunjungan"
-                                                            class="col-sm-2 col-form-label">Pasien</label>
+                                                        <label for="kunjungan" class="h4 f-bolder">Pasien</label>
                                                         <div class="col-sm-10">
                                                             <select name="kunjungan_id" id="kunjungan_id"
                                                                 class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
@@ -205,11 +213,12 @@
 
                                                     <!-- Diagnosa -->
                                                     <div class="mb-3 row">
-                                                        <label for="diagnosa"
-                                                            class="col-sm-2 col-form-label">Diagnosa</label>
+                                                        <label for="diagnosa" class="h4 f-bolder">Diagnosa</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="diagnosa"
-                                                                name="diagnosa" value="{{ $rm->diagnosa }}">
+                                                            <input type="text"
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                id="diagnosa" name="diagnosa"
+                                                                value="{{ $rm->diagnosa }}">
                                                         </div>
                                                         @error('diagnosa')
                                                             <p style="color: red">{{ $message }}</p>
@@ -218,11 +227,12 @@
 
                                                     <!-- Tindakan -->
                                                     <div class="mb-3 row">
-                                                        <label for="tindakan"
-                                                            class="col-sm-2 col-form-label">Tindakan</label>
+                                                        <label for="tindakan" class="h4 f-bolder">Tindakan</label>
                                                         <div class="col-sm-10">
-                                                            <input type="text" class="form-control" id="tindakan"
-                                                                name="tindakan" value="{{ $rm->tindakan }}">
+                                                            <input type="text"
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                id="tindakan" name="tindakan"
+                                                                value="{{ $rm->tindakan }}">
                                                         </div>
                                                         @error('tindakan')
                                                             <p style="color: red">{{ $message }}</p>
@@ -231,10 +241,9 @@
 
                                                     <!-- Resep -->
                                                     <div class="mb-3 row">
-                                                        <label for="deskripsi"
-                                                            class="col-sm-2 col-form-label">Resep</label>
+                                                        <label for="deskripsi" class="h4 f-bolder">Resep</label>
                                                         <div class="col-sm-10">
-                                                            <textarea class="form-control" id="deskripsi" name="deskripsi">{{ $rm->resep->first()->deskripsi ?? '' }}</textarea>
+                                                            <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi">{{ $rm->resep->first()->deskripsi ?? '' }}</textarea>
                                                         </div>
                                                         @error('deskripsi')
                                                             <p style="color: red">{{ $message }}</p>
@@ -243,7 +252,7 @@
 
                                                     <!-- Medication Input Section -->
                                                     <div class="mb-3 row">
-                                                        <label for="obat_id" class="col-sm-2 col-form-label">Obat</label>
+                                                        <label for="obat_id" class="h4 f-bolder">Obat</label>
                                                         <div class="col-sm-10">
                                                             <select name="obat_id[]"
                                                                 class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
@@ -269,10 +278,10 @@
                                                                     class="form h4 f-normal px-2 w-100 h-3 border-radius-1">{{ $obat->obat }}
                                                                     -
                                                                     Jumlah</label>
-                                                                <div class="col-sm-4">
+                                                                <div class="h4 f-bolder">
                                                                     <input type="number"
                                                                         name="jumlah_obat[{{ $obat->id }}]"
-                                                                        class="form-control"
+                                                                        class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
                                                                         value="{{ $obat->pivot->jumlah }}"
                                                                         min="1">
                                                                 </div>
@@ -286,7 +295,8 @@
                                                             class="col-sm-2 col-form-label">Peralatan</label>
                                                         <div class="col-sm-10">
                                                             <select name="peralatan_id[]" id="peralatan_id"
-                                                                class="form-control" multiple>
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                multiple>
                                                                 @foreach ($peralatans as $peralatan)
                                                                     <option value="{{ $peralatan->id }}"
                                                                         {{ in_array($peralatan->id, $rm->peralatans->pluck('id')->toArray()) ? 'selected' : '' }}>
@@ -323,10 +333,11 @@
 
                                                     <div id="edit-image-container">
                                                         <div class="mb-3 row">
-                                                            <label class="col-sm-2 col-form-label">Tambah Gambar
+                                                            <label class="">Tambah Gambar
                                                                 Baru</label>
                                                             <div class="col-sm-10">
-                                                                <input type="file" class="form-control"
+                                                                <input type="file"
+                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
                                                                     name="new_images[]" multiple>
                                                             </div>
 
@@ -337,9 +348,10 @@
 
 
                                                     <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
+                                                        <button type="button" class="px-2 py-1 btn-close red-hover"
                                                             data-bs-dismiss="modal">Cancel</button>
-                                                        <button type="submit" class="btn btn-primary">Save
+                                                        <button type="submit"
+                                                            class="px-2 py-1 btn-add main-color-hover">Save
                                                             Changes</button>
                                                     </div>
                                             </form>
@@ -363,8 +375,14 @@
                                                 <p><strong>Pasien:</strong> {{ $rm->kunjungan->pasien->nama }}</p>
                                                 <p><strong>Diagnosa:</strong> {{ $rm->diagnosa }}</p>
                                                 <p><strong>Tindakan:</strong> {{ $rm->tindakan }}</p>
-                                                <p><strong>Obat:</strong> {{ $obat->obat }} - Jumlah:
-                                                    {{ $obat->pivot->jumlah }}
+                                                <p><strong>Obat:</strong></p>
+                                                @if ($rm->obats && $rm->obats->count() > 0)
+                                                    @foreach ($rm->obats as $obat)
+                                                        <p>{{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}</p>
+                                                    @endforeach
+                                                @else
+                                                    <p>Tidak ada obat yang terkait</p>
+                                                @endif
                                                 <p><strong>Resep</strong> {{ $resep->deskripsi }}</p>
                                                 <p><strong>Gambar:</strong></p>
                                                 @foreach ($rm->images as $image)
@@ -515,41 +533,41 @@
             </div>
         </div>
         <script>
-            document.getElementById('obat_id').addEventListener('change', function() {
-                var selectedObats = Array.from(this.selectedOptions);
-                var quantitySection = document.getElementById('medication-quantity-section');
-                quantitySection.innerHTML = ''; // Clear previous inputs
+           document.getElementById('obat_id').addEventListener('change', function() {
+    var selectedObats = Array.from(this.selectedOptions);
+    var quantitySection = document.getElementById('medication-quantity-section');
+    quantitySection.innerHTML = ''; // Clear previous inputs to avoid duplication
 
-                selectedObats.forEach(function(obat) {
-                    var stok = obat.getAttribute('data-stok');
-                    var obatId = obat.value;
+    selectedObats.forEach(function(obat) {
+        var stok = obat.getAttribute('data-stok');
+        var obatId = obat.value;
 
-                    // Create input fields for each selected medication
-                    var inputGroup = document.createElement('div');
-                    inputGroup.classList.add('mb-3', 'row');
+        // Create input fields for each selected medication
+        var inputGroup = document.createElement('div');
+        inputGroup.classList.add('mb-3', 'row');
 
-                    var label = document.createElement('label');
-                    label.classList.add('h4', 'f-bolder');
-                    label.textContent = 'Jumlah (' + obat.textContent + ')';
-                    inputGroup.appendChild(label);
+        var label = document.createElement('label');
+        label.classList.add('h4', 'f-bolder');
+        label.textContent = 'Jumlah (' + obat.textContent + ')';
+        inputGroup.appendChild(label);
 
-                    var inputContainer = document.createElement('div');
-                    inputContainer.classList.add('col-sm-12');
+        var inputContainer = document.createElement('div');
+        inputContainer.classList.add('col-sm-12');
 
-                    var input = document.createElement('input');
-                    input.type = 'number';
-                    input.name = 'jumlah_obat[]';
-                    input.classList.add('form', 'h4', 'f-normal', 'px-2', 'w-100', 'h-3', 'border-radius-1');
-                    input.placeholder = 'Jumlah';
-                    input.min = 1;
-                    input.max = stok;
-                    input.required = true;
+        var input = document.createElement('input');
+        input.type = 'number';
+        input.name = 'jumlah_obat[]'; // Ensure this is an array
+        input.classList.add('form', 'h4', 'f-normal', 'px-2', 'w-100', 'h-3', 'border-radius-1');
+        input.placeholder = 'Jumlah';
+        input.min = 1;
+        input.max = stok;
+        input.required = true;
 
-                    inputContainer.appendChild(input);
-                    inputGroup.appendChild(inputContainer);
-                    quantitySection.appendChild(inputGroup);
-                });
-            });
+        inputContainer.appendChild(input);
+        inputGroup.appendChild(inputContainer);
+        quantitySection.appendChild(inputGroup);
+    });
+});
         </script>
 
         <!-- Table -->
