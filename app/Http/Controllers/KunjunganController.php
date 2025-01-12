@@ -40,14 +40,14 @@ class KunjunganController extends Controller
         $pasiens = Pasien::all();$pasiens = Pasien::where('user_id', auth()->id())->get();
     }
     $dokters = Dokter::all();  // Fetch all doctors
-    $dataKunjungan = $this->getKunjunganPerBulan(); 
 
-    if ($user->role === 'admin') {
-        return view('admin-home', compact('dataKunjungan'));
-    }
-
-    return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters','layout','content','dataKunjungan'));  // Pass dokters to the view
+    return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters','layout','content'));  // Pass dokters to the view
 }
+
+
+
+
+
     public function create()
     {
         $pasiens = Pasien::where('user_id', auth()->id())->get();
@@ -190,22 +190,15 @@ public function updateDiagnosa(Request $request)
     // Redirect back with a success message
     return redirect()->route('home-dokter')->with('success', 'Diagnosa berhasil diperbarui');
 }
-public function getKunjunganPerBulan()
+public function adminDashboard()
 {
-    $kunjunganPerBulan = Kunjungan::select(DB::raw('MONTH(tanggal_kunjungan) as bulan, COUNT(*) as total'))
+    // Ambil data kunjungan per bulan
+    $kunjunganPerBulan = DB::table('kunjungan')
+        ->select(DB::raw('MONTH(tanggal) as bulan'), DB::raw('COUNT(*) as jumlah'))
         ->groupBy('bulan')
-        ->orderBy('bulan')
         ->get();
 
-    // Inisialisasi array untuk menyimpan jumlah kunjungan per bulan
-    $dataKunjungan = array_fill(1, 12, 0); // 1-12 untuk bulan Jan-Dec
-
-    // Isi data kunjungan ke dalam array
-    foreach ($kunjunganPerBulan as $kunjungan) {
-        $dataKunjungan[$kunjungan->bulan] = $kunjungan->total;
-    }
-
-    return $dataKunjungan;
+    return view('admin-home', compact('kunjunganPerBulan'));
 }
 
 }
