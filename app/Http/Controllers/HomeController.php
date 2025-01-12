@@ -33,8 +33,13 @@ class HomeController extends Controller
         $user = Auth::user();
         $jumlahPasien = Pasien::count();
 
+        $kunjunganPerBulan = DB::table('kunjungans')
+        ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
+        ->groupBy('bulan')
+        ->get();
+
         if ($user->role === 'admin') {
-            return view('admin-home', compact('jumlahPasien'));
+            return view('admin-home', compact('jumlahPasien','kunjunganPerBulan'));
         }
 
         $diagnosaCount = RekamMedis::selectRaw('kunjungan_id, count(diagnosa) as total')

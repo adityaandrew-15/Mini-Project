@@ -121,10 +121,22 @@
         }
 
         .bar {
+            position: relative;
             width: 50px;
             background-color: #4CAF50;
             transition: height 0.5s ease-in-out;
         }
+        .bar-value {
+    position: absolute;
+    bottom: 100%; /* Tempatkan angka di atas batang */
+    left: 50%;
+    transform: translateX(-50%); /* Pusatkan angka */
+    font-size: 14px; /* Ukuran font untuk angka */
+    color: #fff; /* Warna font untuk angka */
+    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang semi-transparan untuk kontras */
+    padding: 2px 5px; /* Padding untuk angka */
+    border-radius: 5px; /* Sudut membulat untuk latar belakang */
+}
 
         .labels {
             display: flex;
@@ -366,37 +378,61 @@
         </div>
     </div>
     <div class="content-end ml-2 mr-2 mb-2 d-flex">
-        <div class="content-tree-chart m-1 drop-shadow">
-            <h2 class="h2">Chart Batang Kunjungan Per Bulan</h2>
-            <div class="chart-tree-container">
-                <div class="bar" id="jan"></div>
-                <div class="bar" id="feb"></div>
-                <div class="bar" id="mar"></div>
-                <div class="bar" id="apr"></div>
-                <div class="bar" id="may"></div>
-                <div class="bar" id="jun"></div>
-                <div class="bar" id="jul"></div>
-                <div class="bar" id="aug"></div>
-                <div class="bar" id="sep"></div>
-                <div class="bar" id="oct"></div>
-                <div class="bar" id="nov"></div>
-                <div class="bar" id="dec"></div>
-            </div>
-            <div class="labels">
-                <span>Jan</span>
-                <span>Feb</span>
-                <span>Mar</span>
-                <span>Apr</span>
-                <span>May</span>
-                <span>Jun</span>
-                <span>Jul</span>
-                <span>Aug</span>
-                <span>Sep</span>
-                <span>Oct</span>
-                <span>Nov</span>
-                <span>Dec</span>
-            </div>
-        </div>
+    <div class="content-tree-chart m-1 drop-shadow">
+    <h2 class="h2">Chart Batang Kunjungan Per Bulan</h2>
+    <div class="chart-tree-container">
+    <div class="bar" id="jan" data-value="{{ $kunjunganPerBulan->where('bulan', 1)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 1)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="feb" data-value="{{ $kunjunganPerBulan->where('bulan', 2)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 2)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="mar" data-value="{{ $kunjunganPerBulan->where('bulan', 3)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 3)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="apr" data-value="{{ $kunjunganPerBulan->where('bulan', 4)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 4)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="may" data-value="{{ $kunjunganPerBulan->where('bulan', 5)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 5)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="jun" data-value="{{ $kunjunganPerBulan->where('bulan', 6)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 6)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="jul" data-value="{{ $kunjunganPerBulan->where('bulan', 7)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 7)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="aug" data-value="{{ $kunjunganPerBulan->where('bulan', 8)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 8)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="sep" data-value="{{ $kunjunganPerBulan->where('bulan', 9)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 9)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="oct" data-value="{{ $kunjunganPerBulan->where('bulan', 10)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 10)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="nov" data-value="{{ $kunjunganPerBulan->where('bulan', 11)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 11)->first()->jumlah ?? 0 }}</span>
+    </div>
+    <div class="bar" id="dec" data-value="{{ $kunjunganPerBulan->where('bulan', 12)->first()->jumlah ?? 0 }}">
+        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 12)->first()->jumlah ?? 0 }}</span>
+    </div>
+</div>
+    <div class="labels">
+        <span>Jan</span>
+        <span>Feb</span>
+        <span>Mar</span>
+        <span>Apr</span>
+        <span>May</span>
+        <span>Jun</span>
+        <span>Jul</span>
+        <span>Aug</span>
+        <span>Sep</span>
+        <span>Oct</span>
+        <span>Nov</span>
+        <span>Dec</span>
+    </div>
+</div>
         <div class="content-chart m-1 drop-shadow">
             <h1>Data Kunjungan Perbulan</h1>
             <div class="chart-container">
@@ -419,144 +455,6 @@
         </div>
     </div>
     <script>
-        // Diagram Batang
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        const barChart = new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
-                datasets: [{
-                    label: 'Jumlah Kunjungan',
-                    data: [120, 150, 180, 130, 170, 200],
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        // Diagram Lingkaran
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        const pieChart = new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni'],
-                datasets: [{
-                    label: 'Jumlah Kunjungan',
-                    data: [120, 150, 180, 130, 170, 200],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    }
-                }
-            }
-        });
-    </script>
-    <script>
-        // Data kunjungan per bulan
-        const visitsData = new Array(12).fill(0); // Array untuk 12 bulan, diisi dengan 0
-
-        // Mengisi data kunjungan dari backend
-        @if(isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
-            @foreach($kunjunganPerBulan as $kunjungan)
-                visitsData[{{ $kunjungan->bulan }} - 1] = {{ $kunjungan->jumlah }}; // Mengisi data berdasarkan bulan
-            @endforeach
-        @endif
-
-        // Data untuk chart
-        const chartData = visitsData;
-
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-                datasets: [{
-                    data: chartData,
-                    backgroundColor: [
-                        '#ff6384',
-                        '#36a2eb',
-                        '#ffce56',
-                        '#4bc0c0',
-                        '#9966ff',
-                        '#ff9f40',
-                        '#c9cbcf',
-                        '#7e57c2',
-                        '#ff6384',
-                        '#36a2eb',
-                        '#ffce56',
-                        '#4bc0c0'
-                    ],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: true
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                label += context.raw;
-                                label += ' (' + (context.raw / chartData.reduce((a, b) => a + b, 0) * 100).toFixed(2) + '%)';
-                                return label;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    </script>
-    <script>
-        // Fungsi untuk mengupdate tinggi batang sesuai dengan data kunjungan
-        function updateChart() {
-            for (let month in visitsData) {
-                let bar = document.getElementById(month);
-                let height = visitsData[month];
-
-                // Atur tinggi batang berdasarkan data kunjungan
-                bar.style.height = height + 'px';
-            }
-        }
-
-        // Panggil fungsi updateChart setelah halaman dimuat
-        window.onload = updateChart;
-    </script>
-
-<script>
     // Data kunjungan per bulan
     const visitsData = {
         jan: 0,
@@ -573,106 +471,38 @@
         dec: 0
     };
 
-    // mengisi data kunjungan dari backend
+    // Mengisi data kunjungan dari backend
     @if(isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
-    @foreach($kunjunganPerBulan as $kunjungan)
-        switch({{ $kunjungan->bulan }}) {
-            case 1: visitsData.jan = {{ $kunjungan->jumlah }}; break;
-            case 2: visitsData.feb = {{ $kunjungan->jumlah }}; break;
-            case 3: visitsData.mar = {{ $kunjungan->jumlah }}; break;
-            case 4: visitsData.apr = {{ $kunjungan->jumlah }}; break;
-            case 5: visitsData.may = {{ $kunjungan->jumlah }}; break;
-            case 6: visitsData.jun = {{ $kunjungan->jumlah }}; break;
-            case 7: visitsData.jul = {{ $kunjungan->jumlah }}; break;
-            case 8: visitsData.aug = {{ $kunjungan->jumlah }}; break;
-            case 9: visitsData.sep = {{ $kunjungan->jumlah }}; break;
-            case 10: visitsData.oct = {{ $kunjungan->jumlah }}; break;
-            case 11: visitsData.nov = {{ $kunjungan->jumlah }}; break;
-            case 12: visitsData.dec = {{ $kunjungan->jumlah }}; break;
-        }
-    @endforeach
+        @foreach($kunjunganPerBulan as $kunjungan)
+            switch({{ $kunjungan->bulan }}) {
+                case 1: visitsData.jan = {{ $kunjungan->jumlah }}; break;
+                case 2: visitsData.feb = {{ $kunjungan->jumlah }}; break;
+                case 3: visitsData.mar = {{ $kunjungan->jumlah }}; break;
+                case 4: visitsData.apr = {{ $kunjungan->jumlah }}; break;
+                case 5: visitsData.may = {{ $kunjungan->jumlah }}; break;
+                case 6: visitsData.jun = {{ $kunjungan->jumlah }}; break;
+                case 7: visitsData.jul = {{ $kunjungan->jumlah }}; break;
+                case 8: visitsData.aug = {{ $kunjungan->jumlah }}; break;
+                case 9: visitsData.sep = {{ $kunjungan->jumlah }}; break;
+                case 10: visitsData.oct = {{ $kunjungan->jumlah }}; break;
+                case 11: visitsData.nov = {{ $kunjungan->jumlah }}; break;
+                case 12: visitsData.dec = {{ $kunjungan->jumlah }}; break;
+            }
+        @endforeach
     @endif
-    console.log(visitsData);
 
-    // Data untuk chart
-    const chartData = [
-        visitsData.jan,
-        visitsData.feb,
-        visitsData.mar,
-        visitsData.apr,
-        visitsData.may,
-        visitsData.jun,
-        visitsData.jul,
-        visitsData.aug,
-        visitsData.sep,
-        visitsData.oct,
-        visitsData.nov,
-        visitsData.dec
-    ];
+    // Fungsi untuk mengupdate tinggi batang sesuai dengan data kunjungan
+    function updateChart() {
+        for (let month in visitsData) {
+            let bar = document.getElementById(month);
+            let height = visitsData[month] * 2; // Mengalikan dengan 2 untuk memperbesar tinggi batang
 
-    // ... (sisa kode untuk chart)
+            // Atur tinggi batang berdasarkan data kunjungan
+            bar.style.height = height + 'px';
+        }
+    }
+
+    // Panggil fungsi updateChart setelah halaman dimuat
+    window.onload = updateChart;
 </script>
-
-    <!-- Tambahkan Script untuk Chart -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    {{-- <script>
-  // Data untuk Chart
-  const data = {
-      labels: [
-          'Pasien',
-          'Dokter',
-          'Obat',
-          'Kunjungan',
-          'Resep',
-          'Rekam Medis'
-      ],
-      datasets: [{
-          label: 'Statistik Data',
-          data: [
-              {{ DB::table('pasiens')->count() }},
-              {{ DB::table('dokters')->count() }},
-              {{ DB::table('obats')->count() }},
-              {{ DB::table('kunjungans')->count() }},
-              {{ DB::table('reseps')->count() }},
-              {{ DB::table('rekam_medis')->count() }}
-          ], // Data dari backend
-          backgroundColor: [
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-      }]
-  };
-
-  // Konfigurasi Chart
-  const config = {
-      type: 'bar', // Tipe chart (bar chart)
-      data: data,
-      options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-              y: {
-                  beginAtZero: true // Mulai dari 0
-              }
-          }
-      }
-  };
-
-  // Render Chart
-  const ctx = document.getElementById('statisticsChart').getContext('2d');
-  const statisticsChart = new Chart(ctx, config);
-</script> --}}
 @endsection

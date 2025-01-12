@@ -29,10 +29,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // Admin Dashboard (accessible by admin only)
 Route::get('/admin', function () {
-    $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    $visits = [120, 150, 180, 130, 170, 200, 220, 210, 190, 230, 240, 250];
+    $kunjunganPerBulan = DB::table('kunjungans')
+        ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
+        ->groupBy('bulan')
+        ->get();
 
-    return view('admin-home', compact('months', 'visits'));
+    return view('admin-home', compact('kunjunganPerBulan'));
 })->middleware(['auth', 'role:admin'])->name('admin-home');
 
 
