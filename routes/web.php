@@ -89,3 +89,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+Route::get('/admin-dashboard', [KunjunganController::class, 'adminDashboard'])->name('admin.dashboard');
