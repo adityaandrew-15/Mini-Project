@@ -366,21 +366,21 @@
         </div>
     </div>
     <div class="content-end ml-2 mr-2 mb-2 d-flex">
-            <div class="content-tree-chart m-1 drop-shadow">
+        <div class="content-tree-chart m-1 drop-shadow">
             <h2 class="h2">Chart Batang Kunjungan Per Bulan</h2>
             <div class="chart-tree-container">
-                <div class="bar" id="jan" data-value="{{ $dataKunjungan[1] }}"></div>
-                <div class="bar" id="feb" data-value="{{ $dataKunjungan[2] }}"></div>
-                <div class="bar" id="mar" data-value="{{ $dataKunjungan[3] }}"></div>
-                <div class="bar" id="apr" data-value="{{ $dataKunjungan[4] }}"></div>
-                <div class="bar" id="may" data-value="{{ $dataKunjungan[5] }}"></div>
-                <div class="bar" id="jun" data-value="{{ $dataKunjungan[6] }}"></div>
-                <div class="bar" id="jul" data-value="{{ $dataKunjungan[7] }}"></div>
-                <div class="bar" id="aug" data-value="{{ $dataKunjungan[8] }}"></div>
-                <div class="bar" id="sep" data-value="{{ $dataKunjungan[9] }}"></div>
-                <div class="bar" id="oct" data-value="{{ $dataKunjungan[10] }}"></div>
-                <div class="bar" id="nov" data-value="{{ $dataKunjungan[11] }}"></div>
-                <div class="bar" id="dec" data-value="{{ $dataKunjungan[12] }}"></div>
+                <div class="bar" id="jan"></div>
+                <div class="bar" id="feb"></div>
+                <div class="bar" id="mar"></div>
+                <div class="bar" id="apr"></div>
+                <div class="bar" id="may"></div>
+                <div class="bar" id="jun"></div>
+                <div class="bar" id="jul"></div>
+                <div class="bar" id="aug"></div>
+                <div class="bar" id="sep"></div>
+                <div class="bar" id="oct"></div>
+                <div class="bar" id="nov"></div>
+                <div class="bar" id="dec"></div>
             </div>
             <div class="labels">
                 <span>Jan</span>
