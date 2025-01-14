@@ -1,133 +1,38 @@
-@extends($layout)
-
-@section($content)
+@extends('layouts.sidebar')
+<style></style>
+@section('side')
     <!DOCTYPE html>
     <html lang="en">
 
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Pasien</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f5f5f5;
-            }
-
-            .container {
-                width: 90%;
-                margin: 20px auto;
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 5px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 20px;
-            }
-
-            .header input[type="text"] {
-                width: 90%;
-                padding: 5px;
-                border: 1px solid #ccc;
-                border-radius: 15px;
-                margin-left: -30px;
-            }
-
-            .header button {
-                background-color: #d9534f;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 3px;
-                cursor: pointer;
-            }
-
-            .header button i {
-                margin-right: 5px;
-            }
-
-            .title {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .add-button {
-                background-color: #5bc0de;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 3px;
-                cursor: pointer;
-                margin-bottom: 20px;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            table,
-            th,
-            td {
-                border: 1px solid #ccc;
-            }
-
-            th,
-            td {
-                padding: 10px;
-                text-align: left;
-            }
-
-            th {
-                background-color: #0275d8;
-                color: white;
-            }
-
-            tr:nth-child(even) {
-                background-color: #f9f9f9;
-            }
-
-            .action-icons i {
-                margin: 0 5px;
-                cursor: pointer;
-            }
-
-            .action-icons .edit {
-                color: #0275d8;
-            }
-
-            .action-icons .delete {
-                color: #d9534f;
-            }
-        </style>
     </head>
 
     <body>
 
-        <div class="container mt-5">
-            <h1>Peralatan Medis</h1>
+        <div class="m-3">
             @if (session('success'))
                 <script>
                     Swal.fire('Success', '{{ session('success') }}', 'success');
                 </script>
             @endif
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
-                + Tambah peralatan
-            </button>
+            <div class="d-flex j-between m-2 a-center">
+                <div class="d-flex a-center">
+                    <h2 class="h2 f-bolder mr-4">Peralatan Medis</h2>
+                    <div class="btn"></div>
+                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                        Tambah peralatan
+                    </button>
+                </div>
+            </div>
 
             <!-- Search Form -->
-            <div class="row mb-3">
+            {{-- <div class="row mb-3">
                 <div class="col-md-6">
                     <form action="{{ route('peralatan.index') }}" method="GET">
                         <div class="input-group">
@@ -140,160 +45,178 @@
                         </div>
                     </form>
                 </div>
-            </div>            
+            </div> --}}
 
             <!-- Add Modal -->
-            <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="addModalLabel">Tambah peralatan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal animate__animated" id="myModalAdd" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+                <div class="modal-content animate__animated animate__zoomIn">
+                    <h2 class="h2 f-bolder">Tambah Peralatan</h2>
+                    {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+                    <form action="{{ route('peralatan.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="my-2">
+                            <label for="nama_peralatan" class="h4 f-bolder">Nama Peralatan</label>
+                            <div class="my-1">
+                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="nama_peralatan" name="nama_peralatan" value="{{ old('nama_peralatan') }}" required>
+                            </div>
+                            @error('nama_peralatan')
+                                <p style="color: red">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <form action="{{ route('peralatan.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="nama" class="form-label">Nama peralatan</label>
-                                    <input type="text" class="form-control" id="nama_peralatan" name="nama_peralatan" required>
-                                    @error('nama_peralatan')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="my-2">
-                                    <label for="gambar" class="h4 f-bolder">Image</label>
-                                    <div class="my-1">
-                                        <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="no_hp" class="form-label">harga</label>
-                                    <input type="text" class="form-control" id="harga" name="harga" required>
-                                    @error('harga')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+            
+                        <div class="my-2">
+                            <label for="harga" class="h4 f-bolder">Harga</label>
+                            <div class="my-1">
+                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga" name="harga" value="{{ old('harga') }}" required>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss ="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            @error('harga')
+                                <p style="color: red">{{ $message }}</p>
+                            @enderror
+                        </div>
+            
+                        <div class="my-2">
+                            <label for="gambar" class="h4 f-bolder">Image</label>
+                            <div class="my-1">
+                                <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
                             </div>
-                        </form>
-                    </div>
+                        </div>
+            
+                        <button type="button" class="px-2 py-1 btn-close red-hover" id="btnCloseAddModal">Batal</button>
+                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                    </form>
                 </div>
             </div>
+            
 
             <!-- Table -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nama peralatan</th>
-                        <th>gambar</th>
-                        <th>harga</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($peralatan as $per)
-                        <tr>
-                            <td>{{ $per->nama_peralatan }}</td>
-                            <td>
-                                @if ($per->gambar)
-                                    <img class="table-img" src="{{ asset('storage/peralatan/' . $per->gambar) }}" height="100px" width="80px" alt="gambar">
-                                @else
-                                    <img class="table-img" src="{{ asset('asset/img/peralatan.png') }}" alt="gambar default">
-                                @endif
-                            </td>
-                            
-                            <td>{{ $per->harga }}</td>
-                            <td class="action-icons">
-                                
-                                <button type="button" style="border: none; outline: none; background: transparent;"
-                                    data-bs-toggle="modal" data-bs-target="#editModal{{ $per->id }}">
-                                    <i class="fas fa-edit edit"></i>
-                                </button>
-                                <form id="delete-form-{{ $per->id }}"
-                                    action="{{ route('peralatan.destroy', $per->id) }}" method="POST"
-                                    style="display: none;">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                                <button type="submit" style="background: transparent; outline: none; border: none"
-                                    onclick="confirmDelete({{ $per->id }})">
-                                    <i class="fas fa-trash delete"></i>
-                                </button>
-                                <script>
-                                    function confirmDelete(id) {
-                                        Swal.fire({
-                                            title: 'Apakah Anda yakin?',
-                                            text: "Data ini akan dihapus secara permanen!",
-                                            icon: 'warning',
-                                            showCancelButton: true,
-                                            confirmButtonColor: '#3085d6',
-                                            cancelButtonColor: '#d33',
-                                            confirmButtonText: 'Ya, hapus!',
-                                            cancelButtonText: 'Batal'
-                                        }).then((result) => {
-                                            if (result.isConfirmed) {
-                                                // Submit form hapus
-                                                document.getElementById('delete-form-' + id).submit();
-                                            }
-                                        });
-                                    }
-                                </script>
-                            </td>
-                        </tr>
-                        <!-- Edit Modal -->
-<div class="modal fade" id="editModal{{ $per->id }}" tabindex="-1"
-    aria-labelledby="editModalLabel{{ $per->id }}" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel{{ $per->id }}">Perbarui peralatan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="content-table m-2 d-flex col">
+                <form action="{{ route('peralatan.index') }}" method="GET">
+                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
+                        value="{{ request('search') }}" class="">
+                </form>
+                <div class="outer-table">
+                    <div class="content-table-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nama peralatan</th>
+                                    <th>gambar</th>
+                                    <th>harga</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($peralatan as $per)
+                                    <tr>
+                                        <td>{{ $per->nama_peralatan }}</td>
+                                        <td>
+                                            @if ($per->gambar)
+                                                <img class="table-img"
+                                                    src="{{ asset('storage/peralatan/' . $per->gambar) }}" height="100px"
+                                                    width="80px" alt="gambar">
+                                            @else
+                                                <img class="table-img" src="{{ asset('asset/img/peralatan.png') }}"
+                                                    alt="gambar default">
+                                            @endif
+                                        </td>
+
+                                        <td>{{ $per->harga }}</td>
+                                        <td class="action-icons">
+
+                                            <button type="button"
+                                                style="border: none; outline: none; background: transparent;"
+                                                onclick="btnOpenEditModal({{ $per->id }})">
+                                                <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
+                                            </button>
+                                            <form id="delete-form-{{ $per->id }}"
+                                                action="{{ route('peralatan.destroy', $per->id) }}" method="POST"
+                                                style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                            <button type="submit"
+                                                style="background: transparent; outline: none; border: none"
+                                                onclick="confirmDelete({{ $per->id }})">
+                                                <i class="fas fa-trash delete h3 mr-1 red pointer"></i>
+                                            </button>
+                                            <script>
+                                                function confirmDelete(id) {
+                                                    Swal.fire({
+                                                        title: 'Apakah Anda yakin?',
+                                                        text: "Data ini akan dihapus secara permanen!",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Ya, hapus!',
+                                                        cancelButtonText: 'Batal'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            // Submit form hapus
+                                                            document.getElementById('delete-form-' + id).submit();
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Edit Modal -->
+                                    <div class="modal animate__fadeIn" id="myModalEdit{{ $per->id }}">
+                                        <div class="modal-content animate__animated animate__zoomIn">
+                                            <h2 class="h2 f-bolder">Edit Peralatan</h2>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <form action="{{ route('peralatan.update', $per->id) }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="my-2">
+                                                    <label for="nama_peralatan" class="h4 f-bolder">Nama Peralatan</label>
+                                                    <div class="my-1">
+                                                        <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="nama_peralatan" name="nama_peralatan" value="{{ $per->nama_peralatan }}" required>
+                                                    </div>
+                                                </div>
+                                                @error('nama_peralatan')
+                                                    <p style="color: red">{{ $message }}</p>
+                                                @enderror
+                                    
+                                                <div class="my-2">
+                                                    <label for="harga" class="h4 f-bolder">Harga</label>
+                                                    <div class="my-1">
+                                                        <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga" name="harga" value="{{ $per->harga }}" required>
+                                                    </div>
+                                                </div>
+                                                @error('harga')
+                                                    <p style="color: red">{{ $message }}</p>
+                                                @enderror
+                                    
+                                                <div class="my-2">
+                                                    <label for="gambar" class="h4 f-bolder">Image</label>
+                                                    <div class="my-1">
+                                                        <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
+                                                    </div>
+                                                    @if ($per->gambar)
+                                                        <div class="mt-2">
+                                                            <p>Gambar Lama:</p>
+                                                            <img src="{{ asset('storage/peralatan/' . $per->gambar) }}" class="mt-2" width="500">
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                    
+                                                <button type="button" class="px-2 py-1 btn-close red-hover" onclick="closeEditModal({{ $per->id }})">Batal</button>
+                                                <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    
+
+                                    <!-- Detail Modal for Visit and Medical Record Input -->
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
-            <form action="{{ route('peralatan.update', $per->id) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nama_peralatan" class="form-label">Nama Peralatan</label>
-                        <input type="text" class="form-control" id="nama_peralatan" name="nama_peralatan"
-                            value="{{ $per->nama_peralatan }}" required>
-                    </div>
-                    <div class="my-2">
-                        <label for="gambar" class="h4 f-bolder">Gambar</label>
-                        <div class="my-1">
-                            <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
-                        </div>
-                        @if ($per->gambar)
-                            <div class="mt-2">
-                                <p>Gambar Lama:</p>
-                                <img src="{{ asset('storage/peralatan/' . $per->gambar) }}" class="mt-2" width="100">
-                            </div>
-                        @endif
-                    </div>
-                    <div class="mb-3">
-                        <label for="harga" class="form-label">Harga</label>
-                        <input type="text" class="form-control" id="harga" name="harga" value="{{ $per->harga }}" required>
-                    </div>
-                    <hr>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-
-                        <!-- Detail Modal for Visit and Medical Record Input -->
-                    @endforeach
-                </tbody>
-            </table>
         </div>
 
         <script>
@@ -327,6 +250,47 @@
 
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            var addModal = document.getElementById("myModalAdd");
+            var btnOpenAddModal = document.getElementById("btnOpenAddModal");
+            var btnCloseAddModal = document.getElementById("btnCloseAddModal");
+
+            var editModal = document.getElementById("myModalEdit");
+            var btnCloseEditModal = document.getElementById("btnCloseEditModal")
+
+            btnOpenAddModal.onclick = function() {
+                addModal.style.display = "block";
+            }
+
+            btnCloseAddModal.onclick = function() {
+                addModal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    addModal.style.display = "none";
+                }
+            }
+
+            function btnOpenEditModal(id) {
+                var modal = document.getElementById("myModalEdit" + id);
+                modal.style.display = "block";
+            }
+
+            function closeEditModal(id) {
+                var modal = document.getElementById("myModalEdit" + id);
+                modal.style.display = "none";
+            }
+
+            window.onclick = function(event) {
+                var modals = document.querySelectorAll('.modal');
+                modals.forEach(function(modal) {
+                    if (event.target === modal) {
+                        modal.style.display = "none";
+                    }
+                });
+            }
+        </script>
     </body>
 
     </html>

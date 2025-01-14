@@ -481,13 +481,26 @@
         });
     </script>
     <script>
+        // Data kunjungan per bulan
+        const visitsData = new Array(12).fill(0); // Array untuk 12 bulan, diisi dengan 0
+
+        // Mengisi data kunjungan dari backend
+        @if(isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
+            @foreach($kunjunganPerBulan as $kunjungan)
+                visitsData[{{ $kunjungan->bulan }} - 1] = {{ $kunjungan->jumlah }}; // Mengisi data berdasarkan bulan
+            @endforeach
+        @endif
+
+        // Data untuk chart
+        const chartData = visitsData;
+
         const ctx = document.getElementById('myChart').getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+                labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                 datasets: [{
-                    data: [20, 25, 10, 35, 18, 28, 32, 40],
+                    data: chartData,
                     backgroundColor: [
                         '#ff6384',
                         '#36a2eb',
@@ -496,7 +509,11 @@
                         '#9966ff',
                         '#ff9f40',
                         '#c9cbcf',
-                        '#7e57c2'
+                        '#7e57c2',
+                        '#ff6384',
+                        '#36a2eb',
+                        '#ffce56',
+                        '#4bc0c0'
                     ],
                     hoverOffset: 4
                 }]
@@ -504,7 +521,7 @@
             options: {
                 plugins: {
                     legend: {
-                        display: false
+                        display: true
                     },
                     tooltip: {
                         callbacks: {
@@ -514,7 +531,7 @@
                                     label += ': ';
                                 }
                                 label += context.raw;
-                                label += ' (' + (context.raw / 208 * 100).toFixed(2) + '%)';
+                                label += ' (' + (context.raw / chartData.reduce((a, b) => a + b, 0) * 100).toFixed(2) + '%)';
                                 return label;
                             }
                         }
@@ -524,22 +541,6 @@
         });
     </script>
     <script>
-        // Data kunjungan per bulan
-        const visitsData = {
-            jan: 120,
-            feb: 150,
-            mar: 180,
-            apr: 100,
-            may: 200,
-            jun: 170,
-            jul: 190,
-            aug: 130,
-            sep: 140,
-            oct: 210,
-            nov: 160,
-            dec: 180
-        };
-
         // Fungsi untuk mengupdate tinggi batang sesuai dengan data kunjungan
         function updateChart() {
             for (let month in visitsData) {
@@ -554,6 +555,63 @@
         // Panggil fungsi updateChart setelah halaman dimuat
         window.onload = updateChart;
     </script>
+
+<script>
+    // Data kunjungan per bulan
+    const visitsData = {
+        jan: 0,
+        feb: 0,
+        mar: 0,
+        apr: 0,
+        may: 0,
+        jun: 0,
+        jul: 0,
+        aug: 0,
+        sep: 0,
+        oct: 0,
+        nov: 0,
+        dec: 0
+    };
+
+    // mengisi data kunjungan dari backend
+    @if(isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
+    @foreach($kunjunganPerBulan as $kunjungan)
+        switch({{ $kunjungan->bulan }}) {
+            case 1: visitsData.jan = {{ $kunjungan->jumlah }}; break;
+            case 2: visitsData.feb = {{ $kunjungan->jumlah }}; break;
+            case 3: visitsData.mar = {{ $kunjungan->jumlah }}; break;
+            case 4: visitsData.apr = {{ $kunjungan->jumlah }}; break;
+            case 5: visitsData.may = {{ $kunjungan->jumlah }}; break;
+            case 6: visitsData.jun = {{ $kunjungan->jumlah }}; break;
+            case 7: visitsData.jul = {{ $kunjungan->jumlah }}; break;
+            case 8: visitsData.aug = {{ $kunjungan->jumlah }}; break;
+            case 9: visitsData.sep = {{ $kunjungan->jumlah }}; break;
+            case 10: visitsData.oct = {{ $kunjungan->jumlah }}; break;
+            case 11: visitsData.nov = {{ $kunjungan->jumlah }}; break;
+            case 12: visitsData.dec = {{ $kunjungan->jumlah }}; break;
+        }
+    @endforeach
+    @endif
+    console.log(visitsData);
+
+    // Data untuk chart
+    const chartData = [
+        visitsData.jan,
+        visitsData.feb,
+        visitsData.mar,
+        visitsData.apr,
+        visitsData.may,
+        visitsData.jun,
+        visitsData.jul,
+        visitsData.aug,
+        visitsData.sep,
+        visitsData.oct,
+        visitsData.nov,
+        visitsData.dec
+    ];
+
+    // ... (sisa kode untuk chart)
+</script>
 
     <!-- Tambahkan Script untuk Chart -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

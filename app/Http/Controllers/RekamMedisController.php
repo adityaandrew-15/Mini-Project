@@ -138,9 +138,9 @@ class RekamMedisController extends Controller
         'obat_id.*' => 'required|exists:obats,id',
         'jumlah_obat.*' => 'required|integer|min:1',
         'new_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        'peralatan_id.*' => 'exists:peralatans,id', 
+        'peralatan_id.*' => 'exists:peralatans,id',
     ]);
-    
+
 
     $rekamMedis = RekamMedis::findOrFail($id);
 
@@ -169,7 +169,7 @@ class RekamMedisController extends Controller
 
     // Detach old medications
     $rekamMedis->obats()->detach();
-    
+
     // Handle updating peralatan
 if ($request->has('peralatan_id') && is_array($request->peralatan_id)) {
     $rekamMedis->peralatans()->sync($request->peralatan_id); // Sync peralatan yang dipilih
@@ -203,23 +203,23 @@ if ($request->has('peralatan_id') && is_array($request->peralatan_id)) {
     return redirect()->route('rekam_medis.index')->with('success', 'Rekam medis berhasil diupdate.');
 }
 
-    
-    
+
+
     public function destroy(RekamMedis $rekamMedis, $id)
     {
         $rekamMedis = RekamMedis::findOrFail($id);
-    
+
         // Delete associated images from storage
         foreach ($rekamMedis->images as $image) {
             Storage::delete('public/' . $image->image_path); // Delete image from storage
         }
-    
+
         // Permanently delete RekamMedis record (force delete)
         $rekamMedis->forceDelete();  // This will permanently delete the record
-    
+
         return redirect()->route('rekam_medis.index')->with('success', 'Rekam Medis berhasil dihapus.');
     }
-    
+
 
 public function deleteImage($id)
 {

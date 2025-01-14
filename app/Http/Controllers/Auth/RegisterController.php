@@ -26,7 +26,7 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'phone' => 'nullable|regex:/^[0-9]{10,15}$/|max:15', // Phone is nullable
-            'specialty' => 'nullable|string|max:255', // Specialty is nullable
+            'spesialis' => 'nullable|string|max:255', // spesialis is nullable
         ],[
             'phone.regex' => 'Nomor telepon hanya boleh berisi angka dan memiliki panjang antara 10 hingga 15 digit.',
         ]);
@@ -47,28 +47,28 @@ protected function create(array $data)
         'name' => $data['name'],
         'email' => $data['email'],
         'password' => Hash::make($data['password']),
-        'spesialisasi' => $data['specialty'], // Store the specialty in the users table
+        'spesialis' => $data['spesialis'], // Store the spesialis in the users table
     ]);
 
-        // If no specialty is provided, assign the 'user' role
-        if (empty($data['specialty'])) {
+        // If no spesialis is provided, assign the 'user' role
+        if (empty($data['spesialis'])) {
             $user->assignRole('user'); // Assign the 'user' role
         } else {
-            $user->assignRole('dokter'); // Assign the 'dokter' role if specialty is provided
+            $user->assignRole('dokter'); // Assign the 'dokter' role if spesialis is provided
         }
 
         // If the user is a 'dokter', create the corresponding 'dokter' record
-        if (!empty($data['specialty'])) {
+        if (!empty($data['spesialis'])) {
             $dokter = new Dokter([
                 'nama' => $data['name'],
-                'spesialis' => $data['specialty'],
+                'spesialis' => $data['spesialis'],
                 'no_hp' => $data['phone'] ?? null, // If no phone, set it as null
             ]);
 
     $user->dokter()->save($dokter);
     }
     // Create the user
-    
+
 
     return $user;
 }

@@ -1,5 +1,5 @@
 :root {
-    --main-color: #0F8CA9;
+    --main-color: #103F91;
     --animate-duration: 400ms;
     --animate-delay: 0.2s;
 }
@@ -203,7 +203,7 @@ body {
 
 /* Kustomisasi tombol */
 .btn-custom {
-    background-color: #007bff; /* Warna tombol */
+    background-color: #0e7b94; /* Warna tombol */
     color: white;
     padding: 10px 20px;
     border: none;
@@ -736,7 +736,7 @@ body {
     text-align: center;
     width: 300px;
     height: 100vh;
-    background-color: #0F8CA9;
+    background-color: #0e7b94;
     color: white;
     position: fixed;
     left: 0;
