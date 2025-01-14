@@ -29,7 +29,7 @@
                 <li>
                     <a href="#">
                         <img src="{{ asset('icons/logos.svg') }}" alt="">
-                        <Span>Klinik</Span>
+                        <Span>ALLCARE</Span>
                     </a>
                 </li>
                 <li>
@@ -152,7 +152,7 @@
                     <a href="#">
                         <img class="photo-profile-sidebar" src="{{ asset('asset/img/dokter.png') }}" alt="">
                         <span>
-                            <h6>Welcome Bek</h2>
+                            <h6>Welcome</h2>
                                 <p>Admin/Dokter</p>
                         </span>
                     </a>

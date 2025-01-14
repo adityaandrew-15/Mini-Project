@@ -7,17 +7,6 @@
                 Swal.fire('Success', '{{ session('success') }}', 'success');
             </script>
         @endif
-        {{-- <div class="row">
-            <div class="col">
-                <label for="start_time" class="form-label">Jam Mulai</label>
-                <input type="time" name="start_time" id="start_time" class="form-control"
-                    value="{{ request('start_time') }}">
-            </div>
-            <div class="col">
-                <label for="end_time" class="form-label">Jam Selesai</label>
-                <input type="time" name="end_time" id="end_time" class="form-control" value="{{ request('end_time') }}">
-            </div>
-        </div> --}}
         <div class="d-flex j-between m-2 a-center">
             <div class="d-flex a-center">
                 <h2 class="h2 f-bolder mr-4">Data Jadwal Praktik</h2>
@@ -29,10 +18,26 @@
         </div>
 
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('jadwal_praktek.index') }}">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                    value="{{ request('search') }}" class="form-control">
+            <form method="GET" action="{{ route('jadwal_praktek.index') }}" class="d-flex align-items-center">
+                <input type="text" class="search-container form-control" name="search" placeholder="Search"
+                    value="{{ request('search') }}" style="flex: 1; margin-right: 10px;">
+                
+                <select name="hari" class="form-control mx-2" style="width: 150px;">
+                    <option value="">Pilih Hari</option>
+                    <option value="Senin" {{ request('hari') == 'Senin' ? 'selected' : '' }}>Senin</option>
+                    <option value="Selasa" {{ request('hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
+                    <option value="Rabu" {{ request('hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                    <option value="Kamis" {{ request('hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
+                    <option value="Jumat" {{ request('hari') == 'Jumat' ? 'selected' : '' }}>Jumat</option>
+                    <option value="Sabtu" {{ request('hari') == 'Sabtu' ? 'selected' : '' }}>Sabtu</option>
+                </select>
+        
+                <input type="time" name="jam" class="form-control mx-2" value="{{ request('jam') }}" style="width: 100px;">
+                
+                <button type="submit" class="btn btn-primary mx-2">Cari</button>
+                <a href="{{ route('jadwal_praktek.index') }}" class="btn btn-secondary">Clear Search</a>
             </form>
+        </div>
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>

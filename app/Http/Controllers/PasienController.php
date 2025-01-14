@@ -50,62 +50,30 @@ class PasienController extends Controller
 
     public function store(Request $request)
 {
-    if(auth()->user()->hasRole('user')){
-        try {
-            $request->validate([
-                'nama' => 'required|string|max:255',
-                'alamat' => 'required|string',
-                'no_hp' => 'required|unique:pasiens,no_hp|numeric',
-                'tanggal_lahir' =>[
-                    'required',
-                    'date',
-                    function ($attribute, $value, $fail) {
-                        $today = now()->toDateString(); // Mendapatkan tanggal hari ini
-            
-                        if ($value >= $today) { // Jika tanggal inputan lebih besar atau sama dengan hari ini
-                            $fail("$attribute tidak boleh hari ini atau di masa depan.");
-                        }
-                    },
-                ],
-            ]);
-        
+    $request->validate([
+        'nama' => 'required|string|max:255',
+        'alamat' => 'nullable|string', // Ubah menjadi nullable
+        'no_hp' => 'nullable|unique:pasiens,no_hp|numeric', // Ubah menjadi nullable
+        'tanggal_lahir' => [
+            'nullable', // Ubah menjadi nullable
+            'date',
+            function ($attribute, $value, $fail) {
+                $today = now()->toDateString();
+                if ($value >= $today) {
+                    $fail("$attribute tidak boleh hari ini atau di masa depan.");
+                }
+            },
+        ],
+    ]);
 
-            $data = $request->all();
-            $data['user_id'] = auth()->id();
-        
-            Pasien::create($data);
-        
-            return redirect()->route('home')->with('success', 'Data pasien berhasil ditambahkan.');
-        }catch (ValidationException $e) {
-            return redirect('/home#form-pasien')
-                ->withInput()
-                ->withErrors($e->errors());
-        }
-    }else{
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'alamat' => 'required|string',
-            'no_hp' => 'required|unique:pasiens,no_hp|numeric',
-            'tanggal_lahir' => [
-                'required',
-                'date',
-                function ($attribute, $value, $fail) {
-                    $today = now()->toDateString(); // Mendapatkan tanggal hari ini
-        
-                    if ($value >= $today) { // Jika tanggal inputan lebih besar atau sama dengan hari ini
-                        $fail("$attribute tidak boleh hari ini atau di masa depan.");
-                    }
-                },
-            ],
-        ]);
+    // Simpan data pasien
+    $data = $request->all();
+    $data['user_id'] = auth()->id();
+    Pasien::create($data);
 
-        $data = $request->all();
-        $data['user_id'] = auth()->id();
-
-        Pasien::create($data);
-        return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil ditambahkan');
-    }
+    return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil ditambahkan');
 }
+
 public function show(Pasien $pasien)
 {
     $pasien->load('kunjungan', 'rekamMedis'); // Eager load kunjungan dan rekam medis
@@ -120,9 +88,9 @@ public function show(Pasien $pasien)
 {
     $request->validate([
         'nama' => 'required|string|max:255',
-        'alamat' => 'nullable|string',
-        'no_hp' => 'nullable|unique:pasiens,no_hp,' . $pasien->id,
-        'tanggal_lahir' => 'nullable|date',
+        'alamat' => 'nullable|string', // Ubah menjadi nullable
+        'no_hp' => 'nullable|unique:pasiens,no_hp,' . $pasien->id, // Ubah menjadi nullable
+        'tanggal_lahir' => 'nullable|date', // Ubah menjadi nullable
         'dokter_id' => 'required|exists:dokters,id',
         'keluhan' => 'required|string',
         'tanggal_kunjungan' => 'required|date',
@@ -137,7 +105,7 @@ public function show(Pasien $pasien)
         'dokter_id' => $request->dokter_id,
         'keluhan' => $request->keluhan,
         'tanggal_kunjungan' => $request->tanggal_kunjungan,
-        'user_id' => auth()->id(), // Menyimpan ID pengguna yang membuat kunjungan
+        'user_id' => auth()->id(),
     ]);
 
     return redirect()->route('pasien.index')->with('success', 'Data pasien dan kunjungan berhasil diperbarui.');
