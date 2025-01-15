@@ -485,13 +485,6 @@
                                 </ul>
                             </div>
                         @endif
-                        <div class="field" >
-                            <select class="form-select" name="role" id="role-select" required>
-                                <option selected disabled>Role kamu</option>
-                                <option value="1">Pasien</option>
-                                <option value="2">Dokter</option>
-                            </select>
-                        </div>
                         <div class="field">
                             <input type="text" placeholder="Name" name="name" required value="{{ old('name') }}">
                         </div>
@@ -599,7 +592,7 @@
                 // Setelah pengguna menekan OK, sembunyikan formulir login dan tampilkan formulir pendaftaran
                 const loginForm = document.querySelector(".form-inner .login");
                 const signupForm = document.querySelector(".form-inner form:nth-child(2)");
-                
+
                 loginForm.classList.remove("active"); // Sembunyikan formulir login
                 signupForm.classList.add("active"); // Tampilkan formulir pendaftaran
             });
