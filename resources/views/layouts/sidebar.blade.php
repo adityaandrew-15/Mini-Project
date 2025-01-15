@@ -30,7 +30,7 @@
             </div>
             <ul>
                 <li>
-                    <a href="#">
+                    <a href="">
                         <img src="{{ asset('icons/logos.svg') }}" alt="">
                         <Span>ALLCARE</Span>
                     </a>
@@ -39,22 +39,25 @@
                 <li>
                     <div class="gap-li"></div>
                 </li>
-
-                    @if (auth()->user()->hasRole('admin'))
+                @if (auth()->user()->hasRole('admin'))
                     <li>
                         <a href="{{ route('admin-home') }}"
                             class="{{ request()->routeIs('admin-home') ? 'active' : '' }}">
                             <i class="fas fa-home"></i>
-                            <span>Dashboard Admin</span>
+                            <span>Dashboard</span>
                         </a>
-                    @else
+                        @endif
+                    </li>
+                    <li>
+                    @if (auth()->user()->hasRole('dokter'))
                         <a href="{{ route('home-dokter') }}"
                             class="{{ request()->routeIs('home-dokter') ? 'active' : '' }}">
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
+                        @endif
                     </li>
-                    @endif
+                    
 
                 @if (auth()->user()->hasRole('admin'))
                 <li>

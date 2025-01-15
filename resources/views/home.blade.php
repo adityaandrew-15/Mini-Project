@@ -25,7 +25,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
@@ -34,29 +35,37 @@
             text-align: center;
             margin-bottom: 40px;
         }
+
         .history-section h2 {
             font-size: 24px;
             margin: 0;
         }
+
         .history-section p {
             margin: 10px 0 20px;
         }
+
         .history-table {
             width: 100%;
             border-collapse: collapse;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .history-table th, .history-table td {
+
+        .history-table th,
+        .history-table td {
             padding: 10px;
             text-align: left;
         }
+
         .history-table th {
             background-color: #457b9d;
             color: white;
         }
+
         .history-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
         .history-table tr:nth-child(odd) {
             background-color: #ffffff;
         }
@@ -91,11 +100,11 @@
     @endif
     @if (session('error'))
         <script>
-            Swal.fire('Error', '{{session('error')}}', 'error')
+            Swal.fire('Error', '{{ session('error') }}', 'error')
         </script>
     @endif
     <header>
-    {{-- <header>
+        {{-- <header>
         <h1>
             KLINIK
         </h1>
@@ -129,32 +138,33 @@
             <li><a href="#form-section-kunjungan">
                     Buat Kunjungan
                 </a></li>
-            
+
             <li><a href="#info-kunjungan">
-                    Data Kunjungan    
-            </a></li>
+                    Data Kunjungan
+                </a></li>
         </ul>
         <ul>
             <li style="margin-top: 7px">
                 <a href="#">
                     <i class="fa-solid fa-inbox"></i>
                     @if (auth()->user()->unreadNotifications->count())
-                    <span class="notification-badge" style="color: red">{{ auth()->user()->unreadNotifications->count() }}</span>
+                        <span class="notification-badge"
+                            style="color: red">{{ auth()->user()->unreadNotifications->count() }}</span>
                     @endif
                     <p>Inbox</p>
                 </a>
             </li>
-                <li class="nav-item" style="margin-left: 20px; margin-top: 15px">
-                    <a href="{{ route('logout') }}"
-                       onclick="event.preventDefault();
+            <li class="nav-item" style="margin-left: 20px; margin-top: 15px">
+                <a href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <p>Logout</p>
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                        @csrf
-                    </form>
-                </li>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <p>Logout</p>
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </li>
         </ul>
         <div class="gap"></div>
     </nav>
@@ -170,7 +180,7 @@
                 <p>
                     Jangan ragu untuk membuat janji temu dengan dokter <br> melalui website ini.
                 </p>
-                
+
             </div>
             <div class="button">
                 <a href="#" id="scrollToForm">Janji Temu</a>
@@ -192,19 +202,20 @@
         <div id="doctors" class="doctors">
             <div class="doctor-group">
                 @foreach ($dokter as $dok)
-                <div class="doctor-card">
-                    <img src="{{ asset('storage/dokters/'.$dok->image) }}" height="100px" width="80px" alt="gambar">
+                    <div class="doctor-card">
+                        <img src="{{ asset('storage/dokters/' . $dok->image) }}" height="100px" width="80px"
+                            alt="gambar">
 
-                    <h4>
-                        {{ $dok->nama }}
-                    </h4>
-                    <p>
-                       {{ $dok->spesialis }}
-                    </p>
-                    <p>
-                        {{ $dok->no_hp }}
-                    </p>
-                </div>
+                        <h4>
+                            {{ $dok->nama }}
+                        </h4>
+                        <p>
+                            {{ $dok->spesialis }}
+                        </p>
+                        <p>
+                            {{ $dok->no_hp }}
+                        </p>
+                    </div>
                 @endforeach
             </div>
         </div>
@@ -254,25 +265,25 @@
         <div class="container">
             @foreach ($pasien as $pas)
                 <div class="patient-card">
-                    <b>Data Pasien Anda: {{$loop->iteration}}</b>
+                    <b>Data Pasien Anda: {{ $loop->iteration }}</b>
                     <p>
                         <i class="fas fa-user"></i>
-                        <span class="label">Nama        :</span>
+                        <span class="label">Nama :</span>
                         <span class="value">{{ $pas->nama }}</span>
                     </p>
                     <p>
                         <i class="fas fa-map-marker-alt"></i>
-                        <span class="label">Alamat      :</span>
+                        <span class="label">Alamat :</span>
                         <span class="value">{{ $pas->alamat }}</span>
                     </p>
                     <p>
                         <i class="fas fa-phone"></i>
-                        <span class="label">No. HP      :</span>
+                        <span class="label">No. HP :</span>
                         <span class="value">{{ $pas->no_hp }}</span>
                     </p>
                     <p>
                         <i class="fas fa-calendar-alt"></i>
-                        <span class="label">Tgl Lahir   :</span>
+                        <span class="label">Tgl Lahir :</span>
                         <span class="value">{{ $pas->tanggal_lahir }}</span>
                     </p>
                 </div>
@@ -286,7 +297,7 @@
                 <select name="pasien_id" class="pasien-select-option" style="border-radius: 50px;">
                     <option disabled selected style="border-radius: 50px;">Cari pasien</option>
                     @foreach ($pasien as $pas)
-                    <option value="{{$pas->id}}">{{$pas->nama}}</option>
+                        <option value="{{ $pas->id }}">{{ $pas->nama }}</option>
                     @endforeach
                 </select>
                 @error('pasien_id')
@@ -296,7 +307,8 @@
                 @error('keluhan')
                     <p style="color: red">{{ $message }}</p>
                 @enderror
-                <input placeholder="Tanggal Kunjungan" name="tanggal_kunjungan" value="{{old('tanggal_kunjungan')}}" type="date">
+                <input placeholder="Tanggal Kunjungan" name="tanggal_kunjungan"
+                    value="{{ old('tanggal_kunjungan') }}" type="date">
                 @error('tanggal_kunjungan')
                     <p style="color: red">{{ $message }}</p>
                 @enderror
@@ -322,7 +334,7 @@
             </p>
         </div>
     </section>
-    <section id="info-kunjungan" class="info-kunjungan">
+    {{-- <section id="info-kunjungan" class="info-kunjungan">
         <div class="history-section">
             <h2>Riwayat Kunjungan Anda</h2>
             <p>Berikut adalah daftar kunjungan yang telah Anda buat.</p>
@@ -437,8 +449,76 @@
                 </tbody>
             </table>
         </div>
+    </section> --}}
+    <section id="patien-info" class="patient-info">
+        <h3>
+            Riwayat Kunjungan Anda
+        </h3>
+        <p>
+            Berikut adalah daftar kunjungan yang <br> telah Anda buat.
+        </p>
+        <div class="container">
+            <div class="patient-card">
+                <h2 style="font-weight: bold;">Data Anda: </h2>
+                <p>
+                    <i class="fas fa-user"></i>
+                    <span class="label">Nama :</span>
+                    <span style="font-weight: bolder; color:#000;" class="value">Nama</span>
+                </p>
+                <p>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="label">Dokter :</span>
+                    <span class="value">Dokter</span>
+                </p>
+                <p>
+                    <i class="fas fa-phone"></i>
+                    <span class="label">Keluhan :</span>
+                    <span class="value">Keluhan</span>
+                </p>
+                <p>
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="label">Tanggal Kunjungan :</span>
+                    <span class="value">Tanggal Kunjungan</span>
+                </p>
+                <div class="button-details">
+                    <div class="details-button">
+                        <i class="fa-regular fa-eye"></i>
+                        <a href="#">Detail</a>
+                    </div>
+                </div>
+            </div>
+            <div class="patient-card">
+                <h2 style="font-weight: bold;">Data Anda: </h2>
+                <p>
+                    <i class="fas fa-user"></i>
+                    <span class="label">Nama :</span>
+                    <span style="font-weight: bolder; color:#000;" class="value">Nama</span>
+                </p>
+                <p>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span class="label">Dokter :</span>
+                    <span class="value">Dokter</span>
+                </p>
+                <p>
+                    <i class="fas fa-phone"></i>
+                    <span class="label">Keluhan :</span>
+                    <span class="value">Keluhan</span>
+                </p>
+                <p>
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="label">Tanggal Kunjungan :</span>
+                    <span class="value">Tanggal Kunjungan</span>
+                </p>
+                <div class="button-details">
+                    <div class="details-button">
+                        <i class="fa-regular fa-eye"></i>
+                        <a href="#">Detail</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-    
+
 </body>
 <script>
     document.querySelectorAll('nav a').forEach(anchor => {
@@ -453,8 +533,8 @@
 </script>
 <script>
     $(document).ready(function() {
-    $('.pasien-select-option').select2();
-});
+        $('.pasien-select-option').select2();
+    });
 </script>
 
 

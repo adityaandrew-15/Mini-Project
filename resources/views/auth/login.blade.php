@@ -491,9 +491,18 @@ transform: scale(1.05); /* Slight scaling effect */
                     </form>
 
                     <!-- Form Register -->
-                    <form action="{{ route('register') }}" method="POST">
+                    <form action="{{ route('register') }}" method="POST" class="{{ $errors->any() ? 'active' : '' }}" >
                         @csrf
-                        <div class="field">
+                        @if ($errors->any())
+                            <div class="alert alert-danger" style="display: none;">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <div class="field" >
                             <select class="form-select" name="role" id="role-select" required>
                                 <option selected disabled>Role kamu</option>
                                 <option value="1">Pasien</option>
@@ -501,25 +510,25 @@ transform: scale(1.05); /* Slight scaling effect */
                             </select>
                         </div>
                         <div class="field">
-                            <input type="text" placeholder="Name" name="name" required>
+                            <input type="text" placeholder="Name" name="name" required value="{{ old('name') }}">
                         </div>
                         <div class="field">
-                            <input type="email" placeholder="Email Address" name="email" required>
+                            <input type="email" placeholder="Email Address" name="email" required value="{{ old('email') }}">
                         </div>
                         <div class="field" id="specialty-field">
-                            <input type="text" id="specialty" placeholder="Specialty" name="specialty">
+                            <input type="text" id="specialty" placeholder="Specialty" name="spesialis" value="{{ old('spesialis') }}">
                         </div>
                         <div class="field" id="nohp-field">
-                            <input type="text" id="nohp" placeholder="Phone Number" name="phone" required>
+                            <input type="text" id="nohp" placeholder="Phone Number" name="phone" required value="{{ old('phone') }}">
                             @error('phone')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="field">
-                            <input type="password" placeholder="Password" name="password" required>
+                            <input type="password" placeholder="Password" name="password" required value="{{ old('password') }}">
                         </div>
                         <div class="field">
-                            <input type="password" placeholder="Confirm Password" name="password_confirmation" required>
+                            <input type="password" placeholder="Confirm Password" name="password_confirmation" required value="{{ old('spesialis') }}">
                         </div>
                         <div class="field btn">
                             <input type="submit" value="Register">
@@ -583,17 +592,36 @@ transform: scale(1.05); /* Slight scaling effect */
     </script>
     <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const formContainer = document.querySelector("container");
-            const loginForm = document.querySelector(".form-inner .login");
-            const signupForm = document.querySelector(".form-inner form:nth-child(2)");
-            const loginRadio = document.getElementById("login");
-            const signupRadio = document.getElementById("signup");
+        document.addEventListener("DOMContentLoaded", function () {
+    const errorMessages = @json($errors->all());
+    const formContainer = document.querySelector("container");
+    const loginForm = document.querySelector(".form-inner .login");
+    const signupForm = document.querySelector(".form-inner form:nth-child(2)");
+    const loginRadio = document.getElementById("login");
+    const signupRadio = document.getElementById("signup");
 
-            // Fungsi untuk menyesuaikan tinggi container
-            function adjustHeight(form) {
-                formContainer.style.height = `${form.offsetHeight}px`;
-            }
+    // Fungsi untuk menyesuaikan tinggi container
+    function adjustHeight(form) {
+        formContainer.style.height = `${form.offsetHeight}px`;
+    }
+
+    if (errorMessages.length > 0) {
+            // Tampilkan SweetAlert dengan pesan kesalahan
+            Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan',
+                html: `<ul>${errorMessages.map(error => `<li>${error}</li>`).join('')}</ul>`,
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Setelah pengguna menekan OK, sembunyikan formulir login dan tampilkan formulir pendaftaran
+                const loginForm = document.querySelector(".form-inner .login");
+                const signupForm = document.querySelector(".form-inner form:nth-child(2)");
+                
+                loginForm.classList.remove("active"); // Sembunyikan formulir login
+                signupForm.classList.add("active"); // Tampilkan formulir pendaftaran
+            });
+        }
+
 
             // Event listener untuk mengubah form saat radio button diklik
             loginRadio.addEventListener("change", function() {
