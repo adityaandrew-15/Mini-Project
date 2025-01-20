@@ -491,9 +491,7 @@
                         <div class="field">
                             <input type="email" placeholder="Email Address" name="email" required value="{{ old('email') }}">
                         </div>
-                        <div class="field" id="specialty-field">
-                            <input type="text" id="specialty" placeholder="Specialty" name="spesialis" value="{{ old('spesialis') }}">
-                        </div>
+                        
                         <div class="field" id="nohp-field">
                             <input type="text" id="nohp" placeholder="Phone Number" name="phone" required value="{{ old('phone') }}">
                             @error('phone')
