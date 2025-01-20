@@ -491,7 +491,9 @@
                         <div class="field">
                             <input type="email" placeholder="Email Address" name="email" required value="{{ old('email') }}">
                         </div>
-                        
+                        <div class="field" id="specialty-field">
+                            <input type="text" id="specialty" placeholder="Specialty" name="spesialis" value="{{ old('spesialis') }}">
+                        </div>
                         <div class="field" id="nohp-field">
                             <input type="text" id="nohp" placeholder="Phone Number" name="phone" required value="{{ old('phone') }}">
                             @error('phone')
@@ -648,6 +650,42 @@
         // Default: Sembunyikan input Specialty saat halaman dimuat
         specialtyField.style.display = "none";
     });
+</script>
+<script>
+    @if (session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed',
+            text: "{{ session('error') }}",
+            confirmButtonText: 'OK'
+        }).then(() => {
+            // Tampilkan form login dan sembunyikan form register
+            document.querySelector('.form-inner .login').classList.add('active');
+            document.querySelector('.form-inner form:nth-child(2)').classList.remove('active');
+        });
+    @endif
+
+    @if ($errors->any())
+        Swal.fire({
+            icon: 'error',
+            title: 'Validation Errors',
+            html: "<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>",
+            confirmButtonText: 'OK'
+        }).then(() => {
+            // Tampilkan form login dan sembunyikan form register
+            document.querySelector('.form-inner .login').classList.add('active');
+            document.querySelector('.form-inner form:nth-child(2)').classList.remove('active');
+        });
+    @endif
+
+    @if (session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "{{ session('success') }}",
+            confirmButtonText: 'OK'
+        });
+    @endif
 </script>
 
 

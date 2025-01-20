@@ -32,47 +32,19 @@ class RegisterController extends Controller
         ]);
     }
 
-protected function create(array $data)
-{
-    if($data['role'] == 1){
+    protected function create(array $data)
+    {
+        // Buat pengguna tanpa role
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make(($data['password']))
+            'password' => Hash::make($data['password']),
+            'phone' => $data['phone'], // Simpan nomor telepon di tabel pengguna
         ]);
-
-        $user->assignRole('user');
-    }else{
-        $user = User::create([
-        'name' => $data['name'],
-        'email' => $data['email'],
-        'password' => Hash::make($data['password']),
-        'spesialis' => $data['spesialis'], // Store the spesialis in the users table
-    ]);
-
-        // If no spesialis is provided, assign the 'user' role
-        if (empty($data['spesialis'])) {
-            $user->assignRole('user'); // Assign the 'user' role
-        } else {
-            $user->assignRole('dokter'); // Assign the 'dokter' role if spesialis is provided
-        }
-
-        // If the user is a 'dokter', create the corresponding 'dokter' record
-        if (!empty($data['spesialis'])) {
-            $dokter = new Dokter([
-                'nama' => $data['name'],
-                'spesialis' => $data['spesialis'],
-                'no_hp' => $data['phone'] ?? null, // If no phone, set it as null
-            ]);
-
-    $user->dokter()->save($dokter);
-    }
-    // Create the user
-
-
-    return $user;
-}
-
+    
+        // Jika Anda ingin menetapkan role default, Anda bisa melakukannya di sini
+        // $user->assignRole('user'); // Misalnya, semua pengguna baru adalah 'user'
+    
         return $user;
     }
 
