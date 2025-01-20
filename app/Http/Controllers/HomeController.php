@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
+use Illuminate\Support\Facades\DB;
+
 
 class HomeController extends Controller
 {
