@@ -201,6 +201,26 @@ body {
     display: none;
 }
 
+.input-group {
+    display: flex;
+}
+
+.search-container a {
+    text-decoration: none;
+}
+
+.clear-btn {
+    background-color: var(--main-color);
+    border-radius: 1.6rem;
+    padding: 0.8rem 2rem;
+    color: #fff;
+    text-decoration: node;
+}
+
+.clear-btn:hover {
+    background-color: #0e5d6e;
+}
+
 /* Kustomisasi tombol */
 .btn-custom {
     background-color: #0e7b94; /* Warna tombol */
