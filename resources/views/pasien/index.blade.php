@@ -76,11 +76,11 @@
 
         <div class="content-table m-2 d-flex col">
             <form action="{{ route('pasien.index') }}" method="GET">
-                <div class="input-group">
-                    <input type="text" name="search" class="search-container w-100 h4" placeholder="Cari pasien..."
+                <div class="search-container w-100 h4 ">
+                    <input type="text" name="search" class="p6" placeholder="Cari pasien..."
                         value="{{ request('search') }}">
                     @if (request('search'))
-                        <a href="{{ route('pasien.index') }}" class="btn btn-outline-danger">Clear</a>
+                        <a href="{{ route('pasien.index') }}" class="clear-btn">Clear</a>
                     @endif
                 </div>
             </form>
