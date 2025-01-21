@@ -434,24 +434,8 @@
     </div>
 </div>
         <div class="content-chart m-1 drop-shadow">
-            <h1>Data Kunjungan Perbulan</h1>
-            <div class="chart-container">
-                <canvas id="myChart"></canvas>
-            </div>
-            <div class="legend">
-                <div class="legend-left">
-                    <div class="mei"><span></span>Mei: 20 (9.62%)</div>
-                    <div class="juni"><span></span>Juni: 25 (12.02%)</div>
-                    <div class="juli"><span></span>Juli: 10 (4.81%)</div>
-                    <div class="agustus"><span></span>Agustus: 35 (16.83%)</div>
-                </div>
-                <div class="legend-right">
-                    <div class="september"><span></span>September: 18 (8.65%)</div>
-                    <div class="oktober"><span></span>Oktober: 28 (13.46%)</div>
-                    <div class="november"><span></span>November: 32 (15.38%)</div>
-                    <div class="desember"><span></span>Desember: 40 (19.23%)</div>
-                </div>
-            </div>
+                <h1>Chart Kunjungan Dokter</h1>
+                <canvas id="dokterChart" width="400" height="400"></canvas>
         </div>
     </div>
     <script>
@@ -505,4 +489,51 @@
     // Panggil fungsi updateChart setelah halaman dimuat
     window.onload = updateChart;
 </script>
+<script>
+        const ctx = document.getElementById('dokterChart').getContext('2d');
+        const dokterKunjungan = @json($dokterKunjungan);
+
+        const labels = dokterKunjungan.map(d => d.dokter.nama); // Ambil nama dokter
+        const data = dokterKunjungan.map(d => d.total); // Ambil total kunjungan
+
+        const chart = new Chart(ctx, {
+            type: 'pie', // Tipe chart lingkaran
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Jumlah pasien',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Perbandingan Kunjungan Dokter'
+                    }
+                }
+            }
+        });
+    </script>
 @endsection
