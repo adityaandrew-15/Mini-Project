@@ -30,7 +30,11 @@
             </div>
             <ul>
                 <li>
-                    <a href="">
+                @if (auth()->user()->hasRole('admin'))
+                    <a href="{{ route('admin-home') }}">
+                @elseif (auth()->user()->hasRole('dokter'))
+                    <a href="{{ route('home-dokter') }}">
+                @endif
                         <img src="{{ asset('icons/logos.svg') }}" alt="">
                         <span style="font-family: 'Handlee', cursive; font-size: 24px;">ALLCARE</span>
                     </a>
@@ -162,7 +166,11 @@
                         <img class="photo-profile-sidebar" src="{{ asset('asset/img/dokter.png') }}" alt="">
                         <span>
                             <h6>Welcome</h2>
-                                <p>Admin/Dokter</p>
+                            @if (auth()->user()->hasRole('admin'))
+                            <p>admin</p>
+                            @elseif (auth()->user()->hasRole('dokter'))
+                            <p>{{ Auth::user()->name }}</p>
+                            @endif
                         </span>
                     </a>
                 </li>

@@ -531,6 +531,72 @@
             </div>
         </div>
         <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const obatSelect = document.getElementById("obat_id");
+        const quantityContainer = document.getElementById("obat-quantity-container");
+
+        if (!obatSelect || !quantityContainer) {
+            console.error("Element obat_id atau obat-quantity-container tidak ditemukan!");
+            return;
+        }
+
+        // Event listener untuk perubahan pada <select> dengan multiple attribute
+        obatSelect.addEventListener("change", function () {
+            console.log("Change event triggered!");
+
+            // Ambil semua ID obat yang saat ini dipilih
+            const selectedIds = Array.from(obatSelect.selectedOptions).map(option => option.value);
+            console.log("Selected IDs:", selectedIds);
+
+            // Loop melalui obat yang dipilih untuk memastikan input jumlah dibuat
+            selectedIds.forEach(id => {
+                const optionText = Array.from(obatSelect.options).find(opt => opt.value === id)?.textContent || '';
+                const obatName = optionText.split('(')[0].trim(); // Mengambil nama obat dari teks opsi
+
+                const inputId = `obat-quantity-${id}`;
+                if (!document.getElementById(inputId)) {
+                    console.log(`Menambahkan input untuk obat ID: ${id}, Nama: ${obatName}`);
+                    
+                    // Membuat elemen input baru untuk jumlah obat
+                    const newInput = document.createElement("div");
+                    newInput.classList.add("mb-3", "row");
+                    newInput.id = inputId;
+
+                    newInput.innerHTML = `
+                        <label for="jumlah_obat-${id}" class="h4 f-normal px-2 w-100 h-3 border-radius-1">
+                            ${obatName} - Jumlah
+                        </label>
+                        <div class="h4 f-bolder">
+                            <input type="number"
+                                name="jumlah_obat[${id}]"
+                                id="jumlah_obat-${id}"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                min="1"
+                                value="1">
+                        </div>
+                    `;
+
+                    // Tambahkan elemen baru ke container
+                    quantityContainer.appendChild(newInput);
+
+                    // Debug: pastikan elemen ditambahkan
+                    console.log(`Input jumlah untuk obat ID: ${id} berhasil ditambahkan.`);
+                }
+            });
+
+            // Menghapus input jumlah untuk obat yang tidak lagi dipilih
+            Array.from(quantityContainer.children).forEach(input => {
+                const inputId = input.id.replace("obat-quantity-", "");
+                if (!selectedIds.includes(inputId)) {
+                    console.log(`Menghapus input untuk obat ID: ${inputId}`);
+                    input.remove();
+                }
+            });
+        });
+    });
+</script>
+
+        <script>
            document.getElementById('obat_id').addEventListener('change', function() {
     var selectedObats = Array.from(this.selectedOptions);
     var quantitySection = document.getElementById('medication-quantity-section');
