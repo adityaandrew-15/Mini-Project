@@ -103,7 +103,7 @@ class PasienController extends Controller
         $data['user_id'] = auth()->id();
 
         Pasien::create($data);
-        return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil ditambahkan');
+        return redirect()->route('home')->with('success', 'Data pasien berhasil ditambahkan');
     }
 }
 public function show(Pasien $pasien)
