@@ -12,6 +12,8 @@ use App\Http\Controllers\RekamMedisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PeralatanController;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Kunjungan;
+
 
 
 
@@ -33,8 +35,12 @@ Route::get('/admin', function () {
         ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
         ->groupBy('bulan')
         ->get();
+    $dokterKunjungan = kunjungan::select('dokter_id', DB::raw('count(*) as total'))
+        ->groupBy('dokter_id')
+        ->with('dokter') // Mengambil data dokter
+        ->get();
 
-    return view('admin-home', compact('kunjunganPerBulan'));
+    return view('admin-home', compact('kunjunganPerBulan','dokterKunjungan'));
 })->middleware(['auth', 'role:admin'])->name('admin-home');
 
 
