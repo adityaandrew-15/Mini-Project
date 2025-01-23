@@ -62,30 +62,45 @@
                                         @endforeach
                                     </td>
                                     <td>
-                                        @if ($rm->obats && $rm->obats->count() > 0)
+                                        {{-- @if ($rm->obats && $rm->obats->count() > 0)
                                             @foreach ($rm->obats as $obat)
                                                 <p>{{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}</p>
                                             @endforeach
                                         @else
                                             <p>Tidak ada obat yang terkait</p>
-                                        @endif
+                                        @endif --}}
+                                        @forelse ($rm->obats as $obat)
+                                            <p>{{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah}}</p>
+                                        @empty
+                                            <p>data kosong</p>
+                                        @endforelse
                                     </td>
 
                                     <td>
-                                        @if ($rm->peralatans && $rm->peralatans->count() > 0)
+                                        {{-- @if ($rm->peralatans && $rm->peralatans->count() > 0)
                                             @foreach ($rm->peralatans as $peralatan)
                                                 <p>{{ $peralatan->nama_peralatan }}</p> <!-- Display Peralatan name -->
                                             @endforeach
                                         @else
                                             <p>Tidak ada peralatan yang terkait</p>
-                                        @endif
+                                        @endif --}}
+                                        @forelse ($rm->peralatans as $peralatan)
+                                            <p>{{ $peralatan->nama_peralatan }}</p>
+                                        @empty
+                                            data kosong
+                                        @endforelse
                                     </td>
 
                                     <td>
-                                        @foreach ($rm->images as $image)
+                                        {{-- @foreach ($rm->images as $image)
                                             <img src="{{ asset('storage/' . $image->image_path) }}" height="100"
                                                 width="80" alt="Gambar">
-                                        @endforeach
+                                        @endforeach --}}
+                                        @forelse ($rm->images as $image)
+                                            <img src="{{ asset('storage/' . $image->image_path) }}" height="100"
+                                            width="80" alt="Gambar">
+                                        @empty
+                                        @endforelse
                                     </td>
                                     @if (auth()->user()->hasRole('admin'))
                                         <td class="action-icons">
@@ -556,7 +571,7 @@
                 const inputId = `obat-quantity-${id}`;
                 if (!document.getElementById(inputId)) {
                     console.log(`Menambahkan input untuk obat ID: ${id}, Nama: ${obatName}`);
-                    
+
                     // Membuat elemen input baru untuk jumlah obat
                     const newInput = document.createElement("div");
                     newInput.classList.add("mb-3", "row");
