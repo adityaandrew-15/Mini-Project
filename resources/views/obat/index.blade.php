@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('resep.index') }}">
+            <form method="GET" action="{{ route('obat.index') }}">
                 <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
                     value="{{ request('search') }}" class="form-control">
             </form>
