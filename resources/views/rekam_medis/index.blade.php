@@ -107,10 +107,9 @@
                                                 onclick="confirmDelete({{ $rm->id }})">
                                                 <i class="fas fa-trash delete h3 mr-1 red pointer"></i>
                                             </button>
-                                            <a href="{{ route('rekam_medis.nota', $rm->id) }}"
-                                                class="btn btn-sm btn-info">
-                                            <i class="fa-solid fa-print"></i>
-                                        </a>
+                                            <a href="{{ route('rekam_medis.nota', $rm->id) }}" class="btn btn-sm btn-info">
+                                                <i class="fa-solid fa-print"></i>
+                                            </a>
                                             <script>
                                                 function confirmDelete(id) {
                                                     Swal.fire({
@@ -179,8 +178,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="editModalLabel{{ $rm->id }}">Edit Rekam
-                                                    Medis
-                                                </h5>
+                                                    Medis</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                             </div>
@@ -196,8 +194,7 @@
                                                             <select name="kunjungan_id" id="kunjungan_id"
                                                                 class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
                                                                 <option value="{{ $rm->kunjungan_id }}" selected>
-                                                                    {{ $rm->kunjungan->pasien->nama }}
-                                                                </option>
+                                                                    {{ $rm->kunjungan->pasien->nama }}</option>
                                                                 @foreach ($knjgn as $kn)
                                                                     @if ($kn->id !== $rm->kunjungan_id)
                                                                         <option value="{{ $kn->id }}">
@@ -220,10 +217,10 @@
                                                                 id="diagnosa" name="diagnosa"
                                                                 value="{{ $rm->diagnosa }}">
                                                         </div>
-                                                        @error('diagnosa')
-                                                            <p style="color: red">{{ $message }}</p>
-                                                        @enderror
                                                     </div>
+                                                    @error('diagnosa')
+                                                        <p style="color: red">{{ $message }}</p>
+                                                    @enderror
 
                                                     <!-- Tindakan -->
                                                     <div class="mb-3 row">
@@ -234,10 +231,10 @@
                                                                 id="tindakan" name="tindakan"
                                                                 value="{{ $rm->tindakan }}">
                                                         </div>
-                                                        @error('tindakan')
-                                                            <p style="color: red">{{ $message }}</p>
-                                                        @enderror
                                                     </div>
+                                                    @error('tindakan')
+                                                        <p style="color: red">{{ $message }}</p>
+                                                    @enderror
 
                                                     <!-- Resep -->
                                                     <div class="mb-3 row">
@@ -245,10 +242,10 @@
                                                         <div class="col-sm-10">
                                                             <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi">{{ $rm->resep->first()->deskripsi ?? '' }}</textarea>
                                                         </div>
-                                                        @error('deskripsi')
-                                                            <p style="color: red">{{ $message }}</p>
-                                                        @enderror
                                                     </div>
+                                                    @error('deskripsi')
+                                                        <p style="color: red">{{ $message }}</p>
+                                                    @enderror
 
                                                     <!-- Medication Input Section -->
                                                     <div class="mb-3 row">
@@ -265,19 +262,18 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        @error('obat_id')
-                                                            <p style="color: red">{{ $message }}</p>
-                                                        @enderror
                                                     </div>
+                                                    @error('obat_id')
+                                                        <p style="color: red">{{ $message }}</p>
+                                                    @enderror
 
                                                     <!-- Quantity Section (Dynamic) -->
                                                     <div id="obat-quantity-container">
                                                         @foreach ($rm->obats as $obat)
                                                             <div class="mb-3 row" id="obat-quantity-{{ $obat->id }}">
-                                                                <label for="jumlah_obat"
-                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1">{{ $obat->obat }}
-                                                                    -
-                                                                    Jumlah</label>
+                                                                <label for="jumlah_obat_{{ $obat->id }}"
+                                                                    class="h4 f-normal px-2 w-100 h-3 border-radius-1">{{ $obat->obat }}
+                                                                    - Jumlah</label>
                                                                 <div class="h4 f-bolder">
                                                                     <input type="number"
                                                                         name="jumlah_obat[{{ $obat->id }}]"
@@ -289,23 +285,22 @@
                                                         @endforeach
                                                     </div>
 
-
-                                            <!-- Peralatan Input Section -->
-                                            <div class="mb-3 row">
-                                                <label for="peralatan_id" class="col-sm-2 col-form-label">Peralatan</label>
-                                                <div class="col-sm-10">
-                                                    <select name="peralatan_id[]" id="peralatan_id" class="form-control" multiple>
-                                                        @foreach ($peralatans as $peralatan)
-                                                            <option value="{{ $peralatan->id }}"
-                                                                {{ in_array($peralatan->id, $rm->peralatans->pluck('id')->toArray()) ? 'selected' : '' }}>
-                                                                {{ $peralatan->nama_peralatan }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
-
+                                                    <!-- Peralatan Input Section -->
+                                                    <div class="mb-3 row">
+                                                        <label for="peralatan_id"
+                                                            class="col-sm-2 col-form-label">Peralatan</label>
+                                                        <div class="col-sm-10">
+                                                            <select name="peralatan_id[]" id="peralatan_id"
+                                                                class="form-control" multiple>
+                                                                @foreach ($peralatans as $peralatan)
+                                                                    <option value="{{ $peralatan->id }}"
+                                                                        {{ in_array($peralatan->id, $rm->peralatans->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                                                        {{ $peralatan->nama_peralatan }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
                                                     <!-- Images Section with Checkboxes -->
                                                     <div class="mb-3">
@@ -317,7 +312,7 @@
                                                                         name="delete_images[]"
                                                                         value="{{ $image->id }}"
                                                                         id="deleteImage{{ $image->id }}">
-                                                                    <label class=" form-check-label"
+                                                                    <label class="form-check-label"
                                                                         for="deleteImage{{ $image->id }}">
                                                                         <img src="{{ asset('storage/' . $image->image_path) }}"
                                                                             height="100" width="80" alt="Gambar">
@@ -328,36 +323,29 @@
                                                         </div>
                                                     </div>
 
-
                                                     <div id="edit-image-container">
                                                         <div class="mb-3 row">
-                                                            <label class="">Tambah Gambar
-                                                                Baru</label>
+                                                            <label class="">Tambah Gambar Baru</label>
                                                             <div class="col-sm-10">
                                                                 <input type="file"
                                                                     class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
                                                                     name="new_images[]" multiple>
                                                             </div>
-
                                                         </div>
                                                     </div>
 
+                                                </div>
 
-
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="px-2 py-1 btn-close red-hover"
-                                                            data-bs-dismiss="modal">Cancel</button>
-                                                        <button type="submit"
-                                                            class="px-2 py-1 btn-add main-color-hover">Save
-                                                            Changes</button>
-                                                    </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                        data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="px-2 py-1 btn-add main-color-hover">Save
+                                                        Changes</button>
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <!-- Detail Modal for Visit and Medical Record Input -->
                                 <div class="modal fade" id="detailModal{{ $rm->id }}" tabindex="-1"
                                     aria-labelledby="detailModalLabel{{ $rm->id }}" aria-hidden="true">
@@ -476,7 +464,8 @@
                                         <option value="">--- Pilih Obat ---</option>
                                         @foreach ($obats as $obat)
                                             <option value="{{ $obat->id }}" data-stok="{{ $obat->jumlah }}">
-                                                {{ $obat->obat }} (Stok: {{ $obat->jumlah }})</option>
+                                                {{ $obat->obat }} (Stok: {{ $obat->jumlah }})
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -485,6 +474,7 @@
                                 @enderror
                             </div>
 
+                            <!-- Quantity Section for Selected Medications -->
                             <div id="medication-quantity-section"></div>
 
                             <!-- Equipment Selection -->
@@ -505,8 +495,6 @@
                                 @enderror
                             </div>
 
-
-
                             <!-- Image Input for Create Modal -->
                             <div id="image-container">
                                 <div class="mb-3 row">
@@ -520,7 +508,6 @@
 
                         </div>
 
-
                         <div class="modal-footer">
                             <button type="button" class="px-2 py-1 btn-close red-hover"
                                 data-bs-dismiss="modal">Close</button>
@@ -530,108 +517,103 @@
                 </div>
             </div>
         </div>
-        <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const obatSelect = document.getElementById("obat_id");
-        const quantityContainer = document.getElementById("obat-quantity-container");
-
-        if (!obatSelect || !quantityContainer) {
-            console.error("Element obat_id atau obat-quantity-container tidak ditemukan!");
-            return;
-        }
-
-        // Event listener untuk perubahan pada <select> dengan multiple attribute
-        obatSelect.addEventListener("change", function () {
-            console.log("Change event triggered!");
-
-            // Ambil semua ID obat yang saat ini dipilih
-            const selectedIds = Array.from(obatSelect.selectedOptions).map(option => option.value);
-            console.log("Selected IDs:", selectedIds);
-
-            // Loop melalui obat yang dipilih untuk memastikan input jumlah dibuat
-            selectedIds.forEach(id => {
-                const optionText = Array.from(obatSelect.options).find(opt => opt.value === id)?.textContent || '';
-                const obatName = optionText.split('(')[0].trim(); // Mengambil nama obat dari teks opsi
-
-                const inputId = `obat-quantity-${id}`;
-                if (!document.getElementById(inputId)) {
-                    console.log(`Menambahkan input untuk obat ID: ${id}, Nama: ${obatName}`);
-                    
-                    // Membuat elemen input baru untuk jumlah obat
-                    const newInput = document.createElement("div");
-                    newInput.classList.add("mb-3", "row");
-                    newInput.id = inputId;
-
-                    newInput.innerHTML = `
-                        <label for="jumlah_obat-${id}" class="h4 f-normal px-2 w-100 h-3 border-radius-1">
-                            ${obatName} - Jumlah
-                        </label>
-                        <div class="h4 f-bolder">
-                            <input type="number"
-                                name="jumlah_obat[${id}]"
-                                id="jumlah_obat-${id}"
-                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                min="1"
-                                value="1">
-                        </div>
-                    `;
-
-                    // Tambahkan elemen baru ke container
-                    quantityContainer.appendChild(newInput);
-
-                    // Debug: pastikan elemen ditambahkan
-                    console.log(`Input jumlah untuk obat ID: ${id} berhasil ditambahkan.`);
-                }
-            });
-
-            // Menghapus input jumlah untuk obat yang tidak lagi dipilih
-            Array.from(quantityContainer.children).forEach(input => {
-                const inputId = input.id.replace("obat-quantity-", "");
-                if (!selectedIds.includes(inputId)) {
-                    console.log(`Menghapus input untuk obat ID: ${inputId}`);
-                    input.remove();
-                }
-            });
-        });
-    });
-</script>
 
         <script>
-           document.getElementById('obat_id').addEventListener('change', function() {
-    var selectedObats = Array.from(this.selectedOptions);
-    var quantitySection = document.getElementById('medication-quantity-section');
-    quantitySection.innerHTML = ''; // Clear previous inputs to avoid duplication
+            document.addEventListener("DOMContentLoaded", function() {
+                const obatSelect = document.getElementById("obat_id");
+                const quantityContainer = document.getElementById("obat-quantity-container");
 
-    selectedObats.forEach(function(obat) {
-        var stok = obat.getAttribute('data-stok');
-        var obatId = obat.value;
+                if (!obatSelect || !quantityContainer) {
+                    console.error("Element obat_id atau obat-quantity-container tidak ditemukan!");
+                    return;
+                }
 
-        // Create input fields for each selected medication
-        var inputGroup = document.createElement('div');
-        inputGroup.classList.add('mb-3', 'row');
+                // Event listener untuk perubahan pada <select> dengan multiple attribute
+                obatSelect.addEventListener("change", function() {
+                    console.log("Change event triggered!");
 
-        var label = document.createElement('label');
-        label.classList.add('h4', 'f-bolder');
-        label.textContent = 'Jumlah (' + obat.textContent + ')';
-        inputGroup.appendChild(label);
+                    // Ambil semua ID obat yang saat ini dipilih
+                    const selectedIds = Array.from(obatSelect.selectedOptions).map(option => option.value);
+                    console.log("Selected IDs:", selectedIds);
 
-        var inputContainer = document.createElement('div');
-        inputContainer.classList.add('col-sm-12');
+                    // Loop melalui obat yang dipilih untuk memastikan input jumlah dibuat
+                    selectedIds.forEach(id => {
+                        const optionText = Array.from(obatSelect.options).find(opt => opt.value === id)
+                            ?.textContent || '';
+                        const obatName = optionText.split('(')[0]
+                    .trim(); // Mengambil nama obat dari teks opsi
 
-        var input = document.createElement('input');
-        input.type = 'number';
-        input.name = 'jumlah_obat[]'; // Ensure this is an array
-        input.classList.add('form', 'h4', 'f-normal', 'px-2', 'w-100', 'h-3', 'border-radius-1');
-        input.placeholder = 'Jumlah';
-        input.min = 1;
-        input.max = stok;
-        input.required = true;
+                        const inputId = `obat-quantity-${id}`;
+                        if (!document.getElementById(inputId)) {
+                            console.log(`Menambahkan input untuk obat ID: ${id}, Nama: ${obatName}`);
 
-        inputContainer.appendChild(input);
-        inputGroup.appendChild(inputContainer);
-        quantitySection.appendChild(inputGroup);
-    });
-});
+                            // Membuat elemen input baru untuk jumlah obat
+                            const newInput = document.createElement("div");
+                            newInput.classList.add("mb-3", "row");
+                            newInput.id = inputId;
+
+                            newInput.innerHTML = `
+                    <label for="jumlah_obat-${id}" class="h4 f-normal px-2 w-100 h-3 border-radius-1">${obatName} - Jumlah</label>
+                    <div class="h4 f-bolder">
+                        <input type="number" name="jumlah_obat[${id}]" id="jumlah_obat-${id}" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" min="1" value="1">
+                    </div>
+                `;
+
+                            // Tambahkan elemen baru ke container
+                            quantityContainer.appendChild(newInput);
+
+                            // Debug: pastikan elemen ditambahkan
+                            console.log(`Input jumlah untuk obat ID: ${id} berhasil ditambahkan.`);
+                        }
+                    });
+
+                    // Menghapus input jumlah untuk obat yang tidak lagi dipilih
+                    Array.from(quantityContainer.children).forEach(input => {
+                        const inputId = input.id.replace("obat-quantity-", "");
+                        if (!selectedIds.includes(inputId)) {
+                            console.log(`Menghapus input untuk obat ID: ${inputId}`);
+                            input.remove();
+                        }
+                    });
+                });
+            });
+        </script>
+        <script>
+            document.getElementById('obat_id').addEventListener('change', function() {
+                var selectedObats = Array.from(this.selectedOptions);
+                var quantitySection = document.getElementById('medication-quantity-section');
+                quantitySection.innerHTML = ''; // Clear previous inputs to avoid duplication
+
+                selectedObats.forEach(function(obat) {
+                    var stok = obat.getAttribute('data-stok');
+                    var obatId = obat.value;
+
+                    // Create input fields for each selected medication
+                    var inputGroup = document.createElement('div');
+                    inputGroup.classList.add('mb-3', 'row');
+
+                    var label = document.createElement('label');
+                    label.classList.add('h4', 'f-bolder');
+                    label.textContent = 'Jumlah (' + obat.textContent + ')';
+                    inputGroup.appendChild(label);
+
+                    var inputContainer = document.createElement('div');
+                    inputContainer.classList.add('col-sm-12');
+
+                    var input = document.createElement('input');
+                    input.type = 'number';
+                    input.name = 'jumlah_obat[]'; // Ensure this is an array
+                    input.classList.add('form', 'h4', 'f-normal', 'px-2', 'w-100', 'h-3', 'border-radius-1');
+                    input.placeholder = 'Jumlah';
+                    input.min = 1;
+                    input.max = stok;
+                    input.required = true;
+
+                    inputContainer.appendChild(input);
+                    inputGroup.appendChild(inputContainer);
+                    quantitySection.appendChild(inputGroup);
+                });
+            });
         </script>
 
         <!-- Table -->
