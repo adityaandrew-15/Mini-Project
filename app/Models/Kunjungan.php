@@ -16,14 +16,14 @@ class Kunjungan extends Model
     ];
 
     public function pasien()
-{
-    return $this->belongsTo(Pasien::class);
-} 
+    {
+        return $this->belongsTo(Pasien::class);
+    }
 
-public function dokter()
-{
-    return $this->belongsTo(Dokter::class);
-}
+    public function dokter()
+    {
+        return $this->belongsTo(Dokter::class);
+    }
 
     public function rekamMedis()
     {
@@ -31,13 +31,12 @@ public function dokter()
     }
 
     public function resep()
-{
-    return $this->hasOne(Resep::class);  // Assuming each Kunjungan has one Resep
-}
+    {
+        return $this->hasOne(Resep::class);  // Assuming each Kunjungan has one Resep
+    }
+
     public function user()
-{
-    return $this->belongsTo(User::class);  // Menambahkan 'return' untuk relasi ini
+    {
+        return $this->belongsTo(User::class);  // Menambahkan 'return' untuk relasi ini
+    }
 }
-
-}
-

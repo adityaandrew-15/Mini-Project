@@ -111,16 +111,15 @@
                                         <td>{{ $per->nama_peralatan }}</td>
                                         <td>
                                             @if ($per->gambar)
-                                                <img class="table-img"
-                                                    src="{{ asset('storage/peralatan/' . $per->gambar) }}" height="100px"
-                                                    width="80px" alt="gambar">
+                                                <img src="{{ asset('storage/peralatan/' . $per->gambar) }}" height="100"
+                                                    width="80" alt="gambar">
                                             @else
                                                 <img class="table-img" src="{{ asset('asset/img/peralatan.png') }}"
                                                     alt="gambar default">
                                             @endif
                                         </td>
 
-                                        <td>{{ $per->harga }}</td>
+                                        <td>Rp. {{ $per->harga }}</td>
                                         <td class="action-icons">
 
                                             <button type="button"

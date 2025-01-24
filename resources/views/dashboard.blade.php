@@ -9,8 +9,8 @@
     <meta name="keywords" content="">
 
     <!-- Favicons -->
-    <link href="medicio/assets/img/favicon.png" rel="icon">
-    <link href="medicio/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="Medicio/assets/img/favicon.png" rel="icon">
+    <link href="Medicio/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -20,15 +20,15 @@
         rel="stylesheet">
 
     <!-- Vendor CSS Files -->
-    <link href="medicio/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="medicio/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="medicio/assets/vendor/aos/aos.css" rel="stylesheet">
-    <link href="medicio/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="medicio/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="medicio/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
     <!-- Main CSS File -->
-    <link href="medicio/assets/css/main.css" rel="stylesheet">
+    <link href="Medicio/assets/css/main.css" rel="stylesheet">
 </head>
 
 <style>
@@ -118,7 +118,7 @@
                 data-bs-interval="5000">
 
                 <div class="carousel-item active">
-                    <img src="medicio/assets/img/hero-carousel/hero-carousel-1.jpg" alt="">
+                    <img src="Medicio/assets/img/hero-carousel/hero-carousel-1.jpg" alt="">
                     <div class="container">
 
                         <h2>Selamat Datang di AllCare</h2>
@@ -156,7 +156,7 @@
 
                 <div class="row gy-4">
                     <div class="col-lg-6 position-relative align-self-start" data-aos="fade-up" data-aos-delay="100">
-                        <img src="medicio/assets/img/allcare2.webp" class="img-fluid" alt="">
+                        <img src="Medicio/assets/img/allcare2.webp" class="img-fluid" alt="">
                     </div>
                     <div class="col-lg-6 content" data-aos="fade-up" data-aos-delay="200">
                         <h3>AllCare</h3>
@@ -484,15 +484,15 @@
     <div id="preloader"></div>
 
     <!-- Vendor JS Files -->
-    <script src="medicio/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="medicio/assets/vendor/php-email-form/validate.js"></script>
-    <script src="medicio/assets/vendor/aos/aos.js"></script>
-    <script src="medicio/assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="medicio/assets/vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="medicio/assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="Medicio/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="Medicio/assets/vendor/php-email-form/validate.js"></script>
+    <script src="Medicio/assets/vendor/aos/aos.js"></script>
+    <script src="Medicio/assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="Medicio/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="Medicio/assets/vendor/swiper/swiper-bundle.min.js"></script>
 
     <!-- Main JS File -->
-    <script src="medicio/assets/js/main.js"></script>
+    <script src="Medicio/assets/js/main.js"></script>
 
 </body>
 

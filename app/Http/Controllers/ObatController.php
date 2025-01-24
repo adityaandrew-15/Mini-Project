@@ -3,31 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\Obat;
-use App\Models\Resep;
 use App\Models\RekamMedis;
+use App\Models\Resep;
 use Illuminate\Http\Request;
 
 class ObatController extends Controller
 {
     public function index(Request $request)
     {
-        if(auth()->user()->hasRole('admin|dokter')){
+        if (auth()->user()->hasRole('admin|dokter')) {
             $layout = 'layouts.sidebar';
             $content = 'side';
-        }else{
+        } else {
             $layout = 'layouts.app';
             $content = 'content';
         }
         $search = $request->input('search');
 
-    // Query untuk mendapatkan data obat
-    $obats = Obat::when($search, function($query) use ($search) {
-        return $query->where('obat', 'like', "%{$search}%")
-                     ->orWhere('harga', 'like', "%{$search}%");
-    })->paginate(10);
+        // Query untuk mendapatkan data obat
+        $obats = Obat::when($search, function ($query) use ($search) {
+            return $query
+                ->where('obat', 'like', "%{$search}%")
+                ->orWhere('harga', 'like', "%{$search}%");
+        })->paginate(10);
 
         $resep = Resep::all();
-        return view('obat.index', compact('obats','resep','layout','content'));
+        return view('obat.index', compact('obats', 'resep', 'layout', 'content'));
     }
 
     public function create()
@@ -39,8 +40,8 @@ class ObatController extends Controller
     {
         $request->validate([
             'obat' => 'required',
-            'jumlah' => 'required|numeric|min:0',
-            'harga' => 'required|string',
+            'jumlah' => 'required|numeric|min:1',
+            'harga' => 'required|numeric|min:1',
         ]);
 
         Obat::create($request->only(['obat', 'jumlah', 'harga']));
@@ -62,10 +63,9 @@ class ObatController extends Controller
     {
         $request->validate([
             'obat' => 'required',
-            'jumlah' => 'required|numeric|min:0',
-            'harga' => 'required|string',
+            'jumlah' => 'required|numeric|min:1',
+            'harga' => 'required|numeric|min:1',
         ]);
-        
 
         $obat = Obat::findOrFail($id);
         $obat->update($request->only(['obat', 'jumlah', 'harga']));

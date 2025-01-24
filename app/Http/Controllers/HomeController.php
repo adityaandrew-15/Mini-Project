@@ -4,17 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Dokter;
 use App\Models\Kunjungan;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
 
 class HomeController extends Controller
 {
-
-
     /**
      * Create a new controller instance.
      *
@@ -36,22 +33,23 @@ class HomeController extends Controller
         $jumlahPasien = Pasien::count();
 
         $kunjunganPerBulan = DB::table('kunjungans')
-        ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
-        ->groupBy('bulan')
-        ->get();
+            ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('bulan')
+            ->get();
 
         if ($user->role === 'admin') {
-            return view('admin-home', compact('jumlahPasien','kunjunganPerBulan'));
+            return view('admin-home', compact('jumlahPasien', 'kunjunganPerBulan'));
         }
 
         $diagnosaCount = RekamMedis::selectRaw('kunjungan_id, count(diagnosa) as total')
             ->groupBy('kunjungan_id')
             ->get();
 
+        $kunjunganhistory = Kunjungan::with(['dokter', 'pasien'])->get();
         $dokter = Dokter::all();
         $pasien = Pasien::where('user_id', auth()->id())->get();
         $kunjungan = Kunjungan::where('user_id', auth()->id())->get();
         $jumlah = Kunjungan::count();
-        return view('home', compact('jumlahPasien', 'diagnosaCount', 'pasien', 'kunjungan','jumlah', 'dokter'));
+        return view('home', compact('jumlahPasien', 'diagnosaCount', 'pasien', 'kunjungan', 'jumlah', 'dokter', 'kunjunganhistory'));
     }
 }
