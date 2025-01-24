@@ -384,9 +384,8 @@
 
         .header-text {
             color: rgb(100, 100, 192);
-            position: absolute;
-            top: 20px;
-            left: 100px;
+            display: flex;
+            justify-self: center;            
         }
 
         .lotie {
