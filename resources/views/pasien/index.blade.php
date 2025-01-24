@@ -39,7 +39,7 @@
                         <label for="alamat" class="h4 f-bolder">Alamat</label>
                         <div class="my-1">
                             <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="alamat"
-                                name="alamat" value="{{ old('alamat') }}" required>
+                                name="alamat" value="{{ old('alamat') }}" >
                         </div>
                         @error('alamat')
                             <p style="color: red">{{ $message }}</p>
@@ -50,7 +50,7 @@
                         <label for="no_hp" class="h4 f-bolder">No HP</label>
                         <div class="my-1">
                             <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="no_hp"
-                                name="no_hp" value="{{ old('no_hp') }}" required>
+                                name="no_hp" value="{{ old('no_hp') }}" >
                         </div>
                         @error('no_hp')
                             <p style="color: red">{{ $message }}</p>
@@ -61,7 +61,7 @@
                         <label for="tanggal_lahir" class="h4 f-bolder">Tanggal Lahir</label>
                         <div class="my-1">
                             <input type="date" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="tanggal_lahir"
-                                name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required>
+                                name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" >
                         </div>
                         @error('tanggal_lahir')
                             <p style="color: red">{{ $message }}</p>
