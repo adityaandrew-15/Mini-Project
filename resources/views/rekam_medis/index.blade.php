@@ -247,7 +247,7 @@
                                                         <p style="color: red">{{ $message }}</p>
                                                     @enderror
 
-                                                    <!-- Medication Input Section -->
+                                                    <!-- Dropdown untuk Obat -->
                                                     <div class="mb-3 row">
                                                         <label for="obat_id" class="h4 f-bolder">Obat</label>
                                                         <div class="col-sm-10">
@@ -263,22 +263,23 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    @error('obat_id')
-                                                        <p style="color: red">{{ $message }}</p>
-                                                    @enderror
 
-                                                    <!-- Quantity Section (Dynamic) -->
+                                                    <!-- Input Jumlah Obat -->
                                                     <div id="obat-quantity-container">
-                                                        @foreach ($rm->obats as $obat)
-                                                            <div class="mb-3 row" id="obat-quantity-{{ $obat->id }}">
-                                                                <label for="jumlah_obat_{{ $obat->id }}"
-                                                                    class="h4 f-normal px-2 w-100 h-3 border-radius-1">{{ $obat->obat }}
-                                                                    - Jumlah</label>
+                                                        @foreach ($obats as $obat)
+                                                            <div class="mb-3 row obat-quantity-input"
+                                                                id="obat-quantity-{{ $obat->id }}"
+                                                                style="{{ in_array($obat->id, $rm->obats->pluck('id')->toArray()) ? '' : 'display: none;' }}">
+                                                                <label for="jumlah_obat-{{ $obat->id }}"
+                                                                    class="h4 f-normal px-2 w-100 h-3 border-radius-1">
+                                                                    {{ $obat->obat }} - Jumlah
+                                                                </label>
                                                                 <div class="h4 f-bolder">
                                                                     <input type="number"
                                                                         name="jumlah_obat[{{ $obat->id }}]"
+                                                                        id="jumlah_obat-{{ $obat->id }}"
                                                                         class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                        value="{{ $obat->pivot->jumlah }}"
+                                                                        value="{{ $rm->obats->where('id', $obat->id)->first()->pivot->jumlah ?? 1 }}"
                                                                         min="1">
                                                                 </div>
                                                             </div>
@@ -521,63 +522,45 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const obatSelect = document.getElementById("obat_id");
-                const quantityContainer = document.getElementById("obat-quantity-container");
+                const quantityInputs = document.querySelectorAll(".obat-quantity-input");
 
-                if (!obatSelect || !quantityContainer) {
-                    console.error("Element obat_id atau obat-quantity-container tidak ditemukan!");
+                if (!obatSelect || !quantityInputs) {
+                    console.error("Element obat_id atau input jumlah tidak ditemukan!");
                     return;
                 }
 
-                // Event listener untuk perubahan pada <select> dengan multiple attribute
+                // Event listener untuk perubahan pada select
                 obatSelect.addEventListener("change", function() {
-                    console.log("Change event triggered!");
-
-                    // Ambil semua ID obat yang saat ini dipilih
                     const selectedIds = Array.from(obatSelect.selectedOptions).map(option => option.value);
-                    console.log("Selected IDs:", selectedIds);
 
-                    // Loop melalui obat yang dipilih untuk memastikan input jumlah dibuat
-                    selectedIds.forEach(id => {
-                        const optionText = Array.from(obatSelect.options).find(opt => opt.value === id)
-                            ?.textContent || '';
-                        const obatName = optionText.split('(')[0]
-                    .trim(); // Mengambil nama obat dari teks opsi
-
-                        const inputId = `obat-quantity-${id}`;
-                        if (!document.getElementById(inputId)) {
-                            console.log(`Menambahkan input untuk obat ID: ${id}, Nama: ${obatName}`);
-
-                            // Membuat elemen input baru untuk jumlah obat
-                            const newInput = document.createElement("div");
-                            newInput.classList.add("mb-3", "row");
-                            newInput.id = inputId;
-
-                            newInput.innerHTML = `
-                    <label for="jumlah_obat-${id}" class="h4 f-normal px-2 w-100 h-3 border-radius-1">${obatName} - Jumlah</label>
-                    <div class="h4 f-bolder">
-                        <input type="number" name="jumlah_obat[${id}]" id="jumlah_obat-${id}" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" min="1" value="1">
-                    </div>
-                `;
-
-                            // Tambahkan elemen baru ke container
-                            quantityContainer.appendChild(newInput);
-
-                            // Debug: pastikan elemen ditambahkan
-                            console.log(`Input jumlah untuk obat ID: ${id} berhasil ditambahkan.`);
-                        }
-                    });
-
-                    // Menghapus input jumlah untuk obat yang tidak lagi dipilih
-                    Array.from(quantityContainer.children).forEach(input => {
+                    quantityInputs.forEach(input => {
                         const inputId = input.id.replace("obat-quantity-", "");
-                        if (!selectedIds.includes(inputId)) {
-                            console.log(`Menghapus input untuk obat ID: ${inputId}`);
-                            input.remove();
+
+                        if (selectedIds.includes(inputId)) {
+                            input.style.display = ""; // Tampilkan input
+                        } else {
+                            input.style.display = "none"; // Sembunyikan input
+                            const inputField = input.querySelector("input[type='number']");
+                            if (inputField) inputField.value = ""; // Reset nilai input
+                            input.remove(); // Hapus elemen input jika obat diunselect
+
                         }
                     });
                 });
+
+                // Menampilkan input jumlah obat sesuai dengan obat yang sudah dipilih saat pertama kali load
+                const selectedIds = Array.from(obatSelect.selectedOptions).map(option => option.value);
+                quantityInputs.forEach(input => {
+                    const inputId = input.id.replace("obat-quantity-", "");
+                    if (selectedIds.includes(inputId)) {
+                        input.style.display = ""; // Tampilkan input
+                    } else {
+                        input.style.display = "none"; // Sembunyikan input
+                    }
+                });
             });
         </script>
+
         <script>
             document.getElementById('obat_id').addEventListener('change', function() {
                 var selectedObats = Array.from(this.selectedOptions);

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ObatController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if(auth()->user()->hasRole('admin|dokter')){
             $layout = 'layouts.sidebar';
@@ -18,7 +18,14 @@ class ObatController extends Controller
             $layout = 'layouts.app';
             $content = 'content';
         }
-        $obats = Obat::paginate(10);
+        $search = $request->input('search');
+
+    // Query untuk mendapatkan data obat
+    $obats = Obat::when($search, function($query) use ($search) {
+        return $query->where('obat', 'like', "%{$search}%")
+                     ->orWhere('harga', 'like', "%{$search}%");
+    })->paginate(10);
+
         $resep = Resep::all();
         return view('obat.index', compact('obats','resep','layout','content'));
     }
