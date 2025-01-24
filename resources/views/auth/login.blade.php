@@ -385,7 +385,8 @@
         .header-text {
             color: rgb(100, 100, 192);
             display: flex;
-            justify-self: center;            
+            justify-self: center;
+            
         }
 
         .lotie {
@@ -467,7 +468,7 @@
                         <div class="field btn">
                             <input type="submit" value="Login" >
                         </div>
-                        <div class="signup-link">
+                        <div class="signup-link" style="position: relative; left: 50%;">
                             Not a member? <a href="/register">Signup now</a>
                         </div>
                     </form>
