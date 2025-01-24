@@ -568,9 +568,9 @@
                 const optionText = Array.from(obatSelect.options).find(opt => opt.value === id)?.textContent || '';
                 const obatName = optionText.split('(')[0].trim(); // Mengambil nama obat dari teks opsi
 
-                const inputId = `obat-quantity-${id}`;
+                const inputId = obat-quantity-${id};
                 if (!document.getElementById(inputId)) {
-                    console.log(`Menambahkan input untuk obat ID: ${id}, Nama: ${obatName}`);
+                    console.log(Menambahkan input untuk obat ID: ${id}, Nama: ${obatName});
 
                     // Membuat elemen input baru untuk jumlah obat
                     const newInput = document.createElement("div");
@@ -595,7 +595,7 @@
                     quantityContainer.appendChild(newInput);
 
                     // Debug: pastikan elemen ditambahkan
-                    console.log(`Input jumlah untuk obat ID: ${id} berhasil ditambahkan.`);
+                    console.log(Input jumlah untuk obat ID: ${id} berhasil ditambahkan.);
                 }
             });
 
@@ -603,7 +603,7 @@
             Array.from(quantityContainer.children).forEach(input => {
                 const inputId = input.id.replace("obat-quantity-", "");
                 if (!selectedIds.includes(inputId)) {
-                    console.log(`Menghapus input untuk obat ID: ${inputId}`);
+                    console.log(Menghapus input untuk obat ID: ${inputId});
                     input.remove();
                 }
             });
