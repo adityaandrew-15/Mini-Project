@@ -11,6 +11,8 @@ use App\Http\Controllers\JadwalPraktekController;
 use App\Http\Controllers\RekamMedisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PeralatanController;
+use App\Http\Controllers\detailController;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Kunjungan;
 
@@ -28,6 +30,7 @@ Auth::routes();
 
 // Home route after login
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 // Admin Dashboard (accessible by admin only)
 Route::get('/admin', function () {
@@ -97,3 +100,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+
+Route::get('/detail', [App\Http\Controllers\detailController::class, 'index'])->name('detail');

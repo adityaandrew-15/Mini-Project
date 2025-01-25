@@ -487,7 +487,7 @@
                     </div>
                 </div>
             </div> --}}
-            @foreach ($kunjunganhistory as $kunj)
+            @foreach ($kunjunganhistory->take(3) as $kunj)
                 <div class="patient-card">
                     <h2 style="font-weight: bold;">Data Anda: </h2>
                     <p>
@@ -510,14 +510,14 @@
                         <span class="label">Tanggal Kunjungan :</span>
                         <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
                     </p>
-                    {{-- <div class="button-details">
-                        <div class="details-button">
-                            <i class="fa-regular fa-eye"></i>
-                            <a href="#">Detail</a>
-                        </div>
-                    </div> --}}
                 </div>
             @endforeach
+            <div class="button-details">
+                <div class="details-button">
+                    <i class="fa-regular fa-eye"></i>
+                    <a href="{{route ('detail')}}">lihat semua</a>
+                </div>
+            </div>
         </div>
     </section>
 
