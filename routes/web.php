@@ -103,3 +103,6 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/detail', [App\Http\Controllers\detailController::class, 'index'])->name('detail');
+
+
+// Halaman kedua (page2)

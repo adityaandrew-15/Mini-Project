@@ -103,27 +103,6 @@
             Swal.fire('Error', '{{ session('error') }}', 'error')
         </script>
     @endif
-    <header>
-        {{-- <header>
-        <h1>
-            KLINIK
-        </h1>
-        <nav>
-            <a href="#page-2">
-                Dokter
-            </a>
-            <a href="#patien-info">
-                Pasien
-            </a>
-            <a href="#form-section">
-                Kunjungan
-            </a>
-            <a href="#">
-                Diagnosa
-            </a>
-        </nav>
-        <div class="gap"></div> --}}
-    </header>
     <nav class="navbar">
         <h1>
             KLINIK
@@ -138,10 +117,10 @@
             <li><a href="#form-section-kunjungan">
                     Buat Kunjungan
                 </a></li>
+            <li><a href="#patient-info">
+                    data kunjungan
+            </a></li>
 
-            <li><a href="#info-kunjungan">
-                    Data Kunjungan
-                </a></li>
         </ul>
         <ul>
             <li style="margin-top: 7px">
@@ -450,7 +429,7 @@
             </table>
         </div>
     </section> --}}
-    <section id="patien-info" class="patient-info">
+    <section id="patient-info" class="patient-info">
         <h3>
             Riwayat Kunjungan Anda
         </h3>

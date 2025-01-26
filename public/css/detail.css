@@ -1,0 +1,577 @@
+:root {
+    --main-color: #2697b1;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #000000;
+    position: fixed;
+    width: 100%;
+    padding: 1.5rem 2rem;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+.navbar h1 {
+    color: var(--main-color);
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0;
+}
+
+.navbar ul {
+    display: flex;
+    text-decoration: none;
+}
+
+.navbar ul li {
+    display: inline-block;
+}
+
+.navbar ul li a {
+    margin: 0 2rem;
+    text-decoration: none;
+    color: #333;
+    font-size: 1.8rem;
+    font-weight: 600;
+    justify-content: center;
+}
+
+.navbar li:hover {
+    background-color: #ccc6c6;
+    border-radius: 10px;
+}
+
+.shadow-effect:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Bayangan muncul */
+  }
+
+.hero {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 120px 40px 0 40px;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    position: relative;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero h2 {
+    font-size: 6rem;
+    font-weight: 900;
+    margin: 0;
+}
+
+.hero h2 span {
+    color: var(--main-color);
+}
+
+.hero p {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 10px 0 20px;
+}
+
+.button {
+    margin: 4rem 0;
+}
+
+.hero a {
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 1rem 4rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 12px;
+    margin-top: 5rem;
+}
+
+.hero img {
+    height: 900px;
+    width: auto;
+    object-fit: cover;
+    margin-left: 0;
+}
+
+.page-doctor {
+    padding: 148px 0 2rem;
+}
+
+.section-title {
+    text-align: center;
+}
+
+.section-title h3 {
+    font-size: 4rem;
+    margin: 1rem;
+}
+
+.section-title p {
+    font-size: 2rem;
+}
+
+.doctors {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 2rem 2rem 4rem 2rem;
+}
+
+.doctor-group {
+    display: flex;
+    padding: 0 12rem;
+}
+
+.doctor-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+}
+
+.doctor-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.doctor-card h4 {
+    font-size: 1.5rem;
+    margin: 10px 0 5px;
+}
+
+.doctor-card p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 5px 0;
+}
+
+.form-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10rem 168px 0;
+    text-align: center;
+    background: linear-gradient(to right, #fff, #2697b1);
+}
+
+.form-left {
+    text-align: left;
+    align-items: left;
+}
+
+.form-left {
+    padding: 6rem 4rem;
+}
+
+.form-right {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 3.5rem;
+    margin: 4rem 2rem;
+    background: #87c5d4;
+    border-radius: 64px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.form-section h3 {
+    font-size: 4rem;
+    margin: 0 0 20px;
+}
+
+.form-section p {
+    font-size: 1.5rem;
+    color: #666;
+    margin: 0 0 20px;
+}
+
+.form-section form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+.form-section input {
+    width: 750px;
+    padding: 1.5rem 2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 1rem 0;
+    border: 2px solid #8d8d8d;
+    border-radius: 10px;
+}
+
+.form-section form button {
+    background-color: #0f8ca9;
+    color: white;
+    border: none;
+    width: 40%;
+    padding: 1.5rem 1.5rem;
+    font-size: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.patient-info {
+    position: relative; /* Untuk memastikan z-index bekerja */
+
+    background-color: #ffffff;
+    margin-top: 100px;
+    padding: 6rem 12rem;
+    text-align: center;
+    border-bottom-left-radius: 230px;
+    border-bottom-right-radius: 230px;
+    z-index: 5;
+}
+
+.patient-info h3 {
+    color: #103F91;
+    font-size: 4rem;
+    margin: 0 0 2rem;
+}
+
+.patient-info p {
+    font-size: 2rem;
+    color: #000000;
+    margin: 0 0 6rem;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.patient-card {
+    border: 1px solid #000000;
+    border-radius: 16px;
+    padding: 20px;
+    width: 700px;
+    text-align: left;
+}
+
+.patient-card p {
+    margin: 5px 0;
+    font-size: 2rem;
+}
+
+.patient-card i {
+    color: #103F91;
+    margin-right: 10px;
+}
+
+.patient-card .label {
+    width: 100px;
+    /* Lebar tetap untuk label */
+    font-weight: bold;
+}
+
+.patient-card .value {
+    flex: 1;
+    /* Membuat teks dinamis */
+    color: #555;
+}
+
+.button-details {
+    display: flex;
+}
+
+.details-button:hover {
+    background-color: #0d7188;
+}
+
+.details-button {
+    background-color: #0f8ca9;
+    color: white;
+    border: none;
+    width: 40%;
+    padding: 1rem 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 10rem;
+}
+
+.details-button a {
+    color: #fff;
+    text-decoration: none;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+footer {
+    margin-top: -250px;
+    background: linear-gradient(#103F91, #103F91BF,#103F9180);
+    color: white;
+    padding: 20px 0;
+    height:680px;
+  }
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 20px;
+    margin-left: 150px;
+  }
+  .footer-column {
+    margin-top: 300px;
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 20px;
+  }
+  .footer-column h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid white;
+    display: inline-block;
+    padding-bottom: 5px;
+  }
+  .footer-column p, .footer-column ul {
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+  }
+  .footer-column ul {
+    list-style: none;
+  }
+  .footer-column ul li {
+    margin-bottom: 10px;
+  }
+  .social-icons a {
+    color: white;
+    text-decoration: none;
+    margin-bottom: 10px;    
+    font-size: 18px;
+  }
+  .social-icons a:hover {
+    color: #00bcd4;
+  }
+  .social-icons{
+    display: flex;
+    flex-direction: column;
+    
+
+}
+
+@media (max-width: 1366px) {
+    .navbar h1 {
+        font-size: 2rem;
+        /* Mengurangi ukuran font h1 */
+    }
+
+    .navbar ul li a {
+        font-size: 1.2rem;
+        /* Mengurangi ukuran font pada link navigasi */
+        margin: 0 1rem;
+        /* Mengurangi margin antar link */
+    }
+
+    .navbar {
+        padding: 1rem 1.5rem;
+        /* Mengurangi padding pada header */
+    }
+
+    .hero {
+        padding: 96px 30px 0 30px;
+        /* Mengurangi padding untuk ruang lebih efisien */
+    }
+
+    .hero-content {
+        padding: 60px 0;
+        /* Mengurangi padding vertikal */
+    }
+
+    .hero h2 {
+        font-size: 4.5rem;
+        /* Mengurangi ukuran font h2 */
+    }
+
+    .hero p {
+        font-size: 1.6rem;
+        /* Mengurangi ukuran font paragraf */
+    }
+
+    .hero a {
+        padding: 0.8rem 3rem;
+        /* Mengurangi padding pada tombol */
+        font-size: 0.9rem;
+        /* Mengurangi ukuran font pada tombol */
+    }
+
+    .hero img {
+        height: 600px;
+        width: auto;
+        object-fit: cover;
+        margin-left: 0;
+    }
+
+    .page-doctor {
+        padding: 96px 0 0;
+    }
+
+    /* Section Title */
+    .section-title h3 {
+        font-size: 2.5rem;
+        /* Mengurangi ukuran font judul */
+    }
+
+    .section-title p {
+        font-size: 1.3rem;
+        /* Mengurangi ukuran font paragraf */
+    }
+
+    /* Doctors Section */
+    .doctor-group {
+        padding: 0 6rem;
+        /* Mengurangi padding pada grup dokter */
+    }
+
+    .doctor-card {
+        width: 200;
+        /* Mengurangi lebar kartu dokter */
+        margin: 0.5rem 1rem;
+        /* Mengurangi margin antar kartu dokter */
+        padding: 15px;
+        /* Mengurangi padding dalam kartu dokter */
+    }
+
+    .doctor-card h4 {
+        font-size: 1.3rem;
+        /* Mengurangi ukuran font nama dokter */
+    }
+
+    .doctor-card p {
+        font-size: 1rem;
+        /* Mengurangi ukuran font deskripsi dokter */
+    }
+
+    /* Form Section */
+    .form-section {
+        padding: 5rem 4rem 0;
+        justify-content: space-evenly;
+    }
+
+    .form-left {
+        padding: 4rem 2rem;
+        /* Mengurangi padding pada form-left */
+    }
+
+    .form-right {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 2rem;
+        margin: 4rem 2rem;
+        background: #87c5d4;
+        border-radius: 32px;
+        justify-content: center;
+        align-items: center;
+        width: 500px;
+    }
+
+    .form-section h3 {
+        font-size: 2.5rem;
+        /* Mengurangi ukuran font judul form */
+    }
+
+    .form-section p {
+        font-size: 1.3rem;
+    }
+
+    .form-section input {
+        width: 450px;
+        /* Membuat input mengisi lebar 100% */
+        padding: 0.8rem 1.8rem;
+        /* Mengurangi padding dalam input */
+        font-size: 1rem;
+        /* Mengurangi ukuran font dalam input */
+    }
+
+    .form-section form button {
+        width: 150px;
+        /* Tombol mengisi 60% lebar */
+        padding: 0.8rem 0.8rem;
+        /* Mengurangi padding tombol */
+        font-size: 1rem;
+        /* Mengurangi ukuran font tombol */
+    }
+
+    /* Patient Info Section */
+    .patient-info {
+        z-index: 5;
+        padding: 4rem 6rem;
+        /* Mengurangi padding pada patient-info */
+    }
+
+    .patient-info h3 {
+        font-size: 3rem;
+        /* Mengurangi ukuran font judul patient-info */
+    }
+
+    .patient-info p {
+        font-size: 1.6rem;
+        /* Mengurangi ukuran font deskripsi patient-info */
+    }
+
+    .patient-card {
+        width: 500px;
+        /* Membuat kartu pasien mengisi lebar penuh */
+        padding: 15px;
+        /* Mengurangi padding pada kartu pasien */
+        font-size: 1.6rem;
+        /* Mengurangi ukuran font dalam kartu pasien */
+    }
+
+    /* Icon dalam patient-card */
+    .patient-card i {
+        font-size: 1.6rem;
+        /* Mengurangi ukuran icon */
+    }
+
+    .patient-card b {
+        font-size: 1.3rem;
+        text-align: center;
+        font-weight: 550;
+    }
+
+    
+
+}
