@@ -23,6 +23,9 @@
             <form method="GET" action="{{ route('obat.index') }}">
                 <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
                     value="{{ request('search') }}" class="form-control">
+                <input type="number" name="min_price" placeholder="Min Price" value="{{ request('min_price') }}" class="form-control" style="width: 100px; display: inline-block;">
+                <input type="number" name="max_price" placeholder="Max Price" value="{{ request('max_price') }}" class="form-control" style="width: 100px; display: inline-block;">
+                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
             <div class="outer-table">
                 <div class="content-table-table">
