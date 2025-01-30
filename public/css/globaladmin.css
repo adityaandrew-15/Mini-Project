@@ -197,6 +197,15 @@ body {
     font-weight: 800;
 }
 
+.btn-filter {
+    border: none;
+    background: var(--main-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 1.2rem;
+    font-weight: 800;
+}
+
 #fileInput {
     display: none;
 }
