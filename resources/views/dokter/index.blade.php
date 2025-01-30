@@ -45,7 +45,7 @@
                                     <td>
                                         @if ($dokter->image)
                                             <img class="table-img" src="{{ asset('storage/' . $dokter->image) }}"
-                                                height="100px" width="80px" alt="gambar">
+                                                height="100px" width="100px" alt="gambar">
                                         @else
                                             <img class="table-img" src="{{ asset('asset/img/dokter.png') }}" alt="">
                                         @endif
