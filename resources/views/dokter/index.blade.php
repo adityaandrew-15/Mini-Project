@@ -18,12 +18,33 @@
                     </button>
                 @endif
             </div>
-            <h2>Dokter aktif: {{DB::table('dokters')->count()}}</h2>
+            <h2>Dokter aktif: {{ DB::table('dokters')->count() }}</h2>
         </div>
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('dokter.index') }}">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
+            <form method="GET" action="{{ route('dokter.index') }}" class="d-flex w-100 gap-2">
+
+
+                <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama atau No HP"
                     value="{{ request('search') }}" class="form-control">
+
+                <input type="text" class="search-container w-100 h4" name="spesialis" placeholder="Cari Spesialis"
+                    value="{{ request('spesialis') }}" class="form-control">
+
+
+
+                <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
+
+                <style>
+                    .invisible-btn {
+                        opacity: 0;
+                        /* Tombol tidak terlihat */
+                        position: absolute;
+                        /* Menghindari layout bergeser */
+                        pointer-events: none;
+                        /* Mencegah klik langsung */
+                    }
+                </style>
+
             </form>
             <div class="outer-table">
                 <div class="content-table-table">
@@ -119,8 +140,7 @@
                             <label for="spesialis" class="h4 f-bolder">Spesialis</label>
                             <div class="my-1">
                                 <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                    id="spesialis{{ $dokter->id }}" name="spesialis"
-                                    value="{{ $dokter->spesialis }}">
+                                    id="spesialis{{ $dokter->id }}" name="spesialis" value="{{ $dokter->spesialis }}">
                             </div>
                         </div>
                         <div class="my-2">

@@ -90,10 +90,31 @@
 
             <!-- Table -->
             <div class="content-table m-2 d-flex col">
-                <form action="{{ route('peralatan.index') }}" method="GET">
-                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                        value="{{ request('search') }}" class="">
+                <form action="{{ route('peralatan.index') }}" method="GET" class="d-flex w-100 gap-2">
+                    <!-- Search Nama Peralatan -->
+                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama Peralatan"
+                           value="{{ request('search') }}" class="form-control">
+                
+                    <!-- Search Harga Minimal -->
+                    <input type="number" class="search-container w-40 h4" name="min_price" placeholder="Harga Minimal"
+                           value="{{ request('min_price') }}" class="form-control">
+                
+                    <!-- Search Harga Maksimal -->
+                    <input type="number" class="search-container w-40 h4" name="max_price" placeholder="Harga Maksimal"
+                           value="{{ request('max_price') }}" class="form-control">
+                
+                    <!-- Tombol Cari -->
+                    <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
+                
+                    <style>
+                        .invisible-btn {
+                            opacity: 0;
+                            position: absolute;
+                            pointer-events: none;
+                        }
+                    </style>
                 </form>
+                
                 <div class="outer-table">
                     <div class="content-table-table">
                         <table>

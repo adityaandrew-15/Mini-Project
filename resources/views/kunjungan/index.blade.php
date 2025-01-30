@@ -32,9 +32,29 @@
         </div>
 
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('kunjungan.index') }}">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                    value="{{ request('search') }}" class="form-control">
+            <form method="GET" action="{{ route('kunjungan.index') }}" class="d-flex w-100 gap-2">
+
+                <input type="text" class="search-container w-100 h4" name="search_pasien" placeholder="Cari Nama Pasien"
+                    value="{{ request('search_pasien') }}" class="form-control">
+                <input type="text" class="search-container w-100 h4" name="search_dokter" placeholder="Cari Nama Dokter"
+                    value="{{ request('search_dokter') }}" class="form-control">
+                    <input type="date" class="search-container w-40 h4" name="search_tanggal"
+                    placeholder="Cari Nama atau No HP" value="{{ request('search_tanggal') }}" class="form-control" 
+                    onchange="this.form.submit()">  
+                    <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
+
+                    <style>
+                        .invisible-btn {
+                            opacity: 0;
+                            /* Tombol tidak terlihat */
+                            position: absolute;
+                            /* Menghindari layout bergeser */
+                            pointer-events: none;
+                            /* Mencegah klik langsung */
+                        }
+                    </style>
+
+
             </form>
 
             <div class="outer-table">
@@ -109,9 +129,9 @@
 
         <div class="modal animate__fadeIn" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
-                @if (auth()->user()->hasRole('admin',))
-                <h2 class="h2 f-bolder">Tambah Kunjungan</h2>
-                <button type="button" class="btn-close" onclick="closeAddKunjunganModal()"></button>
+                @if (auth()->user()->hasRole('admin'))
+                    <h2 class="h2 f-bolder">Tambah Kunjungan</h2>
+                    <button type="button" class="btn-close" onclick="closeAddKunjunganModal()"></button>
                 @endif
 
                 <form action="{{ route('kunjungan.store') }}" method="POST">
@@ -130,12 +150,13 @@
                             <p style="color: red">{{ $message }}</p>
                         @enderror
                     </div>
-                
+
                     @if (auth()->user()->hasRole('admin'))
                         <div class="my-2">
                             <label for="dokter_id" class="h4 f-bolder">Dokter</label>
                             <div class="my-1">
-                                <select name="dokter_id" id="dokter_id" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                                <select name="dokter_id" id="dokter_id"
+                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
                                     <option>--- Pilih Dokter ---</option>
                                     @foreach ($dokters as $dok)
                                         <option value="{{ $dok->id }}">{{ $dok->nama }}</option>
@@ -147,21 +168,23 @@
                             @enderror
                         </div>
                     @endif
-                
+
                     <div class="my-2">
                         <label for="keluhan" class="h4 f-bolder">Keluhan</label>
                         <div class="my-1">
-                            <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="keluhan" name="keluhan" value="{{ old('keluhan') }}">
+                            <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="keluhan"
+                                name="keluhan" value="{{ old('keluhan') }}">
                         </div>
                         @error('keluhan')
                             <p style="color: red">{{ $message }}</p>
                         @enderror
                     </div>
-                
+
                     <div class="my-2">
                         <label for="tanggal_kunjungan" class="h4 f-bolder">Tanggal Kunjungan</label>
                         <div class="my-1">
-                            <input type="date" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="tanggal_kunjungan" name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan') }}">
+                            <input type="date" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                id="tanggal_kunjungan" name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan') }}">
                         </div>
                         @error('tanggal_kunjungan')
                             <p style="color: red">{{ $message }}</p>
@@ -270,7 +293,7 @@
             function btnCloseAddKunjunganModal() {
                 var modal = document.getElementById("myModalAdd");
                 modal.style.display = "none";
-            }   
+            }
 
 
             window.onclick = function(event) {

@@ -22,32 +22,33 @@ class KunjunganController extends Controller
         $layout = 'layouts.app';
         $content = 'content';
     }
-    $search = $request->get('search');
 
-    $kunjungans = Kunjungan::when($search, function ($query, $search) {
-        return $query->whereHas('pasien', function ($query) use ($search) {
-            $query->where('nama', 'like', '%' . $search . '%');
-        })->orWhereHas('dokter', function ($query) use ($search) {
-            $query->where('nama', 'like', '%' . $search . '%');
+    // Ambil nilai input pencarian
+    $searchPasien = $request->get('search_pasien');
+    $searchDokter = $request->get('search_dokter');
+    $searchTanggal = $request->get('search_tanggal');
+
+    $kunjungans = Kunjungan::when($searchPasien, function ($query, $searchPasien) {
+        return $query->whereHas('pasien', function ($query) use ($searchPasien) {
+            $query->where('nama', 'like', '%' . $searchPasien . '%');
         });
+    })
+    ->when($searchDokter, function ($query, $searchDokter) {
+        return $query->whereHas('dokter', function ($query) use ($searchDokter) {
+            $query->where('nama', 'like', '%' . $searchDokter . '%');
+        });
+    })
+    ->when($searchTanggal, function ($query, $searchTanggal) {
+        return $query->whereDate('tanggal_kunjungan', $searchTanggal);
     })
     ->with(['pasien', 'dokter'])
     ->paginate(10);
 
-    if(auth()->user()->hasRole('admin')){
-        $pasiens = Pasien::all();
-    }else{
-        $pasiens = Pasien::all();$pasiens = Pasien::where('user_id', auth()->id())->get();
-    }
-    $dokters = Dokter::all();  // Fetch all doctors
+    $pasiens = auth()->user()->hasRole('admin') ? Pasien::all() : Pasien::where('user_id', auth()->id())->get();
+    $dokters = Dokter::all();
 
-    return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters','layout','content'));  // Pass dokters to the view
+    return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters', 'layout', 'content'));
 }
-
-
-
-
-
     public function create()
     {
         $pasiens = Pasien::where('user_id', auth()->id())->get();
