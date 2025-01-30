@@ -395,7 +395,7 @@
         <div class="modal animate__animated" id="addModal" tabindex="-1" aria-labelledby="addModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content animate__animated animate__zoomIn">
                     @if (auth()->user()->hasRole('admin'))
                         <div class="modal-header">
                             <h5 class="modal-title" id="addModalLabel">Tambah Rekam Medis</h5>
