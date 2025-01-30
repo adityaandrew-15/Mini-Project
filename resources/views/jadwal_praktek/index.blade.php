@@ -29,10 +29,38 @@
         </div>
 
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('jadwal_praktek.index') }}">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                    value="{{ request('search') }}" class="form-control">
+            <form method="GET" action="{{ route('jadwal_praktek.index') }}" class="d-flex w-100 gap-2">
+                <!-- Search Nama Dokter -->
+                <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama Dokter atau Hari"
+                       value="{{ request('search') }}" class="form-control">
+            
+                <!-- Search Hari -->
+                <input type="text" class="search-container w-100 h4" name="search_hari" placeholder="Cari Hari"
+                       value="{{ request('search_hari') }}" class="form-control">
+            
+                <!-- Search Jam Mulai -->
+                <input type="time" class="search-container w-40 h4" name="start_time" placeholder="Jam Mulai"
+                       value="{{ request('start_time') }}" class="form-control" onchange="this.form.submit()">
+            
+                <!-- Search Jam Selesai -->
+                <input type="time" class="search-container w-40 h4" name="end_time" placeholder="Jam Selesai"
+                       value="{{ request('end_time') }}" class="form-control" onchange="this.form.submit()">
+            
+                <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
+                
+                {{-- ini aslinya butuh soalnya waktu kita input waktu itu udah ke search secara otomatis nah biasnaya kita kan butuh clear atau mau clear time tadi bisa lewat sini atau button ini, be e ada saran bisa di ubah biar lebih mudah dan rapi tampilan e --}}
+                <a href="{{ route('jadwal_praktek.index') }}" class="btn btn-secondary ms-2">Clear</a> 
+                
             </form>
+            
+            <style>
+                .invisible-btn {
+                    opacity: 0;
+                    position: absolute;
+                    pointer-events: none;
+                }
+            </style>
+            
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>

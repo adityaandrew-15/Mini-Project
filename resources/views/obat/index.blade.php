@@ -20,19 +20,29 @@
             </div>
         </div>
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('obat.index') }}">
-                <div class="d-flex">
-                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                        value="{{ request('search') }}" class="form-control">
-                    <div class="filter-form d-flex">
-                        <input type="number" name="min_price" placeholder="Min Price" value="{{ request('min_price') }}"
-                            class="form-control search-container w-100 h4" style="width: 100px; display: inline-block;">
-                        <input type="number" name="max_price" placeholder="Max Price" value="{{ request('max_price') }}"
-                            class="form-control search-container w-100 h4" style="width: 100px; display: inline-block;">
-                    </div>
-                    {{-- <button type="submit" class="btn-filter">Filter</button> --}}
+            <form method="GET" action="{{ route('obat.index') }}" class="d-flex w-100 gap-2">
+                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
+                    value="{{ request('search') }}" class="form-control">
+        
+                <div class="filter-form d-flex">
+                    <input type="number" name="min_price" placeholder="Min Price" value="{{ request('min_price') }}"
+                        class="form-control search-container w-100 h4" style="width: 100px;">
+                    <input type="number" name="max_price" placeholder="Max Price" value="{{ request('max_price') }}"
+                        class="form-control search-container w-100 h4" style="width: 100px;">
                 </div>
+        
+                <!-- Tombol disembunyikan tetapi tetap berfungsi -->
+                <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
+                <style>
+                    .invisible-btn {
+                        opacity: 0; /* Tombol tidak terlihat */
+                        position: absolute; /* Menghindari layout bergeser */
+                        pointer-events: none; /* Mencegah klik langsung */
+                    }
+                </style>
+                
             </form>
+            
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>

@@ -12,7 +12,7 @@ class DokterController extends Controller
 {
     public function index(Request $request)
 {
-    if(auth()->user()->hasRole('admin|dokter')){
+    if (auth()->user()->hasRole('admin|dokter')) {
         $layout = 'layouts.sidebar';
         $content = 'side';
     } else {
@@ -22,18 +22,26 @@ class DokterController extends Controller
 
     $query = Dokter::query();
 
-    // Apply search filter if there's a search query
-    if ($request->has('search') && $request->search) {
+    // Filter berdasarkan nama atau no_hp
+    if ($request->filled('search')) {
         $search = $request->search;
-        $query->where('nama', 'LIKE', "%$search%")
-              ->orWhere('spesialis', 'LIKE', "%$search%")
+        $query->where(function ($q) use ($search) {
+            $q->where('nama', 'LIKE', "%$search%")
               ->orWhere('no_hp', 'LIKE', "%$search%");
+        });
+    }
+
+    // Filter berdasarkan spesialis
+    if ($request->filled('spesialis')) {
+        $query->where('spesialis', 'LIKE', "%{$request->spesialis}%");
     }
 
     $dokters = $query->paginate(10);
 
     return view('dokter.index', compact('dokters', 'layout', 'content'));
 }
+
+
     public function create()
     {
         return view('dokter.create');
