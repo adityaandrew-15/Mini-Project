@@ -421,9 +421,11 @@
         </div>
     </section> --}}
     <section id="patient-info" class="patient-info">
+        
         <h3>
             Riwayat Kunjungan Anda
         </h3>
+        
         <p>
             Berikut adalah daftar kunjungan yang <br> telah Anda buat.
         </p>
@@ -443,8 +445,8 @@
                                 class="value">{{ $kunj->pasien->nama }}</span>
                         </p>
                         {{-- <p>
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span class="label">Dokter :</span>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span class="label">Dokter :</span>
                         <span class="value">{{ $kunj->dokter-nama }}</span>
                     </p> --}}
                         <p>
@@ -456,7 +458,70 @@
                             <i class="fas fa-calendar-alt"></i>
                             <span class="label">Tanggal Kunjungan :</span>
                             <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
-                            <a href="{{ route('rekam_medis.detail', $kunj->rekamMedis->id) }}" class="btn btn-primary">Detail</a>
+                            <!-- Tombol Detail -->
+                            <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#detailModal{{ $kunj->rekamMedis->id }}">
+                                Detail
+                            </a>
+
+                            <!-- Modal -->
+                        <div class="modal fade" id="detailModal{{ $kunj->rekamMedis->id }}" tabindex="-1"
+                            aria-labelledby="detailModalLabel{{ $kunj->rekamMedis->id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="detailModalLabel{{ $kunj->rekamMedis->id }}">
+                                            Detail Rekam Medis
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Pasien:</strong> {{ $kunj->rekamMedis->kunjungan->pasien->nama }}
+                                        </p>
+                                        <p><strong>Diagnosa:</strong> {{ $kunj->rekamMedis->diagnosa }}</p>
+                                        <p><strong>Tindakan:</strong> {{ $kunj->rekamMedis->tindakan }}</p>
+                                        
+                                        <p><strong>Obat:</strong></p>
+                                        @if ($kunj->rekamMedis->obats && $kunj->rekamMedis->obats->count() > 0)
+                                            @foreach ($kunj->rekamMedis->obats as $obat)
+                                                <p>{{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}</p>
+                                            @endforeach
+                                        @else
+                                            <p>Tidak ada obat yang terkait</p>
+                                        @endif
+                                        <p><strong>Resep:</strong>   @if ($kunj->rekamMedis->resep)
+                                            @foreach ($kunj->rekamMedis->resep as $resep)
+                                                <p>{{ $resep->deskripsi }}</p>
+                                            @endforeach
+                                            @else
+                                                <p>Tidak ada resep</p>
+                                            @endif</p>
+
+                                            <p><strong>Peralatan:</strong>  @if ($kunj->rekamMedis->peralatans && $kunj->rekamMedis->peralatans->count() > 0)
+                                                @foreach ($kunj->rekamMedis->peralatans as $peralatan)
+                                                    <tr>
+                                                        <td>{{ $peralatan->nama_peralatan }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td>Tidak ada peralatan yang terkait</td>
+                                                </tr>
+                                            @endif</p>
+                                        <p><strong>Gambar:</strong></p>
+                                        @foreach ($kunj->rekamMedis->images as $image)
+                                            <img src="{{ asset('storage/' . $image->image_path) }}" height="150"
+                                                width="120" class="mb-2" alt="Gambar">
+                                        @endforeach
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         </p>
                     </div>
                 @endforeach
@@ -484,3 +549,5 @@
 
 
 </html>
+
+
