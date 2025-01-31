@@ -30,6 +30,8 @@ Auth::routes();
 // Home route after login
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/rekam-medis/{id}/detail', [RekamMedisController::class, 'detail'])->name('rekam_medis.detail');
+Route::get('kunjungan/{id}/detail', [KunjunganController::class, 'showDetail']);
+
 
 // Admin Dashboard (accessible by admin only)
 Route::get('/admin', function () {
