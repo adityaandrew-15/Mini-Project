@@ -37,9 +37,10 @@ public function peralatans()
     }
 
     public function rekamMedis()
-    {
-        return $this->hasOne(RekamMedis::class);
-    }
+{
+    return $this->hasMany(RekamMedis::class);
+}
+
 
     public function resep()
     {

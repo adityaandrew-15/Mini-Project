@@ -1,5 +1,9 @@
 @extends('layouts.sidebar')
-<style></style>
+<!-- Link CSS Bootstrap -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Link JS Bootstrap -->
+
 @section('side')
     <div class="m-3">
         {{-- @if (auth()->user()->unreadNotifications->count())
@@ -81,6 +85,78 @@
 
                                     @if (auth()->user()->hasRole('admin'))
                                         <td class="action-icons">
+
+
+                                            <button type="button"
+                                                style="border: none; outline: none; background: transparent;"
+                                                onclick="btnOpenDetailModal({{ $kunjungan->id }})">
+                                                <i class="fas fa-eye h3 mr-1 main-color pointer"></i>
+                                            </button>
+                                            @foreach ($kunjungans as $kunjungan)
+                                                <div class="modal fade" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
+                                                    aria-labelledby="detailModalLabel{{ $kunjungan->id }}"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="detailModalLabel{{ $kunjungan->id }}">Detail
+                                                                    Kunjungan dan Rekam Medis</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p><strong>Pasien:</strong> {{ $kunjungan->pasien->nama }}
+                                                                </p>
+                                                                <p><strong>Dokter:</strong>
+                                                                    {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
+                                                                </p>
+                                                                <p><strong>Keluhan:</strong> {{ $kunjungan->keluhan }}</p>
+                                                                <p><strong>Tanggal Kunjungan:</strong>
+                                                                    {{ $kunjungan->tanggal_kunjungan }}</p>
+
+                                                                    <h6>Detail Rekam Medis:</h6>
+                                                                    @if ($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0)
+                                                                        @foreach ($kunjungan->rekamMedis as $rekamMedis)
+                                                                            <p><strong>Diagnosa:</strong> {{ $rekamMedis->diagnosa }}</p>
+                                                                            <p><strong>Tindakan:</strong> {{ $rekamMedis->tindakan }}</p>
+                                                                            <p><strong>Obat:</strong></p>
+                                                                            @if ($rekamMedis->obats && $rekamMedis->obats->count() > 0)
+                                                                                @foreach ($rekamMedis->obats as $obat)
+                                                                                    <p>{{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}</p>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <p>Tidak ada obat yang terkait</p>
+                                                                            @endif
+                                                                            <p><strong>Resep:</strong> {{ $rekamMedis->resep->deskripsi ?? 'Tidak ada resep' }}</p>
+                                                                            <p><strong>Gambar:</strong></p>
+                                                                            @foreach ($rekamMedis->images as $image)
+                                                                                <img src="{{ asset('storage/' . $image->image_path) }}" height="150" width="120" class="mb-2" alt="Gambar">
+                                                                            @endforeach
+                                                                        @endforeach
+                                                                    @else
+                                                                        <p>Tidak ada rekam medis untuk kunjungan ini.</p>
+                                                                    @endif
+                                                                    
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                                    data-bs-dismiss="modal">Tutup</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                            <script>
+                                                function btnOpenDetailModal(kunjunganId) {
+                                                    var modal = document.getElementById('detailModal' + kunjunganId);
+                                                    var modalInstance = new bootstrap.Modal(modal);
+                                                    modalInstance.show();
+                                                }
+                                            </script>
+
+
                                             <button type="button"
                                                 style="border: none; outline: none; background: transparent;"
                                                 onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
@@ -159,7 +235,8 @@
 
                                                         <!-- Peralatan -->
                                                         <div class="my-2">
-                                                            <label for="peralatan_id" class="h4 f-bolder">Peralatan</label>
+                                                            <label for="peralatan_id"
+                                                                class="h4 f-bolder">Peralatan</label>
                                                             <div class="my-1">
                                                                 <select name="peralatan_id[]" id="peralatan_id"
                                                                     class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
@@ -472,4 +549,8 @@
             }
         </script>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 @endsection

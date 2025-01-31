@@ -150,10 +150,30 @@ class KunjunganController extends Controller
     return redirect()->route('kunjungan.index')->with('success', 'Rekam medis berhasil ditambahkan.');
 }
 
-    public function show(Kunjungan $kunjungan)
-    {
-        return view('kunjungan.show', compact('kunjungan'));
-    }
+public function show($id)
+{
+    $kunjungan = Kunjungan::with(['pasien', 'dokter', 'rekamMedis'])->findOrFail($id);
+    return response()->json($kunjungan);
+}
+
+public function showDetail($id)
+{
+    $kunjungan = Kunjungan::with([
+        'pasien', 
+        'dokter', 
+        'rekamMedis',
+        'rekamMedis.obats',
+        'rekamMedis.peralatans',
+        'rekamMedis.images'
+    ])->findOrFail($id);
+
+    return response()->json([
+        'kunjungan' => $kunjungan,
+        'rekamMedis' => $kunjungan->rekamMedis,
+    ]);
+}
+
+
 
     public function edit(Kunjungan $kunjungan)
     {
