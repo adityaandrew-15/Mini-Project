@@ -66,67 +66,59 @@ class RekamMedisController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'kunjungan_id' => 'required|exists:kunjungans,id',
-            'diagnosa' => 'required',
-            'tindakan' => 'required',
-            'deskripsi' => 'required|string',
-            'obat_id.*' => 'exists:obats,id',
-            'jumlah_obat.*' => 'required|integer|min:1',
-            'peralatan_id.*' => 'exists:peralatans,id',
-        ]);
+{
+    $validated = $request->validate([
+        'kunjungan_id' => 'required|exists:kunjungans,id',
+        'diagnosa' => 'required|string',
+        'tindakan' => 'required|string',
+        'deskripsi' => 'required|string',
+        'obat_id.*' => 'exists:obats,id',
+        'jumlah_obat.*' => 'required|integer|min:1',
+        'peralatan_id.*' => 'exists:peralatans,id',
+    ]);
 
-        // Cek apakah kunjungan yang dipilih adalah milik dokter yang sedang login
-        $kunjungan = Kunjungan::findOrFail($validated['kunjungan_id']);
-        if ($kunjungan->dokter_id !== auth()->id()) {
-            return back()->with('error', 'Anda tidak memiliki izin untuk menginput rekam medis untuk pasien ini.');
+    // Get the kunjungan record
+    $kunjungan = Kunjungan::findOrFail($validated['kunjungan_id']);
+
+    // Create the medical record
+    $rekamMedis = RekamMedis::create([
+        'kunjungan_id' => $validated['kunjungan_id'],
+        'pasien_id' => $kunjungan->pasien_id,  // Menambahkan pasien_id
+        'diagnosa' => $validated['diagnosa'],
+        'tindakan' => $validated['tindakan'],
+    ]);
+
+    // Save the prescription
+    Resep::create([
+        'kunjungan_id' => $validated['kunjungan_id'],
+        'rekam_medis_id' => $rekamMedis->id,
+        'deskripsi' => $validated['deskripsi'],
+    ]);
+
+    // Handle the medication and quantities
+    foreach ($validated['obat_id'] as $index => $obatId) {
+        $obat = Obat::findOrFail($obatId);
+        $jumlah = $validated['jumlah_obat'][$index];
+
+        if ($obat->jumlah >= $jumlah) {
+            $obat->decrement('jumlah', $jumlah);  // Reduce stock
+            $rekamMedis->obats()->attach($obat->id, ['jumlah' => $jumlah]);  // Save to pivot table
+        } else {
+            return back()->with('error', 'Stok obat tidak mencukupi untuk ' . $obat->obat);
         }
-
-        $rekamMedis = RekamMedis::create([
-            'kunjungan_id' => $validated['kunjungan_id'],
-            'pasien_id' => $kunjungan->pasien_id,  // Menambahkan pasien_id
-            'diagnosa' => $validated['diagnosa'],
-            'tindakan' => $validated['tindakan'],
-        ]);
-
-        // Simpan data resep
-        Resep::create([
-            'kunjungan_id' => $validated['kunjungan_id'],
-            'rekam_medis_id' => $rekamMedis->id,
-            'deskripsi' => $validated['deskripsi'],
-        ]);
-
-        // Simpan gambar jika ada
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('rekam_medis', 'public');
-                $rekamMedis->images()->create(['image_path' => $path]);
-            }
-        }
-
-        foreach ($validated['obat_id'] as $index => $obatId) {
-            $obat = Obat::findOrFail($obatId);
-            $jumlah = $validated['jumlah_obat'][$index];
-
-            if ($obat->jumlah >= $jumlah) {
-                $obat->decrement('jumlah', $jumlah);  // Kurangi stok obat
-                $rekamMedis->obats()->attach($obat->id, ['jumlah' => $jumlah]);  // Simpan ke pivot table
-            } else {
-                return back()->with('error', 'Stok obat tidak mencukupi untuk ' . $obat->obat);
-            }
-        }
-
-        $kunjungan->status = 'DONE';
-        $kunjungan->save();
-
-        // Hubungkan peralatan
-        if (!empty($validated['peralatan_id'])) {
-            $rekamMedis->peralatans()->sync($validated['peralatan_id']);
-        }
-
-        return redirect()->route('rekam_medis.index')->with('success', 'Rekam medis berhasil ditambahkan.');
     }
+
+    // Update kunjungan status
+    $kunjungan->status = 'DONE';
+    $kunjungan->save();
+
+    // Handle equipment if any
+    if (!empty($validated['peralatan_id'])) {
+        $rekamMedis->peralatans()->sync($validated['peralatan_id']);
+    }
+
+    return redirect()->route('rekam_medis.index')->with('success', 'Rekam medis berhasil ditambahkan.');
+}
 
     public function edit(RekamMedis $rekamMedis)
     {
@@ -249,4 +241,13 @@ class RekamMedisController extends Controller
 
         return view('rekam_medis.nota', compact('rekamMedis', 'totalHarga'));
     }
+
+    public function detail($id)
+{
+    // Ambil data rekam medis berdasarkan ID
+    $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'resep', 'images'])->findOrFail($id);
+
+    // Kirim data ke view
+    return view('rekam_medis.detail', compact('rekamMedis'));
+}
 }

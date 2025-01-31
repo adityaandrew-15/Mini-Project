@@ -20,6 +20,17 @@ class Kunjungan extends Model
         return $this->belongsTo(Pasien::class);
     }
 
+    
+public function obats()
+{
+    return $this->belongsToMany(Obat::class)->withPivot('jumlah');
+}
+
+public function peralatans()
+{
+    return $this->belongsToMany(Peralatan::class);
+}
+
     public function dokter()
     {
         return $this->belongsTo(Dokter::class);

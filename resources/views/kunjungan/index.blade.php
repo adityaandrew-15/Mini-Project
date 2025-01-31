@@ -83,6 +83,116 @@
                                         <td class="action-icons">
                                             <button type="button"
                                                 style="border: none; outline: none; background: transparent;"
+                                                onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
+                                                <i class="fas fa-plus-circle add h3 mr-1 main-color pointer"></i>
+                                            </button>
+                                            <script>
+                                                function btnOpenAddRekamMedisModal(kunjunganId) {
+                                                    document.getElementById('kunjungan_id').value = kunjunganId; // Set the kunjungan_id in the form
+                                                    document.getElementById('myModalAddRekamMedis').style.display = "block"; // Show the modal
+                                                }
+
+                                                function closeAddRekamMedisModal() {
+                                                    document.getElementById('myModalAddRekamMedis').style.display = "none"; // Hide the modal
+                                                }
+                                            </script>
+
+                                            <div class="modal animate__fadeIn" id="myModalAddRekamMedis">
+                                                <div class="modal-content animate__animated animate__zoomIn">
+                                                    <h2 class="h2 f-bolder">Tambah Rekam Medis</h2>
+                                                    <button type="button" class="btn-close"
+                                                        onclick="closeAddRekamMedisModal()"></button>
+
+                                                    <form id="addRekamMedisForm"
+                                                        action="{{ route('rekam_medis.store', $kunjungan->id) }}"
+                                                        method="POST" enctype="multipart/form-data">
+                                                        @csrf
+                                                        <input type="hidden" name="kunjungan_id" id="kunjungan_id">
+
+                                                        <div class="my-2">
+                                                            <label for="diagnosa" class="h4 f-bolder">Diagnosa</label>
+                                                            <div class="my-1">
+                                                                <input type="text"
+                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                    id="diagnosa" name="diagnosa" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Tindakan -->
+                                                        <div class="my-2">
+                                                            <label for="tindakan" class="h4 f-bolder">Tindakan</label>
+                                                            <div class="my-1">
+                                                                <input type="text"
+                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                    id="tindakan" name="tindakan" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Resep -->
+                                                        <div class="my-2">
+                                                            <label for="deskripsi" class="h4 f-bolder">Resep</label>
+                                                            <div class="my-1">
+                                                                <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi" required></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Obat -->
+                                                        <div class="my-2">
+                                                            <label for="obat_id" class="h4 f-bolder">Obat</label>
+                                                            <div class="my-1">
+                                                                <select name="obat_id[]" id="obat_id"
+                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                    multiple>
+                                                                    @foreach ($obats as $obat)
+                                                                        <option value="{{ $obat->id }}"
+                                                                            data-stok="{{ $obat->jumlah }}">
+                                                                            {{ $obat->obat }} (Stok:
+                                                                            {{ $obat->jumlah }})
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Jumlah Obat -->
+                                                        <div id="medication-quantity-section" class="my-2"></div>
+
+                                                        <!-- Peralatan -->
+                                                        <div class="my-2">
+                                                            <label for="peralatan_id" class="h4 f-bolder">Peralatan</label>
+                                                            <div class="my-1">
+                                                                <select name="peralatan_id[]" id="peralatan_id"
+                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                    multiple>
+                                                                    @foreach ($peralatans as $peralatan)
+                                                                        <option value="{{ $peralatan->id }}">
+                                                                            {{ $peralatan->nama_peralatan }}
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Gambar -->
+                                                        <div class="my-2">
+                                                            <label for="images" class="h4 f-bolder">Gambar</label>
+                                                            <div class="my-1">
+                                                                <input type="file"
+                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                    id="images" name="images[]" multiple>
+                                                            </div>
+                                                        </div>
+
+                                                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                            onclick="closeAddRekamMedisModal()">Batal</button>
+                                                        <button type="submit"
+                                                            class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                            <button type="button"
+                                                style="border: none; outline: none; background: transparent;"
                                                 onclick="btnOpenEditModal({{ $kunjungan->id }})">
                                                 <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
                                             </button>
@@ -127,6 +237,45 @@
             </div>
         </div>
 
+        <script>
+            document.getElementById('obat_id').addEventListener('change', function() {
+                var selectedObats = Array.from(this.selectedOptions);
+                var quantitySection = document.getElementById('medication-quantity-section');
+                quantitySection.innerHTML = ''; // Clear previous inputs to avoid duplication
+
+                selectedObats.forEach(function(obat) {
+                    var stok = obat.getAttribute('data-stok');
+                    var obatId = obat.value;
+
+                    // Create input fields for each selected medication
+                    var inputGroup = document.createElement('div');
+                    inputGroup.classList.add('mb-3', 'row');
+
+                    var label = document.createElement('label');
+                    label.classList.add('h4', 'f-bolder');
+                    label.textContent = 'Jumlah (' + obat.textContent + ')';
+                    inputGroup.appendChild(label);
+
+                    var inputContainer = document.createElement('div');
+                    inputContainer.classList.add('col-sm-12');
+
+                    var input = document.createElement('input');
+                    input.type = 'number';
+                    input.name = 'jumlah_obat[' + obatId + ']'; // Ensure this is an array
+                    input.classList.add('form', 'h4', 'f-normal', 'px-2', 'w-100', 'h-3', 'border-radius-1');
+                    input.placeholder = 'Jumlah';
+                    input.min = 1;
+                    input.max = stok;
+                    input.required = true;
+
+                    inputContainer.appendChild(input);
+                    inputGroup.appendChild(inputContainer);
+                    quantitySection.appendChild(inputGroup);
+                });
+            });
+        </script>
+
+
         <div class="modal animate__fadeIn" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 @if (auth()->user()->hasRole('admin'))
@@ -139,7 +288,8 @@
                     <div class="my-2">
                         <label for="pasien_id" class="h4 f-bolder">Pasien</label>
                         <div class="my-1">
-                            <select name="pasien_id" id="pasien_id" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                            <select name="pasien_id" id="pasien_id"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
                                 <option>--- Pilih Pasien ---</option>
                                 @foreach ($pasiens as $pas)
                                     <option value="{{ $pas->id }}">{{ $pas->nama }}</option>

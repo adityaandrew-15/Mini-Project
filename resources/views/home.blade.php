@@ -105,7 +105,7 @@
     @endif
     <nav class="navbar">
         <h1>
-            KLINIK
+            AllCare
         </h1>
         <ul>
             <li><a href="#page-doctor">
@@ -118,21 +118,12 @@
                     Buat Kunjungan
                 </a></li>
             <li><a href="#patient-info">
-                    data kunjungan
+                    Riwayat kunjungan
                 </a></li>
 
         </ul>
         <ul>
-            <li style="margin-top: 7px">
-                <a href="#">
-                    <i class="fa-solid fa-inbox"></i>
-                    @if (auth()->user()->unreadNotifications->count())
-                        <span class="notification-badge"
-                            style="color: red">{{ auth()->user()->unreadNotifications->count() }}</span>
-                    @endif
-                    <p>Inbox</p>
-                </a>
-            </li>
+
             <li class="nav-item" style="margin-left: 20px; margin-top: 15px">
                 <a href="{{ route('logout') }}"
                     onclick="event.preventDefault();
@@ -346,7 +337,7 @@
                                 <i class="fas fa-trash delete"></i>
                             </button>
                         </form>
-                        
+
                         <script>
                             function confirmDelete(id) {
                                 Swal.fire({
@@ -367,8 +358,8 @@
                             }
                         </script>
                     </td>
-                </tr> 
-                
+                </tr>
+
                 <div class="modal fade" id="editModal{{ $kun->id }}" tabindex="-1"
                     aria-labelledby="editModalLabel{{ $kun->id }}" aria-hidden="true">
                     <div class="modal-dialog">
@@ -465,6 +456,7 @@
                             <i class="fas fa-calendar-alt"></i>
                             <span class="label">Tanggal Kunjungan :</span>
                             <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
+                            <a href="{{ route('rekam_medis.detail', $kunj->rekamMedis->id) }}" class="btn btn-primary">Detail</a>
                         </p>
                     </div>
                 @endforeach
