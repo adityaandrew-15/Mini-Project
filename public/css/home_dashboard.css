@@ -1,5 +1,5 @@
 :root {
-    --main-color: #2697b1;
+    --main-color: #103F91;
 }
 
 * {
@@ -181,7 +181,7 @@ body {
     justify-content: space-between;
     padding: 10rem 168px 0;
     text-align: center;
-    background: linear-gradient(to right, #fff, #2697b1);
+    background: linear-gradient(to right, #fff, #2a6bdb);
 }
 
 .form-left {
@@ -198,8 +198,8 @@ body {
     flex-direction: column;
     padding: 3rem 3.5rem;
     margin: 4rem 2rem;
-    background: #87c5d4;
-    border-radius: 64px;
+    background: #5284d9;
+    border-radius: 20px;
     justify-content: center;
     align-items: center;
     border: 1px solid #000;
@@ -235,7 +235,7 @@ body {
 }
 
 .form-section form button {
-    background-color: #0f8ca9;
+    background-color: #103F91;
     color: white;
     border: none;
     width: 40%;
@@ -304,12 +304,12 @@ body {
 }
 
 .details-button:hover {
-    background-color: #0d7188;
+    color: #103F91;
 }
 
 .details-button {
-    background-color: #0f8ca9;
-    color: white;
+    /* background-color: #103F91; */
+    color: black;
     border: none;
     width: 20rem;
     height: 20%;
@@ -323,12 +323,12 @@ body {
 }
 
 .details-button a {
-    color: #fff;
+    color: black;
     text-decoration: none;
 }
 
 .details-button a:hover {
-    color: fff;
+    color: #103F91;
 }
 
 .container-card-kunjungan {
@@ -454,7 +454,7 @@ html {
         flex-direction: column;
         padding: 1rem 2rem;
         margin: 4rem 2rem;
-        background: #87c5d4;
+        background: #103F91;
         border-radius: 32px;
         justify-content: center;
         align-items: center;
