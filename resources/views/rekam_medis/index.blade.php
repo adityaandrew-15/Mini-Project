@@ -30,6 +30,7 @@
                     @if (request('search'))
                         <a href="{{ route('rekam_medis.index') }}" class="btn btn-outline-danger">Clear</a>
                     @endif
+                    <button type="submit" class="btn-filter">Cari</button>
                 </div>
             </form>
             <div class="outer-table">
@@ -172,6 +173,7 @@
                                         </div>
                                     @endif
                                 </tr>
+                                {{-- modal edit --}}
                                 <div class="modal fade" id="editModal{{ $rm->id }}" tabindex="-1"
                                     aria-labelledby="editModalLabel{{ $rm->id }}" aria-hidden="true">
                                     <div class="modal-dialog">
@@ -449,7 +451,7 @@
                             <div class="mb-3 row">
                                 <label for="deskripsi" class="h4 f-bolder">Resep</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi">{{ old('deskripsi') }}</textarea>
+                                    <textarea class="form h4 f-normal px-2 w-100 h-6 border-radius-1" id="deskripsi" name="deskripsi">{{ old('deskripsi') }}</textarea>
                                 </div>
                                 @error('deskripsi')
                                     <p style="color: red">{{ $message }}</p>
@@ -501,7 +503,7 @@
                                 <div class="mb-3 row">
                                     <label for="image" class="h4 f-bolder">Tambah Gambar</label>
                                     <div class="col-sm-10">
-                                        <input type="file" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                        <input type="file" class="mt-1 h4 f-normal px-2 w-100 h-3 border-radius-1"
                                             id="image" name="images[]" multiple>
                                     </div>
                                 </div>

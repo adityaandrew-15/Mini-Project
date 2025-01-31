@@ -48,7 +48,8 @@
             </div> --}}
 
             <!-- Add Modal -->
-            <div class="modal animate__animated" id="myModalAdd" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+            <div class="modal animate__animated" id="myModalAdd" tabindex="-1" aria-labelledby="addModalLabel"
+                aria-hidden="true">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Tambah Peralatan</h2>
                     {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
@@ -57,55 +58,59 @@
                         <div class="my-2">
                             <label for="nama_peralatan" class="h4 f-bolder">Nama Peralatan</label>
                             <div class="my-1">
-                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="nama_peralatan" name="nama_peralatan" value="{{ old('nama_peralatan') }}" required>
+                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                    id="nama_peralatan" name="nama_peralatan" value="{{ old('nama_peralatan') }}" required>
                             </div>
                             @error('nama_peralatan')
                                 <p style="color: red">{{ $message }}</p>
                             @enderror
                         </div>
-            
+
                         <div class="my-2">
                             <label for="harga" class="h4 f-bolder">Harga</label>
                             <div class="my-1">
-                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga" name="harga" value="{{ old('harga') }}" required>
+                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga"
+                                    name="harga" value="{{ old('harga') }}" required>
                             </div>
                             @error('harga')
                                 <p style="color: red">{{ $message }}</p>
                             @enderror
                         </div>
-            
+
                         <div class="my-2">
                             <label for="gambar" class="h4 f-bolder">Image</label>
                             <div class="my-1">
                                 <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
                             </div>
                         </div>
-            
+
                         <button type="button" class="px-2 py-1 btn-close red-hover" id="btnCloseAddModal">Batal</button>
                         <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>
             </div>
-            
+
 
             <!-- Table -->
             <div class="content-table m-2 d-flex col">
                 <form action="{{ route('peralatan.index') }}" method="GET" class="d-flex w-100 gap-2">
                     <!-- Search Nama Peralatan -->
-                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama Peralatan"
-                           value="{{ request('search') }}" class="form-control">
-                
-                    <!-- Search Harga Minimal -->
-                    <input type="number" class="search-container w-40 h4" name="min_price" placeholder="Harga Minimal"
-                           value="{{ request('min_price') }}" class="form-control">
-                
-                    <!-- Search Harga Maksimal -->
-                    <input type="number" class="search-container w-40 h4" name="max_price" placeholder="Harga Maksimal"
-                           value="{{ request('max_price') }}" class="form-control">
-                
+                    <input type="text" class="search-container w-75 h4" name="search" placeholder="Cari Nama Peralatan"
+                        value="{{ request('search') }}" class="form-control">
+
+                    <div class="filter-form d-flex">
+                        <!-- Search Harga Minimal -->
+                        <input type="number" class="search-container h4" style="width: 200px" name="min_price" placeholder="Harga Minimal"
+                            value="{{ request('min_price') }}" class="form-control">
+
+                        <!-- Search Harga Maksimal -->
+                        <input type="number" class="search-container h4" style="width: 200px" name="max_price" placeholder="Harga Maksimal"
+                            value="{{ request('max_price') }}" class="form-control">
+                    </div>
+
                     <!-- Tombol Cari -->
-                    <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
-                
+                    <button type="submit" class="btn-filter">Cari</button>
+
                     <style>
                         .invisible-btn {
                             opacity: 0;
@@ -114,7 +119,7 @@
                         }
                     </style>
                 </form>
-                
+
                 <div class="outer-table">
                     <div class="content-table-table">
                         <table>
@@ -185,49 +190,61 @@
                                     <div class="modal animate__fadeIn" id="myModalEdit{{ $per->id }}">
                                         <div class="modal-content animate__animated animate__zoomIn">
                                             <h2 class="h2 f-bolder">Edit Peralatan</h2>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            <form action="{{ route('peralatan.update', $per->id) }}" method="POST" enctype="multipart/form-data">
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                            <form action="{{ route('peralatan.update', $per->id) }}" method="POST"
+                                                enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="my-2">
                                                     <label for="nama_peralatan" class="h4 f-bolder">Nama Peralatan</label>
                                                     <div class="my-1">
-                                                        <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="nama_peralatan" name="nama_peralatan" value="{{ $per->nama_peralatan }}" required>
+                                                        <input type="text"
+                                                            class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                            id="nama_peralatan" name="nama_peralatan"
+                                                            value="{{ $per->nama_peralatan }}" required>
                                                     </div>
                                                 </div>
                                                 @error('nama_peralatan')
                                                     <p style="color: red">{{ $message }}</p>
                                                 @enderror
-                                    
+
                                                 <div class="my-2">
                                                     <label for="harga" class="h4 f-bolder">Harga</label>
                                                     <div class="my-1">
-                                                        <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga" name="harga" value="{{ $per->harga }}" required>
+                                                        <input type="text"
+                                                            class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                            id="harga" name="harga" value="{{ $per->harga }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                                 @error('harga')
                                                     <p style="color: red">{{ $message }}</p>
                                                 @enderror
-                                    
+
                                                 <div class="my-2">
                                                     <label for="gambar" class="h4 f-bolder">Image</label>
                                                     <div class="my-1">
-                                                        <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
+                                                        <input type="file" class="h4 f-bolder px-2 w-100 h-3"
+                                                            id="gambar" name="gambar">
                                                     </div>
                                                     @if ($per->gambar)
                                                         <div class="mt-2">
                                                             <p>Gambar Lama:</p>
-                                                            <img src="{{ asset('storage/peralatan/' . $per->gambar) }}" class="mt-2" width="500">
+                                                            <img src="{{ asset('storage/peralatan/' . $per->gambar) }}"
+                                                                class="mt-2" width="500">
                                                         </div>
                                                     @endif
                                                 </div>
-                                    
-                                                <button type="button" class="px-2 py-1 btn-close red-hover" onclick="closeEditModal({{ $per->id }})">Batal</button>
-                                                <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+
+                                                <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                    onclick="closeEditModal({{ $per->id }})">Batal</button>
+                                                <button type="submit"
+                                                    class="px-2 py-1 btn-add main-color-hover">Simpan</button>
                                             </form>
                                         </div>
                                     </div>
-                                    
+
 
                                     <!-- Detail Modal for Visit and Medical Record Input -->
                                 @endforeach

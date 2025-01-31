@@ -18,7 +18,7 @@
             width: 100%;
             height: 300px;
             margin: 1.5rem 0;
-            background: url('/asset/img/hero.png') no-repeat left bottom;
+            background: url('/asset/img/hero2.png') no-repeat left bottom;
             background-size: cover;
             border-radius: 1.2rem;
             color: rgb(255, 255, 255);

@@ -2,53 +2,54 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dokter;
 use App\Models\Kunjungan;
 use App\Models\Pasien;
-use App\Models\Dokter;
 use App\Notifications\DokterAssignedNotification;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class KunjunganController extends Controller
 {
     public function index(Request $request)
-{
-    if(auth()->user()->hasRole('admin|dokter')){
-        $layout = 'layouts.sidebar';
-        $content = 'side';
-    }else{
-        $layout = 'layouts.app';
-        $content = 'content';
+    {
+        if (auth()->user()->hasRole('admin|dokter')) {
+            $layout = 'layouts.sidebar';
+            $content = 'side';
+        } else {
+            $layout = 'layouts.app';
+            $content = 'content';
+        }
+
+        // Ambil nilai input pencarian
+        $searchPasien = $request->get('search_pasien');
+        $searchDokter = $request->get('search_dokter');
+        $searchTanggal = $request->get('search_tanggal');
+
+        $kunjungans = Kunjungan::when($searchPasien, function ($query, $searchPasien) {
+            return $query->whereHas('pasien', function ($query) use ($searchPasien) {
+                $query->where('nama', 'like', '%' . $searchPasien . '%');
+            });
+        })
+            ->when($searchDokter, function ($query, $searchDokter) {
+                return $query->whereHas('dokter', function ($query) use ($searchDokter) {
+                    $query->where('nama', 'like', '%' . $searchDokter . '%');
+                });
+            })
+            ->when($searchTanggal, function ($query, $searchTanggal) {
+                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            })
+            ->with(['pasien', 'dokter'])
+            ->paginate(10);
+
+        $pasiens = auth()->user()->hasRole('admin') ? Pasien::all() : Pasien::where('user_id', auth()->id())->get();
+        $dokters = Dokter::all();
+
+        return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters', 'layout', 'content'));
     }
 
-    // Ambil nilai input pencarian
-    $searchPasien = $request->get('search_pasien');
-    $searchDokter = $request->get('search_dokter');
-    $searchTanggal = $request->get('search_tanggal');
-
-    $kunjungans = Kunjungan::when($searchPasien, function ($query, $searchPasien) {
-        return $query->whereHas('pasien', function ($query) use ($searchPasien) {
-            $query->where('nama', 'like', '%' . $searchPasien . '%');
-        });
-    })
-    ->when($searchDokter, function ($query, $searchDokter) {
-        return $query->whereHas('dokter', function ($query) use ($searchDokter) {
-            $query->where('nama', 'like', '%' . $searchDokter . '%');
-        });
-    })
-    ->when($searchTanggal, function ($query, $searchTanggal) {
-        return $query->whereDate('tanggal_kunjungan', $searchTanggal);
-    })
-    ->with(['pasien', 'dokter'])
-    ->paginate(10);
-
-    $pasiens = auth()->user()->hasRole('admin') ? Pasien::all() : Pasien::where('user_id', auth()->id())->get();
-    $dokters = Dokter::all();
-
-    return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters', 'layout', 'content'));
-}
     public function create()
     {
         $pasiens = Pasien::where('user_id', auth()->id())->get();
@@ -57,24 +58,24 @@ class KunjunganController extends Controller
     }
 
     public function store(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'pasien_id' => 'required|exists:pasiens,id',
-        'keluhan' => 'required',
-        'dokter_id' => auth()->user()->hasRole('admin') ? 'required|exists:dokters,id' : 'nullable|exists:dokters,id',
-        'tanggal_kunjungan' => 'required|date',
-    ]);
+    {
+        // Validasi input
+        $request->validate([
+            'pasien_id' => 'required|exists:pasiens,id',
+            'keluhan' => 'required',
+            'dokter_id' => auth()->user()->hasRole('admin') ? 'required|exists:dokters,id' : 'nullable|exists:dokters,id',
+            'tanggal_kunjungan' => 'required|date',
+        ]);
 
-    // Ambil semua data dari request
-    $data = $request->all();
-    $data['user_id'] = auth()->id(); // Tambahkan user_id ke data
+        // Ambil semua data dari request
+        $data = $request->all();
+        $data['user_id'] = auth()->id();  // Tambahkan user_id ke data
 
         Kunjungan::create($data);
 
-        if(auth()->user()->hasRole('admin')){
+        if (auth()->user()->hasRole('admin')) {
             return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan berhasil ditambahkan.');
-        }else{
+        } else {
             return redirect()->route('home')->with('success', 'Data kunjungan berhasil ditambahkan, harap tunggu beberapa saat lagi');
         }
     }
@@ -112,94 +113,93 @@ class KunjunganController extends Controller
 
     public function destroy(Kunjungan $kunjungan)
     {
-        if($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0){
-            if(Auth()->user()->hasRole('admin')){
-                return redirect()->route('kunjungan.idex')->with('error','Data tidak bisa dihapus');
-            }else{
-                return redirect()->route('home')->with('error','Data tidak bisa dihapus karena sudah dilakukan pemeriksaan');
+        if ($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0) {
+            if (Auth()->user()->hasRole('admin')) {
+                return redirect()->route('kunjungan.idex')->with('error', 'Data tidak bisa dihapus');
+            } else {
+                return redirect()->route('home')->with('error', 'Data tidak bisa dihapus karena sudah dilakukan pemeriksaan');
             }
-        }else{
+        } else {
             $kunjungan->delete();
-            if(Auth()->user()->hasRole('admin')){
+            if (Auth()->user()->hasRole('admin')) {
                 return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan berhasil dihapus.');
-            }else{
+            } else {
                 return redirect()->route('home')->with('success', 'Data kunjungan berhasil dihapus');
             }
         }
     }
 
     public function dashboard(Request $request)
-{
-    $doctor = auth()->user();
-    $user = Auth::user();
-    $dokter = $user->dokter; // Get the logged-in doctor
+    {
+        $doctor = auth()->user();
+        $user = Auth::user();
+        $dokter = $user->dokter;  // Get the logged-in doctor
 
-    // Get the search terms
-    $searchTerbaru = $request->get('search_terbaru');
-    $searchKunjungan = $request->get('search_kunjungan');
+        // Get the search terms
+        $searchTerbaru = $request->get('search_terbaru');
+        $searchKunjungan = $request->get('search_kunjungan');
 
-    // For the "Data Terbaru Kunjungan Pasien" section
-    $kunjungans = Kunjungan::where('dokter_id', $doctor->dokter->id)
-                  ->where('status', 'UNDONE')
-                  ->when($searchTerbaru, function ($query, $search) {
-                      return $query->whereHas('pasien', function ($query) use ($search) {
-                          $query->where('nama', 'like', '%' . $search . '%');
-                      });
-                  })
-                  ->orderBy('created_at', 'asc')
-                  ->get();
+        // For the "Data Terbaru Kunjungan Pasien" section
+        $kunjungans = Kunjungan::where('dokter_id', $doctor->dokter->id)
+            ->where('status', 'UNDONE')
+            ->when($searchTerbaru, function ($query, $search) {
+                return $query->whereHas('pasien', function ($query) use ($search) {
+                    $query->where('nama', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('created_at', 'asc')
+            ->get();
 
-    // For the "Data Kunjungan Pasien" section
-    $kunjungan = Kunjungan::where('dokter_id', $doctor->dokter->id)
-                ->where('status', 'DONE')
-                ->when($searchKunjungan, function ($query, $search) {
-                    return $query->whereHas('pasien', function ($query) use ($search) {
-                        $query->where('nama', 'like', '%' . $search . '%');
-                    });
-                })
-                ->orderBy('created_at', 'desc')
-                ->get();
+        // For the "Data Kunjungan Pasien" section
+        $kunjungan = Kunjungan::where('dokter_id', $doctor->dokter->id)
+            ->where('status', 'DONE')
+            ->when($searchKunjungan, function ($query, $search) {
+                return $query->whereHas('pasien', function ($query) use ($search) {
+                    $query->where('nama', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    // Additional counts
-    $count = Kunjungan::where('dokter_id', $doctor->dokter->id)
-    ->where('status', 'UNDONE')
-    ->count();
+        // Additional counts
+        $count = Kunjungan::where('dokter_id', $doctor->dokter->id)
+            ->where('status', 'UNDONE')
+            ->count();
 
-    $selesai = Kunjungan::where('dokter_id', $doctor->dokter->id)
-    ->where('status', 'DONE')
-    ->count();
+        $selesai = Kunjungan::where('dokter_id', $doctor->dokter->id)
+            ->where('status', 'DONE')
+            ->count();
 
-    return view('home-dokter', compact('kunjungans', 'kunjungan', 'count', 'selesai', 'dokter'));
-}
+        return view('home-dokter', compact('kunjungans', 'kunjungan', 'count', 'selesai', 'dokter'));
+    }
 
+    public function updateDiagnosa(Request $request)
+    {
+        // Validate the request
+        $request->validate([
+            'kunjungan_id' => 'required|exists:kunjungans,id',
+            'diagnosa' => 'required|string',
+        ]);
 
-public function updateDiagnosa(Request $request)
-{
-    // Validate the request
-    $request->validate([
-        'kunjungan_id' => 'required|exists:kunjungans,id',
-        'diagnosa' => 'required|string',
-    ]);
+        // Find the Kunjungan by ID
+        $kunjungan = Kunjungan::findOrFail($request->kunjungan_id);
 
-    // Find the Kunjungan by ID
-    $kunjungan = Kunjungan::findOrFail($request->kunjungan_id);
+        // Update the diagnosis
+        $kunjungan->diagnosa = $request->diagnosa;
+        $kunjungan->save();
 
-    // Update the diagnosis
-    $kunjungan->diagnosa = $request->diagnosa;
-    $kunjungan->save();
+        // Redirect back with a success message
+        return redirect()->route('home-dokter')->with('success', 'Diagnosa berhasil diperbarui');
+    }
 
-    // Redirect back with a success message
-    return redirect()->route('home-dokter')->with('success', 'Diagnosa berhasil diperbarui');
-}
-public function adminDashboard()
-{
-    // Ambil data kunjungan per bulan
-    $kunjunganPerBulan = DB::table('kunjungan')
-        ->select(DB::raw('MONTH(tanggal) as bulan'), DB::raw('COUNT(*) as jumlah'))
-        ->groupBy('bulan')
-        ->get();
+    public function adminDashboard()
+    {
+        // Ambil data kunjungan per bulan
+        $kunjunganPerBulan = DB::table('kunjungan')
+            ->select(DB::raw('MONTH(tanggal) as bulan'), DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('bulan')
+            ->get();
 
-    return view('admin-home', compact('kunjunganPerBulan'));
-}
-
+        return view('admin-home', compact('kunjunganPerBulan'));
+    }
 }

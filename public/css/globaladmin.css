@@ -1,5 +1,5 @@
 :root {
-    --main-color: #0e7b94;
+    --main-color: #103F91;
     --animate-duration: 400ms;
     --animate-delay: 0.2s;
 }
@@ -202,8 +202,25 @@ body {
     background: var(--main-color);
     color: white;
     cursor: pointer;
-    border-radius: 1.2rem;
+    border-radius: 1.5rem;
+    width: 100px;
+    font-size: 1.2rem;
     font-weight: 800;
+    margin: 0 0.2rem 0 0.2rem;
+    text-align: center;
+}
+
+.btn-filter a {
+    text-decoration: none;
+    text-align: center;
+    position: relative;
+    top: 17px;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-filter:hover {
+    background: #0a5e70;   
 }
 
 #fileInput {
@@ -216,6 +233,10 @@ body {
 
 .search-container a {
     text-decoration: none;
+}
+
+.filter-search-container {
+    width: 75%;
 }
 
 .clear-btn {
@@ -765,7 +786,7 @@ body {
     text-align: center;
     width: 300px;
     height: 100vh;
-    background-color: #0e7b94;
+    background-color: var(--main-color);
     color: white;
     position: fixed;
     left: 0;
@@ -907,9 +928,10 @@ body {
 
 .table-img {
     width: 50px;
-    height: auto;
+    height: 50px;
     border: 1px solid #aaa;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .header-collumn {
@@ -923,7 +945,7 @@ body {
     width: 100%;
     height: 60px;
     margin: 1.5rem 0;
-    border-radius: 1.2rem;
+    border-radius: 1px;
 }
 
 .search-container {
@@ -934,7 +956,12 @@ body {
     border-radius: 1.5rem;
     padding: 5px 10px;
     background-color: #fff;
-    margin-top: 1rem;
+    margin: 0 0.2rem 0 0.2rem;
+}
+
+.search-container:focus {
+    outline: none;
+    border: 1px solid #000000;
 }
 
 .search-container .fa-magnifying-glass {

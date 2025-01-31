@@ -31,28 +31,31 @@
         <div class="content-table m-2 d-flex col">
             <form method="GET" action="{{ route('jadwal_praktek.index') }}" class="d-flex w-100 gap-2">
                 <!-- Search Nama Dokter -->
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama Dokter atau Hari"
-                       value="{{ request('search') }}" class="form-control">
-            
-                <!-- Search Hari -->
-                <input type="text" class="search-container w-100 h4" name="search_hari" placeholder="Cari Hari"
-                       value="{{ request('search_hari') }}" class="form-control">
-            
-                <!-- Search Jam Mulai -->
-                <input type="time" class="search-container w-40 h4" name="start_time" placeholder="Jam Mulai"
-                       value="{{ request('start_time') }}" class="form-control" onchange="this.form.submit()">
-            
-                <!-- Search Jam Selesai -->
-                <input type="time" class="search-container w-40 h4" name="end_time" placeholder="Jam Selesai"
-                       value="{{ request('end_time') }}" class="form-control" onchange="this.form.submit()">
-            
-                <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
-                
-                {{-- ini aslinya butuh soalnya waktu kita input waktu itu udah ke search secara otomatis nah biasnaya kita kan butuh clear atau mau clear time tadi bisa lewat sini atau button ini, be e ada saran bisa di ubah biar lebih mudah dan rapi tampilan e --}}
-                <a href="{{ route('jadwal_praktek.index') }}" class="btn btn-secondary ms-2">Clear</a> 
-                
+                <input type="text" class="search-container h4" style="width: 40%" name="search"
+                    placeholder="Cari Nama Dokter" value="{{ request('search') }}" class="">
+                <div class="filter-form d-flex">
+                    <!-- Search Hari -->
+                    <input type="text" class="search-container w-50 h4" name="search_hari" placeholder="Cari Hari"
+                        value="{{ request('search_hari') }}" class="form-control">
+
+                    <!-- Search Jam Mulai -->
+                    <input type="time" class="search-container w-40 h4" name="start_time" placeholder="Jam Mulai"
+                        value="{{ request('start_time') }}" class="form-control" onchange="this.form.submit()">
+
+                    <!-- Search Jam Selesai -->
+                    <input type="time" class="search-container w-40 h4" name="end_time" placeholder="Jam Selesai"
+                        value="{{ request('end_time') }}" class="form-control" onchange="this.form.submit()">
+
+                    <button type="submit" class="btn-filter">Cari</button>
+
+                    {{-- ini aslinya butuh soalnya waktu kita input waktu itu udah ke search secara otomatis nah biasnaya kita kan butuh clear atau mau clear time tadi bisa lewat sini atau button ini, be e ada saran bisa di ubah biar lebih mudah dan rapi tampilan e --}}
+                    {{-- hyfunii reply: iyahh --}}
+                    <div class="btn-filter">
+                        <a href="{{ route('jadwal_praktek.index') }}" class="">Clear</a>
+                    </div>
+                </div>
             </form>
-            
+
             <style>
                 .invisible-btn {
                     opacity: 0;
@@ -60,7 +63,7 @@
                     pointer-events: none;
                 }
             </style>
-            
+
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>
@@ -141,7 +144,8 @@
                         <div class="my-2">
                             <label for="dokter" class="h4 f-bolder">Dokter</label>
                             <div class="my-1">
-                                <select class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="dokter" name="dokter_id">
+                                <select class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="dokter"
+                                    name="dokter_id">
                                     @foreach ($dokters as $dokter)
                                         <option value="{{ $dokter->id }}"
                                             {{ $dokter->id == $jadwal->dokter_id ? 'selected' : '' }}>
@@ -154,7 +158,8 @@
                         <div class="my-2">
                             <label for="hari" class="h4 f-bolder">Hari</label>
                             <div class="my-1">
-                                <select id="hari" name="hari" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                                <select id="hari" name="hari"
+                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
                                     <option value="Senin" {{ $jadwal->hari == 'Senin' ? 'selected' : '' }}>Senin</option>
                                     <option value="Selasa" {{ $jadwal->hari == 'Selasa' ? 'selected' : '' }}>Selasa
                                     </option>
@@ -168,15 +173,15 @@
                         <div class="my-2">
                             <label for="jam_mulai" class="h4 f-bolder">Jam Mulai</label>
                             <div class="my-1">
-                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="jam_mulai" name="jam_mulai"
-                                    value="{{ $jadwal->jam_mulai }}">
+                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                    id="jam_mulai" name="jam_mulai" value="{{ $jadwal->jam_mulai }}">
                             </div>
                         </div>
                         <div class="my-2">
                             <label for="jam_selesai" class="h4 f-bolder">Jam Selesai</label>
                             <div class="my-1">
-                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="jam_selesai" name="jam_selesai"
-                                    value="{{ $jadwal->jam_selesai }}">
+                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                    id="jam_selesai" name="jam_selesai" value="{{ $jadwal->jam_selesai }}">
                             </div>
                         </div>
 
@@ -197,7 +202,8 @@
                     <div class="my-2">
                         <label for="dokter_id" class="h4 f-bolder">Dokter</label>
                         <div class="my-1">
-                            <select name="dokter_id" id="dokter_id" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                            <select name="dokter_id" id="dokter_id"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
                                 @foreach ($dokters as $dokter)
                                     <option value="{{ $dokter->id }}">{{ $dokter->nama }}</option>
                                 @endforeach
@@ -207,7 +213,8 @@
                     <div class="my-2">
                         <label for="hari" class="h4 f-bolder">Hari</label>
                         <div class="my-1">
-                            <select name="hari" id="hari" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
+                            <select name="hari" id="hari" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                required>
                                 <option value="">Pilih Hari</option>
                                 <option value="Senin">Senin</option>
                                 <option value="Selasa">Selasa</option>
@@ -221,23 +228,25 @@
                     <div class="my-2">
                         <label for="jam_mulai" class="h4 f-bolder">Jam Mulai</label>
                         <div class="my-1">
-                            <input type="time" id="jam_mulai" name="jam_mulai" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
+                            <input type="time" id="jam_mulai" name="jam_mulai"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
                         </div>
                     </div>
                     <div class="my-2">
                         <label for="jam_selesai" class="h4 f-bolder">Jam Selesai</label>
                         <div class="my-1">
-                            <input type="time" id="jam_selesai" name="jam_selesai" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
+                            <input type="time" id="jam_selesai" name="jam_selesai"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
                         </div>
                     </div>
-                    
+
                     <div class="my-2">
                         <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
                         <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
                     </div>
                 </form>
             </div>
-        </div>        
+        </div>
 
         <script>
             function btnOpenEditModal(id) {

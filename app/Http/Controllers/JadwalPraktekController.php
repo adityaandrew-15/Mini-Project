@@ -2,49 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JadwalPraktek;
 use App\Models\Dokter;
+use App\Models\JadwalPraktek;
 use Illuminate\Http\Request;
 
 class JadwalPraktekController extends Controller
 {
     public function index(Request $request)
-{
-    if(auth()->user()->hasRole('admin|dokter')){
-        $layout = 'layouts.sidebar';
-        $content = 'side';
-    }else{
-        $layout = 'layouts.app';
-        $content = 'content';
+    {
+        if (auth()->user()->hasRole('admin|dokter')) {
+            $layout = 'layouts.sidebar';
+            $content = 'side';
+        } else {
+            $layout = 'layouts.app';
+            $content = 'content';
+        }
+
+        $dokters = Dokter::all();
+
+        // Pencarian
+        $search = $request->input('search');
+        $searchHari = $request->input('search_hari');
+        $startTime = $request->input('start_time');
+        $endTime = $request->input('end_time');
+
+        $jadwalPrakteks = JadwalPraktek::with('dokter')
+            ->when($search, function ($query, $search) {
+                $query->whereHas('dokter', function ($query) use ($search) {
+                    $query->where('nama', 'like', "%{$search}%");
+                })->orWhere('hari', 'like', "%{$search}%");
+            })
+            ->when($searchHari, function ($query, $searchHari) {
+                $query->where('hari', 'like', "%{$searchHari}%");
+            })
+            ->when($startTime, function ($query, $startTime) {
+                $query->where('jam_mulai', '>=', $startTime);
+            })
+            ->when($endTime, function ($query, $endTime) {
+                $query->where('jam_selesai', '<=', $endTime);
+            })
+            ->paginate(10);
+
+        return view('jadwal_praktek.index', compact('dokters', 'jadwalPrakteks', 'layout', 'content'));
     }
-
-    $dokters = Dokter::all();
-
-    // Pencarian
-    $search = $request->input('search');
-    $searchHari = $request->input('search_hari');
-    $startTime = $request->input('start_time');
-    $endTime = $request->input('end_time');
-
-    $jadwalPrakteks = JadwalPraktek::with('dokter')
-        ->when($search, function ($query, $search) {
-            $query->whereHas('dokter', function ($query) use ($search) {
-                $query->where('nama', 'like', "%{$search}%");
-            })->orWhere('hari', 'like', "%{$search}%");
-        })
-        ->when($searchHari, function ($query, $searchHari) {
-            $query->where('hari', 'like', "%{$searchHari}%");
-        })
-        ->when($startTime, function ($query, $startTime) {
-            $query->where('jam_mulai', '>=', $startTime);
-        })
-        ->when($endTime, function ($query, $endTime) {
-            $query->where('jam_selesai', '<=', $endTime);
-        })
-        ->paginate(10);
-
-    return view('jadwal_praktek.index', compact('dokters', 'jadwalPrakteks','layout','content'));
-}
 
     public function create()
     {

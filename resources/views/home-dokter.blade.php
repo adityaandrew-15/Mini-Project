@@ -14,8 +14,6 @@
         text-align: left;
     }
 
-
-
     .welcome-text {
         display: flex;
         flex-direction: column;
@@ -580,11 +578,11 @@
                 <div class="content-table-text m-1 a-center">
                     <h2 class="h2">Data Terbaru Kunjungan Pasien</h2>
                 </div>
-                <div class="search-container m-1">
+                <div class="m-1">
                     <form action="{{ route('home-dokter') }}" method="GET">
-                        <input type="text" name="search_terbaru" placeholder="Search here..."
+                        <input style="outline: none;" type="text" name="search_terbaru" placeholder="Search here..."
                             value="{{ request('search_terbaru') }}">
-                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        {{-- <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button> --}}
                     </form>
                 </div>
             </div>
@@ -636,11 +634,11 @@
                 <div class="content-table-text m-1">
                     <h2 class="h2">Data Kunjungan Pasien</h2>
                 </div>
-                <div class="search-container m-1">
+                <div class="m-1">
                     <form action="{{ route('home-dokter') }}" method="GET">
-                        <input type="text" name="search_kunjungan" placeholder="Search here..."
+                        <input style="outline: none;" type="text" name="search_kunjungan" placeholder="Search here..."
                             value="{{ request('search_kunjungan') }}">
-                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        {{-- <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button> --}}
                     </form>
                 </div>
             </div>
