@@ -456,6 +456,7 @@
                             <i class="fas fa-calendar-alt"></i>
                             <span class="label">Tanggal Kunjungan :</span>
                             <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
+                            <a href="{{ route('rekam_medis.detail', $kunj->rekamMedis->id) }}" class="btn btn-primary">Detail</a>
                         </p>
                     </div>
                 @endforeach

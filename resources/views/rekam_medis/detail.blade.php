@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Detail Rekam Medis</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -37,13 +37,11 @@
 
         table {
             font-size: 1.1rem;
-            /* Membesarkan ukuran teks dalam tabel */
         }
 
         .border-colored th,
         .border-colored td {
             border: 2px solid #0f8da97a;
-            /* Border dengan warna spesifik */
         }
 
         .table-no-border {
@@ -70,27 +68,22 @@
         <div class="row align-items-center mb-4 custom-row">
             <div class="col-md-6">
                 <h1>Detail Kunjungan</h1>
-                <p><strong>Tanggal Kunjungan:</strong> 17/08/1945</p>
+                <p><strong>Tanggal Kunjungan:</strong> {{ $rekamMedis->kunjungan->tanggal_kunjungan }}</p>
             </div>
             <div class="col-md-6">
                 <h2>Informasi Pasien</h2>
                 <table class="table table-no-border">
                     <tr>
                         <td>Nama:</td>
-                        <td>Nama Pasien</td>
+                        <td>{{ $rekamMedis->kunjungan->pasien->nama }}</td>
                     </tr>
                     <tr>
                         <td>Diagnosa:</td>
-                        <td>Hampir Mati</td>
+                        <td>{{ $rekamMedis->diagnosa }}</td>
                     </tr>
                     <tr>
                         <td>Tindakan:</td>
-                        <td>
-                            <ul class="mb-0">
-                                <li>Pemeriksaan fisik</li>
-                                <li>Serah</li>
-                            </ul>
-                        </td>
+                        <td>{{ $rekamMedis->tindakan }}</td>
                     </tr>
                 </table>
             </div>
@@ -107,23 +100,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Magnesium</td>
-                            <td>9 kg</td>
-                        </tr>
-                        <tr>
-                            <td>Asam sulfat</td>
-                            <td>6 l</td>
-                        </tr>
+                        @if ($rekamMedis->obats && $rekamMedis->obats->count() > 0)
+                            @foreach ($rekamMedis->obats as $obat)
+                                <tr>
+                                    <td>{{ $obat->obat }}</td>
+                                    <td>{{ $obat->pivot->jumlah }}</td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="2">Tidak ada obat yang terkait</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
             <div class="col-md-6">
                 <h2>Resep</h2>
                 <ol>
-                    <li>Minum Paracetamol 3x sehari setelah makan.</li>
-                    <li>Minum Amoxicillin 2x sehari setelah makan.</li>
-                    <li>Minum sirup obat batuk saat batuk terasa parah.</li>
+                    @if ($rekamMedis->resep)
+                        <li>{{ $rekamMedis->resep->deskripsi }}</li>
+                    @else
+                        <li>Tidak ada resep</li>
+                    @endif
                 </ol>
             </div>
         </div>
@@ -134,27 +133,34 @@
                 <table class="table border-colored">
                     <thead class="table-light">
                         <tr>
-                            <th>Nama Obat</th>
-                            <th>Jumlah</th>
+                            <th>Nama Peralatan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Magnesium</td>
-                            <td>9 kg</td>
-                        </tr>
-                        <tr>
-                            <td>Asam sulfat</td>
-                            <td>6 l</td>
-                        </tr>
+                        @if ($rekamMedis->peralatans && $rekamMedis->peralatans->count() > 0)
+                            @foreach ($rekamMedis->peralatans as $peralatan)
+                                <tr>
+                                    <td>{{ $peralatan->nama_peralatan }}</td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td>Tidak ada peralatan yang terkait</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
             <div class="col-md-6">
                 <h2>Bukti Medis</h2>
                 <div class="d-flex gap-3">
-                    <img class="img-thumbnail" src="https://placehold.co/150x100" alt="Medical proof image 1">
-                    <img class="img-thumbnail" src="https://placehold.co/150x100" alt="Medical proof image 2">
+                    @if ($rekamMedis->images && $rekamMedis->images->count() > 0)
+                        @foreach ($rekamMedis->images as $image)
+                            <img class="img-thumbnail" src="{{ asset('storage/' . $image->image_path) }}" alt="Medical proof image" style="width: 150px; height: 100px;">
+                        @endforeach
+                    @else
+                        <p>Tidak ada gambar</p>
+                    @endif
                 </div>
             </div>
         </div>
