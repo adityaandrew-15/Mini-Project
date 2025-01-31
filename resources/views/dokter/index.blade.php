@@ -22,17 +22,13 @@
         </div>
         <div class="content-table m-2 d-flex col">
             <form method="GET" action="{{ route('dokter.index') }}" class="d-flex w-100 gap-2">
-
-
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama atau No HP"
+                <input type="text" class="search-container w-75 h4" name="search" placeholder="Cari Nama atau No HP"
                     value="{{ request('search') }}" class="form-control">
 
-                <input type="text" class="search-container w-100 h4" name="spesialis" placeholder="Cari Spesialis"
+                <input type="text" class="search-container w-25 h4" name="spesialis" placeholder="Cari Spesialis"
                     value="{{ request('spesialis') }}" class="form-control">
 
-
-
-                <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
+                <button type="submit" class="btn-filter">Cari</button>
 
                 <style>
                     .invisible-btn {

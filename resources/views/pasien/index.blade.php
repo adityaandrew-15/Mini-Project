@@ -39,7 +39,7 @@
                         <label for="alamat" class="h4 f-bolder">Alamat</label>
                         <div class="my-1">
                             <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="alamat"
-                                name="alamat" value="{{ old('alamat') }}" >
+                                name="alamat" value="{{ old('alamat') }}">
                         </div>
                         @error('alamat')
                             <p style="color: red">{{ $message }}</p>
@@ -50,7 +50,7 @@
                         <label for="no_hp" class="h4 f-bolder">No HP</label>
                         <div class="my-1">
                             <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="no_hp"
-                                name="no_hp" value="{{ old('no_hp') }}" >
+                                name="no_hp" value="{{ old('no_hp') }}">
                         </div>
                         @error('no_hp')
                             <p style="color: red">{{ $message }}</p>
@@ -61,7 +61,7 @@
                         <label for="tanggal_lahir" class="h4 f-bolder">Tanggal Lahir</label>
                         <div class="my-1">
                             <input type="date" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="tanggal_lahir"
-                                name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" >
+                                name="tanggal_lahir" value="{{ old('tanggal_lahir') }}">
                         </div>
                         @error('tanggal_lahir')
                             <p style="color: red">{{ $message }}</p>
@@ -76,12 +76,14 @@
 
         <div class="content-table m-2 d-flex col">
             <form action="{{ route('pasien.index') }}" method="GET">
-                <div class="search-container w-100 h4 ">
-                    <input type="text" name="search" class="p6" placeholder="Cari pasien..."
+                <div class="filter-form d-flex">
+                    <input type="text" name="search" class="search-container w-100 h4" placeholder="Cari pasien"
                         value="{{ request('search') }}">
                     @if (request('search'))
                         <a href="{{ route('pasien.index') }}" class="clear-btn">Clear</a>
                     @endif
+
+                    <button type="submit" class="btn-filter">Cari</button>
                 </div>
             </form>
             <div class="outer-table">
@@ -381,5 +383,4 @@
             });
         }
     </script>
-
 @endsection

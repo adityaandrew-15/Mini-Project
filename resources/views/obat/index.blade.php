@@ -21,28 +21,34 @@
         </div>
         <div class="content-table m-2 d-flex col">
             <form method="GET" action="{{ route('obat.index') }}" class="d-flex w-100 gap-2">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                    value="{{ request('search') }}" class="form-control">
-        
-                <div class="filter-form d-flex">
-                    <input type="number" name="min_price" placeholder="Min Price" value="{{ request('min_price') }}"
-                        class="form-control search-container w-100 h4" style="width: 100px;">
-                    <input type="number" name="max_price" placeholder="Max Price" value="{{ request('max_price') }}"
-                        class="form-control search-container w-100 h4" style="width: 100px;">
-                </div>
-        
+                {{-- <div class="filter-search-container"> --}}
+                    <input type="text" class="search-container h4" style="width: 75%" name="search" placeholder="Cari Obat"
+                        value="{{ request('search') }}" class="">
+
+                    <div class="filter-form d-flex">
+                        <input type="number" searname="min_price" placeholder="Minimal Harga" value="{{ request('min_price') }}"
+                            class=" search-container h4" style="width: 200px;">
+                        <input type="number" name="max_price" placeholder="Maximal Harga" value="{{ request('max_price') }}"
+                            class=" search-container h4" style="width: 200px;">
+                        <button type="submit" class="btn-filter">Cari</button>
+                    </div>
+                {{-- </div> --}}
+
                 <!-- Tombol disembunyikan tetapi tetap berfungsi -->
                 <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
                 <style>
                     .invisible-btn {
-                        opacity: 0; /* Tombol tidak terlihat */
-                        position: absolute; /* Menghindari layout bergeser */
-                        pointer-events: none; /* Mencegah klik langsung */
+                        opacity: 0;
+                        /* Tombol tidak terlihat */
+                        position: absolute;
+                        /* Menghindari layout bergeser */
+                        pointer-events: none;
+                        /* Mencegah klik langsung */
                     }
                 </style>
-                
+
             </form>
-            
+
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>

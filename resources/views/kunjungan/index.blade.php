@@ -33,26 +33,26 @@
 
         <div class="content-table m-2 d-flex col">
             <form method="GET" action="{{ route('kunjungan.index') }}" class="d-flex w-100 gap-2">
-
-                <input type="text" class="search-container w-100 h4" name="search_pasien" placeholder="Cari Nama Pasien"
-                    value="{{ request('search_pasien') }}" class="form-control">
-                <input type="text" class="search-container w-100 h4" name="search_dokter" placeholder="Cari Nama Dokter"
-                    value="{{ request('search_dokter') }}" class="form-control">
-                    <input type="date" class="search-container w-40 h4" name="search_tanggal"
-                    placeholder="Cari Nama atau No HP" value="{{ request('search_tanggal') }}" class="form-control" 
-                    onchange="this.form.submit()">  
-                    <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
-
-                    <style>
-                        .invisible-btn {
-                            opacity: 0;
-                            /* Tombol tidak terlihat */
-                            position: absolute;
-                            /* Menghindari layout bergeser */
-                            pointer-events: none;
-                            /* Mencegah klik langsung */
-                        }
-                    </style>
+                <input type="text" class="search-container w-75 h4" name="search_pasien" placeholder="Cari Nama Pasien"
+                    value="{{ request('search_pasien') }}" class="">
+                <div class="filter-form d-flex">
+                    <input type="text" class="search-container h4" style="width: 200px" name="search_dokter"
+                        placeholder="Cari Nama Dokter" value="{{ request('search_dokter') }}" class="">
+                    <input type="date" class="search-container h4" style="width: 200px" name="search_tanggal"
+                        placeholder="Cari Nama atau No HP" value="{{ request('search_tanggal') }}" class=""
+                        onchange="this.form.submit()">
+                    <button type="submit" class="btn-filter">Cari</button>
+                </div>
+                <style>
+                    .invisible-btn {
+                        opacity: 0;
+                        /* Tombol tidak terlihat */
+                        position: absolute;
+                        /* Menghindari layout bergeser */
+                        pointer-events: none;
+                        /* Mencegah klik langsung */
+                    }
+                </style>
 
 
             </form>

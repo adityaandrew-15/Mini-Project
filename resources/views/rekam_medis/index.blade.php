@@ -30,6 +30,7 @@
                     @if (request('search'))
                         <a href="{{ route('rekam_medis.index') }}" class="btn btn-outline-danger">Clear</a>
                     @endif
+                    <button type="submit" class="btn-filter">Cari</button>
                 </div>
             </form>
             <div class="outer-table">
