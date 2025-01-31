@@ -11,28 +11,41 @@ class PeralatanController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        if (auth()->user()->hasRole('admin')) {
-            $layout = 'layouts.sidebar';
-            $content = 'side';
-        } else {
-            $layout = 'layouts.app';
-            $content = 'content';
-        }
-
-        // Ambil nilai pencarian dari input
-        $search = $request->input('search');
-
-        // Jika ada pencarian, lakukan pencarian pada nama_peralatan
-        if ($search) {
-            $peralatan = Peralatan::where('nama_peralatan', 'like', '%' . $search . '%')->get();
-        } else {
-            // Jika tidak ada pencarian, ambil semua data peralatan
-            $peralatan = Peralatan::all();
-        }
-
-        return view('peralatan.index', compact('peralatan', 'content', 'layout'));
+{
+    if (auth()->user()->hasRole('admin')) {
+        $layout = 'layouts.sidebar';
+        $content = 'side';
+    } else {
+        $layout = 'layouts.app';
+        $content = 'content';
     }
+
+    // Ambil nilai pencarian dari input
+    $search = $request->input('search');
+    $minPrice = $request->input('min_price');
+    $maxPrice = $request->input('max_price');
+
+    // Query pencarian berdasarkan nama peralatan
+    $query = Peralatan::query();
+
+    if ($search) {
+        $query->where('nama_peralatan', 'like', '%' . $search . '%');
+    }
+
+    // Filter harga jika ada
+    if ($minPrice) {
+        $query->where('harga', '>=', $minPrice);
+    }
+    if ($maxPrice) {
+        $query->where('harga', '<=', $maxPrice);
+    }
+
+    // Ambil data peralatan yang sudah difilter
+    $peralatan = $query->get();
+
+    return view('peralatan.index', compact('peralatan', 'content', 'layout'));
+}
+
 
     /**
      * Show the form for creating a new resource.
