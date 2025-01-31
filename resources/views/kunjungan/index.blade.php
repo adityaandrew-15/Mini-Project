@@ -261,7 +261,7 @@
 
                     var input = document.createElement('input');
                     input.type = 'number';
-                    input.name = 'jumlah_obat[' + obatId + ']'; // Ensure this is an array
+                    input.name = 'jumlah_obat[]'; // Ensure this is an array
                     input.classList.add('form', 'h4', 'f-normal', 'px-2', 'w-100', 'h-3', 'border-radius-1');
                     input.placeholder = 'Jumlah';
                     input.min = 1;
