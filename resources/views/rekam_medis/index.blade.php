@@ -156,7 +156,7 @@
                                                             <p>Tidak ada obat yang terkait</p>
                                                         @endif
                                                         <p><strong>Resep</strong> {{ $resep->deskripsi }}</p>
-                                                        <p><strong>Peralatan</strong> {{ $peralatan->nama_peralatan }}</p>
+                                                        {{-- <p><strong>Peralatan</strong> {{ $peralatan->nama_peralatan }}</p> --}}
 
                                                         <p><strong>Gambar:</strong></p>
                                                         @foreach ($rm->images as $image)
