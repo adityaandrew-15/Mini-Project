@@ -11,7 +11,7 @@
 <body>
 <nav class="navbar">
         <h1>
-            KLINIK
+            AllCare
         </h1>
         <ul>
             <li><a href="{{ url('/home#page-doctor') }}">
@@ -24,22 +24,13 @@
                     Buat Kunjungan
                 </a></li>
             <li><a href="{{ url('/home#patient-info') }}">
-                    data Kunjungan
+                    Riwayat Kunjungan
             </a></li>
 
-            
+
         </ul>
         <ul>
-            <li style="margin-top: 7px">
-                <a href="#">
-                    <i class="fa-solid fa-inbox"></i>
-                    @if (auth()->user()->unreadNotifications->count())
-                        <span class="notification-badge"
-                            style="color: red">{{ auth()->user()->unreadNotifications->count() }}</span>
-                    @endif
-                    <p>Inbox</p>
-                </a>
-            </li>
+
             <li class="nav-item" style="margin-left: 20px; margin-top: 15px">
                 <a href="{{ route('logout') }}"
                     onclick="event.preventDefault();
