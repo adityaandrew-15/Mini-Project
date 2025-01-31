@@ -119,7 +119,9 @@
                 <h2>Resep</h2>
                 <ol>
                     @if ($rekamMedis->resep)
-                        <li>{{ $rekamMedis->resep->deskripsi }}</li>
+                    @foreach ($rekamMedis->resep as $resep)
+                        <li>{{ $resep->deskripsi }}</li>
+                    @endforeach
                     @else
                         <li>Tidak ada resep</li>
                     @endif
