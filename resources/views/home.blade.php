@@ -58,7 +58,7 @@
         }
 
         .history-table th {
-            background-color: #457b9d;
+            background-color: var(--main-color);
             color: white;
         }
 
