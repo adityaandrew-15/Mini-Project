@@ -6,7 +6,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    
+
 }
 
 body {
@@ -16,7 +16,7 @@ body {
     box-sizing: border-box;
 }
 
-.navbar {
+/* .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -58,11 +58,12 @@ body {
 .navbar li:hover {
     background-color: #ccc6c6;
     border-radius: 10px;
-}
+} */
 
 .shadow-effect:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Bayangan muncul */
-  }
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    /* Bayangan muncul */
+}
 
 .hero {
     display: flex;
@@ -248,7 +249,8 @@ body {
 }
 
 .patient-info {
-    position: relative; /* Untuk memastikan z-index bekerja */
+    position: relative;
+    /* Untuk memastikan z-index bekerja */
 
     background-color: #ffffff;
     margin-top: 100px;
@@ -336,78 +338,85 @@ body {
 html {
     scroll-behavior: smooth;
 }
+
 footer {
     margin-top: -250px;
-    background: linear-gradient(#103F91, #103F91BF,#103F9180);
+    background: linear-gradient(#103F91, #103F91BF, #103F9180);
     color: white;
     padding: 20px 0;
-    height:680px;
-  }
-  .footer-container {
+    height: 680px;
+}
+
+.footer-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0 20px;
-  }
-  .footer-column {
+}
+
+.footer-column {
     margin-top: 300px;
     flex: 1;
     min-width: 250px;
     margin-bottom: 20px;
-  }
-  .footer-column h3 {
-    font-size: 18px;
+}
+
+.footer-column h3 {
+    font-size: 2rem;
     margin-bottom: 10px;
     border-bottom: 2px solid white;
     display: inline-block;
     padding-bottom: 5px;
-  }
-  .footer-column p, .footer-column ul {
-    font-size: 14px;
+}
+
+.footer-column p,
+.footer-column ul {
+    font-size: 1.2rem;
     margin: 0;
     padding: 0;
-  }
-  .footer-column ul {
+}
+
+.footer-column ul {
     list-style: none;
-  }
-  .footer-column ul li {
+}
+
+.footer-column ul li {
     margin-bottom: 10px;
-  }
-  .social-icons a {
+}
+
+.social-icons a {
     color: white;
     text-decoration: none;
-    margin-bottom: 10px;    
+    margin-bottom: 10px;
     font-size: 18px;
-  }
-  .social-icons a:hover {
+}
+
+.social-icons a:hover {
     color: #00bcd4;
-  }
-  .social-icons{
+}
+
+.social-icons {
     display: flex;
     flex-direction: column;
-    
+
 
 }
 
 @media (max-width: 1366px) {
-    .navbar h1 {
+    /* .navbar h1 {
         font-size: 2rem;
-        /* Mengurangi ukuran font h1 */
     }
 
     .navbar ul li a {
         font-size: 1.2rem;
-        /* Mengurangi ukuran font pada link navigasi */
         margin: 0 1rem;
-        /* Mengurangi margin antar link */
     }
 
     .navbar {
         padding: 1rem 1.5rem;
-        /* Mengurangi padding pada header */
-    }
+    } */
 
     .hero {
         padding: 96px 30px 0 30px;
@@ -571,6 +580,6 @@ footer {
         font-weight: 550;
     }
 
-    
+
 
 }
