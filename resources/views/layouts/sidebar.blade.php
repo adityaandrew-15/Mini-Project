@@ -61,7 +61,7 @@
                         </a>
                         @endif
                     </li>
-                    
+
 
                 @if (auth()->user()->hasRole('admin'))
                 <li>
@@ -111,13 +111,7 @@
                         <span>Jadwal Praktek</span>
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('rekam_medis.index') }}"
-                        class="{{ request()->routeIs('rekam_medis.index') ? 'active' : '' }}">
-                        <i class="fa fa-file-medical-alt"></i>
-                        <span>Rekam Medis</span>
-                    </a>
-                </li>
+                
                 @if (auth()->user()->hasRole('admin'))
                 <li>
                     <a href="{{ route('peralatan.index') }}"
