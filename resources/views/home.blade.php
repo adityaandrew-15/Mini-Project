@@ -421,11 +421,11 @@
         </div>
     </section> --}}
     <section id="patient-info" class="patient-info">
-        
+
         <h3>
             Riwayat Kunjungan Anda
         </h3>
-        
+
         <p>
             Berikut adalah daftar kunjungan yang <br> telah Anda buat.
         </p>
@@ -459,6 +459,7 @@
                             <span class="label">Tanggal Kunjungan :</span>
                             <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
                             <!-- Tombol Detail -->
+                            @if ($kunj->rekamMedis->isNotEmpty())
                             <a href="#" class="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#detailModal{{ $kunj->rekamMedis->id }}">
                                 Detail
@@ -481,7 +482,7 @@
                                         </p>
                                         <p><strong>Diagnosa:</strong> {{ $kunj->rekamMedis->diagnosa }}</p>
                                         <p><strong>Tindakan:</strong> {{ $kunj->rekamMedis->tindakan }}</p>
-                                        
+
                                         <p><strong>Obat:</strong></p>
                                         @if ($kunj->rekamMedis->obats && $kunj->rekamMedis->obats->count() > 0)
                                             @foreach ($kunj->rekamMedis->obats as $obat)
@@ -490,15 +491,17 @@
                                         @else
                                             <p>Tidak ada obat yang terkait</p>
                                         @endif
-                                        <p><strong>Resep:</strong>   @if ($kunj->rekamMedis->resep)
-                                            @foreach ($kunj->rekamMedis->resep as $resep)
-                                                <p>{{ $resep->deskripsi }}</p>
-                                            @endforeach
+                                        <p><strong>Resep:</strong>
+                                            @if ($kunj->rekamMedis->resep)
+                                                @foreach ($kunj->rekamMedis->resep as $resep)
+                                                    <p>{{ $resep->deskripsi }}</p>
+                                                @endforeach
                                             @else
                                                 <p>Tidak ada resep</p>
-                                            @endif</p>
-
-                                            <p><strong>Peralatan:</strong>  @if ($kunj->rekamMedis->peralatans && $kunj->rekamMedis->peralatans->count() > 0)
+                                            @endif
+                                        </p>
+                                        <p><strong>Peralatan:</strong>
+                                            @if ($kunj->rekamMedis->peralatans && $kunj->rekamMedis->peralatans->count() > 0)
                                                 @foreach ($kunj->rekamMedis->peralatans as $peralatan)
                                                     <tr>
                                                         <td>{{ $peralatan->nama_peralatan }}</td>
@@ -508,7 +511,8 @@
                                                 <tr>
                                                     <td>Tidak ada peralatan yang terkait</td>
                                                 </tr>
-                                            @endif</p>
+                                            @endif
+                                        </p>
                                         <p><strong>Gambar:</strong></p>
                                         @foreach ($kunj->rekamMedis->images as $image)
                                             <img src="{{ asset('storage/' . $image->image_path) }}" height="150"
@@ -522,10 +526,13 @@
                                 </div>
                             </div>
                         </div>
-                        </p>
-                    </div>
-                @endforeach
+                    @else
+                        <p>Tidak ada rekam medis untuk kunjungan ini.</p>
+                @endif
+                </p>
             </div>
+            @endforeach
+        </div>
         </div>
     </section>
 
@@ -549,5 +556,3 @@
 
 
 </html>
-
-
