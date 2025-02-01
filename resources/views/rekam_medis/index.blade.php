@@ -57,10 +57,10 @@
                                     <td>{{ $rm->diagnosa }}</td>
                                     <td>{{ $rm->tindakan }}</td>
                                     <td>
-                                        @foreach ($rm->resep as $resep)
+
                                             <!-- Loop through each resep -->
-                                            <p>{{ $resep->deskripsi }}</p> <!-- Display the deskripsi -->
-                                        @endforeach
+                                            <p>{{ $rm->resep->deskripsi }}</p> <!-- Display the deskripsi -->
+
                                     </td>
                                     <td>
                                         @if ($rm->obats && $rm->obats->count() > 0)
@@ -155,7 +155,9 @@
                                                         @else
                                                             <p>Tidak ada obat yang terkait</p>
                                                         @endif
-                                                        <p><strong>Resep</strong> {{ $resep->deskripsi }}</p>
+                                                        @foreach ($rekamMedis as $rm)
+                                                        <p><strong>Resep</strong> {{ $rm->resep->deskripsi }}</p>
+                                                        @endforeach
                                                         {{-- <p><strong>Peralatan</strong> {{ $peralatan->nama_peralatan }}</p> --}}
 
                                                         <p><strong>Gambar:</strong></p>
@@ -372,7 +374,9 @@
                                                 @else
                                                     <p>Tidak ada obat yang terkait</p>
                                                 @endif
-                                                <p><strong>Resep</strong> {{ $resep->deskripsi }}</p>
+                                                @foreach ($rekamMedis as $rm)
+                                                <p><strong>Resep</strong> {{ $rm->resep->deskripsi }}</p>
+                                                @endforeach
                                                 <p><strong>Gambar:</strong></p>
                                                 @foreach ($rm->images as $image)
                                                     <img src="{{ asset('storage/' . $image->image_path) }}"
