@@ -30,6 +30,8 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+    <link href="Medicio/assets/css/main.css" rel="stylesheet">
+
     <style>
         .history-section {
             text-align: center;
@@ -103,7 +105,7 @@
             Swal.fire('Error', '{{ session('error') }}', 'error')
         </script>
     @endif
-    <nav class="navbar">
+    {{-- <nav class="navbar">
         <h1>
             AllCare
         </h1>
@@ -137,7 +139,67 @@
             </li>
         </ul>
         <div class="gap"></div>
-    </nav>
+    </nav> --}}
+    <header id="header" class="header sticky-top">
+
+        <div class="topbar d-flex align-items-center">
+            <div class="container d-flex justify-content-center justify-content-md-between">
+                <div class="d-none d-md-flex align-items-center ms-auto">
+                    <i class="bi bi-clock me-1 "></i> senin - sabtu, 8AM to 10PM
+                </div>
+                <div class="d-flex align-items-center">
+                </div>
+            </div>
+        </div><!-- End Top Bar -->
+
+        <div class="branding d-flex align-items-center">
+
+
+            <div class="container position-relative d-flex align-items-center justify-content-end">
+                <a href="/dashboard" class="logo d-flex align-items-center me-auto">
+                    <h1>AllCare</h1>
+                    <!-- Uncomment the line below if you also wish to use a text logo -->
+                    <!-- <h1 class="sitename">AllCore</h1>  -->
+                </a>
+
+                <nav id="navmenu" class="navmenu">
+                    <ul>
+                        <li><a href="#page-doctor">
+                                Dokter
+                            </a></li>
+                        <li><a href="#form-section">
+                                Pasien
+                            </a></li>
+                        <li><a href="#form-section-kunjungan">
+                                Buat Kunjungan
+                            </a></li>
+                        <li><a href="#patient-info">
+                                Riwayat kunjungan
+                            </a></li>
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                </nav>
+
+                {{-- <a class="cta-btn"
+                    href="{{ Auth::check() ? route(Auth::user()->hasRole('admin') ? 'admin-home' : (Auth::user()->hasRole('dokter') ? 'home-dokter' : 'home')) : route('login') }}">
+                    {{ Auth::check() ? 'Home' : 'JOIN US' }}
+                </a> --}}
+
+                <a class="cta-btn" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
+                    <i class="fas fa-sign-out-alt"></i> <!-- Ikon Logout -->
+                    <span>Logout</span> <!-- Teks Logout -->
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+
+            </div>
+
+        </div>
+
+    </header>
     <section id="hero" class="hero">
         <div class="hero-content">
             <div>

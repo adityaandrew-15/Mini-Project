@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --main-color: #2697b1;
 }
 
@@ -14,7 +14,7 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
+} */
 
 /* .navbar {
     display: flex;
@@ -344,7 +344,7 @@ footer {
     background: linear-gradient(#103F91, #103F91BF, #103F9180);
     color: white;
     padding: 20px 0;
-    height: 680px;
+    /* height: 680px; */
 }
 
 .footer-container {
