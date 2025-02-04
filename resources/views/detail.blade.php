@@ -33,6 +33,14 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <link href="Medicio/assets/css/main.css" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    {{-- <link href="Medicio/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> --}}
+    <link href="Medicio/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="Medicio/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -126,68 +134,200 @@
         </div>
 
     </header>
-    <section id="patien-info" class="patient-info">
-        <h3>
-            Riwayat Kunjungan Anda
-        </h3>
+    <section id="patien-info" class="featured-services section">
+        <div class="container section-title aos-init aos-animate">
+            <h2>
+                Riwayat Kunjungan Anda
+            </h2>
+        </div>
         <div class="container">
-            {{-- <div class="patient-card">
-                <h2 style="font-weight: bold;">Data Anda: </h2>
-                <p>
-                    <i class="fas fa-user"></i>
-                    <span class="label">Nama :</span>
-                    <span style="font-weight: bolder; color:#000;" class="value">Nama</span>
-                </p>
-                <p>
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span class="label">Dokter :</span>
-                    <span class="value">Dokter</span>
-                </p>
-                <p>
-                    <i class="fas fa-phone"></i>
-                    <span class="label">Keluhan :</span>
-                    <span class="value">Keluhan</span>
-                </p>
-                <p>
-                    <i class="fas fa-calendar-alt"></i>
-                    <span class="label">Tanggal Kunjungan :</span>
-                    <span class="value">Tanggal Kunjungan</span>
-                </p>
-                <div class="button-details">
-                    <div class="details-button">
-                        <i class="fa-regular fa-eye"></i>
-                        <a href="#">Detail</a>
-                    </div>
+            @if ($kunjunganhistory->isEmpty())
+                <span>Tidak Ada Data</span>
+            @else
+                <div class="row gy-4">
+                    @foreach ($kunjunganhistory as $kunj)
+                    <div class="col-md-6 aos-init aos-animate">
+                        <div class="service-item position-relative">
+                                <h2>Data pasien: </h2>
+                                <p>
+                                    <i class="fas fa-user"></i>
+                                    <span>Nama :</span>
+                                    <span class="value">{{ $kunj->pasien->nama }}</span>
+                                </p>
+                                <p>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Dokter :</span>
+                                    <span class="value">{{ $kun->dokter->nama ?? 'tunggu beberapa saat lagi' }}</span>
+                                </p>
+                                <p>
+                                    <i class="fas fa-phone"></i>
+                                    <span>Keluhan :</span>
+                                    <span class="value">{{ $kunj->keluhan }}</span>
+                                </p>
+                                <p>
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>Tanggal Kunjungan :</span>
+                                    <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
+                                </p>
+                                @if ($kunj->rekamMedis->isNotEmpty())
+                                    <div class="text-start mt-4">
+                                        <a href="#" class="btn btn-info btn-sm"
+                                            id="detailBtn{{ $kunj->rekamMedis->first()->id }}">
+                                            <p>Detail</p>
+                                        </a>
+                                    </div>
+
+                                    <script>
+                                        // Trigger SweetAlert when the button is clicked
+                                        document.getElementById('detailBtn{{ $kunj->rekamMedis->first()->id }}').addEventListener('click', function(
+                                            event) {
+                                            event.preventDefault(); // Prevent default anchor link behavior
+
+                                            // Collect the modal content
+                                            let content = `
+                <strong>Pasien:</strong> {{ $kunj->rekamMedis->first()->kunjungan->pasien->nama }} <br>
+                <strong>Diagnosa:</strong> {{ $kunj->rekamMedis->first()->diagnosa }} <br>
+                <strong>Tindakan:</strong> {{ $kunj->rekamMedis->first()->tindakan }} <br>
+                <strong>Obat:</strong><br>
+                @if ($kunj->rekamMedis->first()->obats->isNotEmpty())
+                    @foreach ($kunj->rekamMedis->first()->obats as $obat)
+                        {{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}<br>
+                    @endforeach
+                @else
+                    Tidak ada obat yang terkait <br>
+                @endif
+                <strong>Peralatan:</strong><br>
+                @if ($kunj->rekamMedis->first()->peralatans->isNotEmpty())
+                    @foreach ($kunj->rekamMedis->first()->peralatans as $peralatan)
+                        {{ $peralatan->nama_peralatan }}<br>
+                    @endforeach
+                @else
+                    Tidak ada peralatan yang terkait <br>
+                @endif
+                <strong>Gambar:</strong><br>
+                @if ($kunj->rekamMedis->first()->images->isNotEmpty())
+                    @foreach ($kunj->rekamMedis->first()->images as $image)
+                        <img src="{{ asset('storage/' . $image->image_path) }}" height="150" width="120" class="mb-2" alt="Gambar"><br>
+                    @endforeach
+                @else
+                    Tidak ada gambar yang terkait <br>
+                @endif
+            `;
+
+                                            // Show SweetAlert
+                                            Swal.fire({
+                                                title: 'Detail Rekam Medis',
+                                                html: content,
+                                                showCloseButton: true,
+                                                confirmButtonText: 'Close',
+                                                width: '50%',
+                                                padding: '20px',
+                                                didOpen: () => {
+                                                    // Prevent page scrolling when the SweetAlert is open
+                                                    document.body.style.overflow = 'hidden';
+                                                },
+                                                didClose: () => {
+                                                    // Allow page scrolling back when the SweetAlert is closed
+                                                    document.body.style.overflow = 'auto';
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                @else
+                                    <p>Tidak ada rekam medis untuk kunjungan ini.</p>
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
                 </div>
-            </div> --}}
-            @foreach ($kunjunganhistory as $kunj)
-                <div class="patient-card">
-                    <h5 style="font-weight: bold;">Data pasien: </h5>
-                    <p>
-                        <i class="fas fa-user"></i>
-                        <span class="label">Nama :</span>
-                        <span style="font-weight: bolder; color:#000;" class="value">{{ $kunj->pasien->nama }}</span>
-                    </p>
-                    <p>
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span class="label">Dokter :</span>
-                        <span class="value">{{ $kun->dokter->nama ?? 'tunggu beberapa saat lagi' }}</span>
-                    </p>
-                    <p>
-                        <i class="fas fa-phone"></i>
-                        <span class="label">Keluhan :</span>
-                        <span class="value">{{ $kunj->keluhan }}</span>
-                    </p>
-                    <p>
-                        <i class="fas fa-calendar-alt"></i>
-                        <span class="label">Tanggal Kunjungan :</span>
-                        <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
-                    </p>
-                </div>
-            @endforeach
+            @endif
         </div>
     </section>
-    <footer>
+
+    {{-- footer template --}}
+    <footer id="contact" class="footer light-background">
+        <div class="container footer-top">
+            <div class="row gy-4">
+                <div class="col-lg-4 col-md-6 footer-about">
+                    <a href="index.html" class="logo d-flex align-items-center">
+                        <span class="sitename">AllCare</span>
+                    </a>
+                    <div class="footer-contact pt-3">
+                        <!-- Menggunakan data dari footer saya -->
+                        <p>Klinik Sehat Bersama</p>
+                        <p>Jalan Kebahagiaan No. 123, Kota Sejahtera, 45678</p>
+                        <p class="mt-3"><strong>Phone:</strong> <span>021-123-4567</span></p>
+                        <p><strong>Email:</strong> <span>info@kliniksehat.com</span></p>
+                    </div>
+                    {{-- <div class="social-links d-flex mt-4">
+                        <!-- Menggunakan data dari footer saya -->
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i> <span>youtube</span></a>
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i> <span>facebook</span></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i>
+                            <span>instagram</span></a>
+                    </div> --}}
+                </div>
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About us</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Terms of service</a></li>
+                        <li><a href="#">Privacy policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>Our Services</h4>
+                    <ul>
+                        <li><a href="#">Web Design</a></li>
+                        <li><a href="#">Web Development</a></li>
+                        <li><a href="#">Product Management</a></li>
+                        <li><a href="#">Marketing</a></li>
+                        <li><a href="#">Graphic Design</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>Hic solutasetp</h4>
+                    <ul>
+                        <li><a href="#">Molestiae accusamus iure</a></li>
+                        <li><a href="#">Excepturi dignissimos</a></li>
+                        <li><a href="#">Suscipit distinctio</a></li>
+                        <li><a href="#">Dilecta</a></li>
+                        <li><a href="#">Sit quas consectetur</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-3 footer-links">
+                    <h4>Nobis illum</h4>
+                    <ul>
+                        <li><a href="#">Ipsam</a></li>
+                        <li><a href="#">Laudantium dolorum</a></li>
+                        <li><a href="#">Dinera</a></li>
+                        <li><a href="#">Trodelas</a></li>
+                        <li><a href="#">Flexo</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container copyright text-center mt-4">
+            <p>© <span>Copyright</span> <strong class="px-1 sitename">Medicio</strong> <span>All Rights Reserved</span>
+            </p>
+            <div class="credits">
+                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+            </div>
+        </div>
+
+    </footer>
+
+
+    {{-- footer saya --}}
+    {{-- <footer>
         <div class="footer-container">
             <!-- Klinik -->
             <div class="footer-column">
@@ -218,7 +358,7 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer> --}}
 </body>
 
 </html>

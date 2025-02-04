@@ -3,7 +3,9 @@
 {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
 
 <!-- Link JS Bootstrap -->
+<style>
 
+</style>
 @section('side')
     <div class="m-3">
         {{-- @if (auth()->user()->unreadNotifications->count())
@@ -86,59 +88,72 @@
                                     @if (auth()->user()->hasRole('admin'))
                                         <td class="action-icons">
 
-
                                             <button type="button"
                                                 style="border: none; outline: none; background: transparent;"
                                                 onclick="btnOpenDetailModal({{ $kunjungan->id }})">
                                                 <i class="fas fa-eye h3 mr-1 main-color pointer"></i>
                                             </button>
                                             @foreach ($kunjungans as $kunjungan)
-                                            <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
-                                                aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content shadow-none"> <!-- Hapus shadow -->
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="detailModalLabel{{ $kunjungan->id }}">
-                                                                Detail Kunjungan dan Rekam Medis
-                                                            </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p><strong>Pasien:</strong> {{ $kunjungan->pasien->nama }}</p>
-                                                            <p><strong>Dokter:</strong> {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}</p>
-                                                            <p><strong>Keluhan:</strong> {{ $kunjungan->keluhan }}</p>
-                                                            <p><strong>Tanggal Kunjungan:</strong> {{ $kunjungan->tanggal_kunjungan }}</p>
+                                                <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
+                                                    aria-labelledby="detailModalLabel{{ $kunjungan->id }}"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content shadow-none"> <!-- Hapus shadow -->
+                                                            <div class="modal-header">
+                                                                <h2 class="modal-title h2 f-bolder"
+                                                                    id="detailModalLabel{{ $kunjungan->id }}">
+                                                                    Detail Kunjungan dan Rekam Medis
+                                                                </h2>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p class="h4 my-1"><strong>Pasien:</strong> {{ $kunjungan->pasien->nama }}
+                                                                </p>
+                                                                <p class="h4 my-1"><strong>Dokter:</strong>
+                                                                    {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
+                                                                </p>
+                                                                <p class="h4 my-1"><strong>Keluhan:</strong> {{ $kunjungan->keluhan }}</p>
+                                                                <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
+                                                                    {{ $kunjungan->tanggal_kunjungan }}</p>
 
-                                                            <h6>Detail Rekam Medis:</h6>
-                                                            @if ($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0)
-                                                                @foreach ($kunjungan->rekamMedis as $rekamMedis)
-                                                                    <p><strong>Diagnosa:</strong> {{ $rekamMedis->diagnosa }}</p>
-                                                                    <p><strong>Tindakan:</strong> {{ $rekamMedis->tindakan }}</p>
-                                                                    <p><strong>Obat:</strong></p>
-                                                                    @if ($rekamMedis->obats && $rekamMedis->obats->count() > 0)
-                                                                        @foreach ($rekamMedis->obats as $obat)
-                                                                            <p>{{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}</p>
+                                                                <h2 class="h2 f-bolder">Detail Rekam Medis:</h2>
+                                                                @if ($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0)
+                                                                    @foreach ($kunjungan->rekamMedis as $rekamMedis)
+                                                                        <p class="h4 my-1"><strong>Diagnosa:</strong>
+                                                                            {{ $rekamMedis->diagnosa }}</p>
+                                                                        <p class="h4 my-1"><strong>Tindakan:</strong>
+                                                                            {{ $rekamMedis->tindakan }}</p>
+                                                                        <p class="h4 my-1"><strong>Obat:</strong></p>
+                                                                        @if ($rekamMedis->obats && $rekamMedis->obats->count() > 0)
+                                                                            @foreach ($rekamMedis->obats as $obat)
+                                                                                <p>{{ $obat->obat }} - Jumlah:
+                                                                                    {{ $obat->pivot->jumlah }}</p>
+                                                                            @endforeach
+                                                                        @else
+                                                                            <p>Tidak ada obat yang terkait</p>
+                                                                        @endif
+                                                                        <p class="h4 my-1"><strong>Resep:</strong>
+                                                                            {{ $rekamMedis->resep->deskripsi ?? 'Tidak ada resep' }}
+                                                                        </p>
+                                                                        <p class="h4 my-1"><strong>Gambar:</strong></p>
+                                                                        @foreach ($rekamMedis->images as $image)
+                                                                            <img src="{{ asset('storage/' . $image->image_path) }}"
+                                                                                height="150" width="120" class="mb-2"
+                                                                                alt="Gambar">
                                                                         @endforeach
-                                                                    @else
-                                                                        <p>Tidak ada obat yang terkait</p>
-                                                                    @endif
-                                                                    <p><strong>Resep:</strong> {{ $rekamMedis->resep->deskripsi ?? 'Tidak ada resep' }}</p>
-                                                                    <p><strong>Gambar:</strong></p>
-                                                                    @foreach ($rekamMedis->images as $image)
-                                                                        <img src="{{ asset('storage/' . $image->image_path) }}" height="150" width="120" class="mb-2" alt="Gambar">
                                                                     @endforeach
-                                                                @endforeach
-                                                            @else
-                                                                <p>Tidak ada rekam medis untuk kunjungan ini.</p>
-                                                            @endif
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="px-2 py-1 btn-close red-hover" data-bs-dismiss="modal">Tutup</button>
+                                                                @else
+                                                                    <p class="h4 my-1">Tidak ada rekam medis untuk kunjungan ini.</p>
+                                                                @endif
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                                    data-bs-dismiss="modal">Tutup</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
                                             @endforeach
 
                                             <script>
@@ -149,22 +164,32 @@
                                                 }
                                             </script>
 
+                                            @php
+                                                $rekamMedisExists = \App\Models\RekamMedis::where(
+                                                    'kunjungan_id',
+                                                    $kunjungan->id,
+                                                )->exists();
+                                            @endphp
 
-                                            <button type="button"
-                                                style="border: none; outline: none; background: transparent;"
-                                                onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
-                                                <i class="fas fa-plus-circle add h3 mr-1 main-color pointer"></i>
-                                            </button>
+                                            @if (!$rekamMedisExists)
+                                                <button type="button"
+                                                    style="border: none; outline: none; background: transparent;"
+                                                    onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
+                                                    <i class="fas fa-plus-circle add h3 mr-1 main-color pointer"></i>
+                                                </button>
+                                            @endif
+
                                             <script>
                                                 function btnOpenAddRekamMedisModal(kunjunganId) {
-                                                    document.getElementById('kunjungan_id').value = kunjunganId; // Set the kunjungan_id in the form
-                                                    document.getElementById('myModalAddRekamMedis').style.display = "block"; // Show the modal
+                                                    document.getElementById('kunjungan_id').value = kunjunganId; // Set kunjungan_id in the form
+                                                    document.getElementById('myModalAddRekamMedis').style.display = "block"; // Show modal
                                                 }
 
                                                 function closeAddRekamMedisModal() {
-                                                    document.getElementById('myModalAddRekamMedis').style.display = "none"; // Hide the modal
+                                                    document.getElementById('myModalAddRekamMedis').style.display = "none"; // Hide modal
                                                 }
                                             </script>
+
 
                                             <div class="modal animate__fadeIn" id="myModalAddRekamMedis">
                                                 <div class="modal-content animate__animated animate__zoomIn">

@@ -64,7 +64,7 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 } */
 
-.hero {
+/* .hero {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -117,9 +117,9 @@ body {
     width: auto;
     object-fit: cover;
     margin-left: 0;
-}
+} */
 
-.page-doctor {
+/* .page-doctor {
     padding: 148px 0 2rem;
 }
 
@@ -130,13 +130,13 @@ body {
 .section-title h3 {
     font-size: 4rem;
     margin: 1rem;
-}
+} */
 
-.section-title p {
+/* .section-title p {
     font-size: 2rem;
-}
+} */
 
-.doctors {
+/* .doctors {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
@@ -173,7 +173,7 @@ body {
     font-size: 1.2rem;
     color: #666;
     margin: 5px 0;
-}
+} */
 
 .form-section {
     display: flex;
@@ -181,7 +181,7 @@ body {
     justify-content: space-between;
     padding: 10rem 168px 0;
     text-align: center;
-    background: linear-gradient(to right, #fff, #0d6efd);
+    background: linear-gradient(to right, #fff, #0dcaf0);
 }
 
 .form-left {
@@ -198,11 +198,11 @@ body {
     flex-direction: column;
     padding: 3rem 3.5rem;
     margin: 4rem 2rem;
-    background: #0d6efd;
+    background: var(--bs-info);
     border-radius: 20px;
     justify-content: center;
     align-items: center;
-    border: 1px solid #000;
+    /* border: 1px solid; */
     box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
 }
 
@@ -263,11 +263,11 @@ body {
     margin: 0 0 6rem;
 }
 
-.container {
+/* .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-}
+} */
 
 .patient-card {
     border: 1px solid #000000;
