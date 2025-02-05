@@ -210,6 +210,29 @@ body {
     text-align: center;
 }
 
+.btn-cek-nota {
+    display: inline-flex;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    padding: 14px 20px;
+    margin-top: 10px;
+    border-radius: 1rem;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 800;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-cek-nota i {
+    margin-left: 8px;
+}
+
+.btn-cek-nota:hover {
+    background-color: #0056b3;
+}
+
+
 .btn-filter a {
     text-decoration: none;
     text-align: center;
@@ -220,7 +243,7 @@ body {
 }
 
 .btn-filter:hover {
-    background: #0a5e70;   
+    background: #0a5e70;
 }
 
 #fileInput {
@@ -253,7 +276,8 @@ body {
 
 /* Kustomisasi tombol */
 .btn-custom {
-    background-color: #0e7b94; /* Warna tombol */
+    background-color: #0e7b94;
+    /* Warna tombol */
     color: white;
     padding: 10px 20px;
     border: none;
@@ -286,7 +310,8 @@ body {
     max-width: 800px;
 }
 
-.form, form:focus {
+.form,
+form:focus {
     border: 1px solid #aaa;
 }
 
@@ -1030,4 +1055,3 @@ table tr:hover td {
 
 
 @media screen and (max-width: 1366px) {}
-

@@ -102,6 +102,15 @@
         .select2-container .select2-selection--single .select2-selection__rendered {
             line-height: 80px;
         }
+
+        .btn-nota-check {
+            background: var(--accent-color);
+            border: 0;
+            padding: 10px 35px;
+            color: #fff;
+            transition: 0.4s;
+            border-radius: 4px;
+        }
     </style>
 
 </head>
@@ -124,8 +133,8 @@
         </script>
     @endif
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            @if ($errors->any()) 
+        document.addEventListener("DOMContentLoaded", function() {
+            @if ($errors->any())
                 Swal.fire({
                     toast: true,
                     position: 'top-end',
@@ -144,7 +153,7 @@
             @endif
         });
     </script>
-    
+
 
     {{-- <nav class="navbar">
         <h1>
@@ -322,11 +331,11 @@
             </p>
         </div>
         <div id="doctors" class="container">
-            <div class="row gy-4">
+            <div class="row">
                 @foreach ($dokter as $dok)
                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch aos-init aos-animate">
                         <div class="team-member">
-                            <div class="member-img">
+                            <div class="member-img">`
                                 <img src="{{ asset('storage/' . $dok->image) }}" class="img-fluid"" alt="gambar">
                             </div>
                             <div class="member-info">
@@ -667,12 +676,13 @@
                     @foreach ($kunjunganhistory->take(3) as $kunj)
                         <div class="col-md-6">
                             <div class="service-item position-relative">
-                                <h2>Data Anda</h2>
-                                <p>
+                                {{-- <h2>Data Anda</h2> --}}
+                                <h2>Data Kunjungan : <span class="value">{{ $kunj->pasien->nama }}</span></h2>
+                                {{-- <p>
                                     <i class="fas fa-user"></i>
                                     <span class="label">Nama :</span>
                                     <span class="value">{{ $kunj->pasien->nama }}</span>
-                                </p>
+                                </p> --}}
                                 <p>
                                     <i class="fas fa-phone"></i>
                                     <span class="label">Keluhan :</span>
@@ -685,64 +695,81 @@
                                 </p>
                                 @if ($kunj->rekamMedis->isNotEmpty())
                                     <div class="text-start mt-4">
-                                        <a href="#" class="btn btn-info btn-sm"
+                                        <a href="#" class="btn btn-nota-check"
                                             id="detailBtn{{ $kunj->rekamMedis->first()->id }}">
                                             <p>Detail</p>
                                         </a>
                                     </div>
 
                                     <script>
-                                        // Trigger SweetAlert when the button is clicked
                                         document.getElementById('detailBtn{{ $kunj->rekamMedis->first()->id }}').addEventListener('click', function(
                                             event) {
-                                            event.preventDefault(); // Prevent default anchor link behavior
+                                            event.preventDefault(); // Mencegah aksi default tombol
 
-                                            // Collect the modal content
                                             let content = `
-                <strong>Pasien:</strong> {{ $kunj->rekamMedis->first()->kunjungan->pasien->nama }} <br>
-                <strong>Diagnosa:</strong> {{ $kunj->rekamMedis->first()->diagnosa }} <br>
-                <strong>Tindakan:</strong> {{ $kunj->rekamMedis->first()->tindakan }} <br>
-                <strong>Obat:</strong><br>
-                @if ($kunj->rekamMedis->first()->obats->isNotEmpty())
-                    @foreach ($kunj->rekamMedis->first()->obats as $obat)
-                        {{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}<br>
-                    @endforeach
-                @else
-                    Tidak ada obat yang terkait <br>
-                @endif
-                <strong>Peralatan:</strong><br>
-                @if ($kunj->rekamMedis->first()->peralatans->isNotEmpty())
-                    @foreach ($kunj->rekamMedis->first()->peralatans as $peralatan)
-                        {{ $peralatan->nama_peralatan }}<br>
-                    @endforeach
-                @else
-                    Tidak ada peralatan yang terkait <br>
-                @endif
-                <strong>Gambar:</strong><br>
-                @if ($kunj->rekamMedis->first()->images->isNotEmpty())
-                    @foreach ($kunj->rekamMedis->first()->images as $image)
-                        <img src="{{ asset('storage/' . $image->image_path) }}" height="150" width="120" class="mb-2" alt="Gambar"><br>
-                    @endforeach
-                @else
-                    Tidak ada gambar yang terkait <br>
-                @endif
-            `;
+                                                <div style="display: flex; align-items: flex-start; gap: 20px;">
+                                                    <!-- Bagian Kiri (Teks) -->
+                                                    <div style="flex: 1; font-size: 16px;">
+                                                        <strong>Pasien:</strong> <br> {{ $kunj->rekamMedis->first()->kunjungan->pasien->nama }} <br><br>
+                                                        <strong>Diagnosa:</strong> <br> {{ $kunj->rekamMedis->first()->diagnosa }} <br><br>
+                                                        <strong>Tindakan:</strong> <br> {{ $kunj->rekamMedis->first()->tindakan }} <br><br>
+                                    
+                                                        <strong>Obat:</strong> <br>
+                                                        @if ($kunj->rekamMedis->first()->obats->isNotEmpty())
+                                                            @foreach ($kunj->rekamMedis->first()->obats as $obat)
+                                                                {{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}<br>
+                                                            @endforeach
+                                                        @else
+                                                            Tidak ada obat yang terkait <br>
+                                                        @endif
+                                                        <br>
+                                    
+                                                        <strong>Peralatan:</strong> <br>
+                                                        @if ($kunj->rekamMedis->first()->peralatans->isNotEmpty())
+                                                            @foreach ($kunj->rekamMedis->first()->peralatans as $peralatan)
+                                                                {{ $peralatan->nama_peralatan }}<br>
+                                                            @endforeach
+                                                        @else
+                                                            Tidak ada peralatan yang terkait <br>
+                                                        @endif
+                                                    </div>
+                                    
+                                                    <!-- Bagian Kanan (Gambar) -->
+                                                    <div style="flex: 1; text-align: center;">
+                                                         <strong>Gambar:</strong> <br>
+                                                        @if ($kunj->rekamMedis->first()->images->isNotEmpty())
+                                                            @foreach ($kunj->rekamMedis->first()->images as $image)
+                                                                <img src="{{ asset('storage/' . $image->image_path) }}" 
+                                                                     style="max-width: 50%; height: auto; border-radius: 10px;" 
+                                                                     alt="Gambar">
+                                                            @endforeach
+                                                        @else
+                                                            <p>Tidak ada gambar yang terkait</p>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            `;
 
-                                            // Show SweetAlert
                                             Swal.fire({
                                                 title: 'Detail Rekam Medis',
                                                 html: content,
                                                 showCloseButton: true,
                                                 confirmButtonText: 'Close',
-                                                width: '50%',
+                                                showCancelButton: true,
+                                                cancelButtonText: '<i class="fa-solid fa-print"></i> Cek Nota',
+                                                cancelButtonAriaLabel: 'Cek Nota',
+                                                width: '70%',
                                                 padding: '20px',
                                                 didOpen: () => {
-                                                    // Prevent page scrolling when the SweetAlert is open
                                                     document.body.style.overflow = 'hidden';
                                                 },
                                                 didClose: () => {
-                                                    // Allow page scrolling back when the SweetAlert is closed
                                                     document.body.style.overflow = 'auto';
+                                                }
+                                            }).then((result) => {
+                                                if (result.dismiss === Swal.DismissReason.cancel) {
+                                                    window.location.href =
+                                                        "{{ route('rekam_medis.nota', $kunj->rekamMedis->first()->id) }}";
                                                 }
                                             });
                                         });
