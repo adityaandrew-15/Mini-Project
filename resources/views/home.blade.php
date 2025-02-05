@@ -109,14 +109,43 @@
 <body>
     @if (session('success'))
         <script>
-            Swal.fire('Success', '{{ session('success') }}', 'success');
+            document.addEventListener("DOMContentLoaded", function() {
+                @if (session('success'))
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 7000
+                    });
+                @endif
+            });
         </script>
     @endif
-    @if (session('error'))
-        <script>
-            Swal.fire('Error', '{{ session('error') }}', 'error')
-        </script>
-    @endif
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            @if ($errors->any()) 
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Validasi Gagal!',
+                    html: `
+                        <ul style="text-align: left;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                    showConfirmButton: false,
+                    timer: 10000
+                });
+            @endif
+        });
+    </script>
+    
+
     {{-- <nav class="navbar">
         <h1>
             AllCare
@@ -197,15 +226,37 @@
                     {{ Auth::check() ? 'Home' : 'JOIN US' }}
                 </a> --}}
 
-                <a class="cta-btn" href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
-            document.getElementById('logout-form').submit();">
+                <a class="cta-btn" href="#" onclick="confirmLogout(event)">
                     <i class="fas fa-sign-out-alt"></i> <!-- Ikon Logout -->
                     <span>Logout</span> <!-- Teks Logout -->
                 </a>
+
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form>
+
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                <script>
+                    function confirmLogout(event) {
+                        event.preventDefault(); // Mencegah logout langsung
+
+                        Swal.fire({
+                            title: "Yakin ingin logout?",
+                            text: "Anda akan keluar dari sesi ini.",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Ya, Logout!",
+                            cancelButtonText: "Batal"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById("logout-form").submit(); // Kirim form logout jika dikonfirmasi
+                            }
+                        });
+                    }
+                </script>
+
 
             </div>
 
@@ -334,7 +385,7 @@
                                 </div>
                                 <div class="form-group mt-3">
                                     <div class=" form-group">
-                                        <input class="form-control" placeholder="Nomor Handphone" type="text"
+                                        <input class="form-control" placeholder="Nomor Handphone" type="number"
                                             name="no_hp" value="{{ old('no_hp') }}" />
                                         @error('no_hp')
                                             <p style="color: red">{{ $message }}</p>

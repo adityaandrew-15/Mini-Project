@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+     * |--------------------------------------------------------------------------
+     * | Login Controller
+     * |--------------------------------------------------------------------------
+     * |
+     * | This controller handles authenticating users for the application and
+     * | redirecting them to your home screen. The controller uses a trait
+     * | to conveniently provide its functionality to your applications.
+     * |
+     */
 
     use AuthenticatesUsers;
 
@@ -38,7 +38,6 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-    
 
     /**
      * Handle redirection after user is authenticated.
@@ -54,15 +53,14 @@ class LoginController extends Controller
         }
 
         if ($user->hasRole('dokter')) {
-            return redirect('/home-dokter');
+            return redirect('/home-dokter')->with('success', 'Login Berhasil!');
         }
 
-        return redirect('/home');
+        return redirect('/home')->with('success', 'Login Berhasil!');
     }
+
     protected function sendFailedLoginResponse(Request $request)
-{
-    return redirect()->back()->with('error', 'Akun tidak ditemukan atau password salah.');
+    {
+        return redirect()->back()->with('error', 'Akun tidak ditemukan atau password salah.');
+    }
 }
-
-}
-

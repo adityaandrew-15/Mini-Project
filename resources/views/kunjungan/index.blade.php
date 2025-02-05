@@ -72,9 +72,9 @@
                                 <th>Dokter</th>
                                 <th>Keluhan</th>
                                 <th>Tanggal Kunjungan</th>
-                                @if (auth()->user()->hasRole('admin'))
-                                    <th>Aksi</th>
-                                @endif
+                                {{-- @if (auth()->user()->hasRole('admin')) --}}
+                                <th>Aksi</th>
+                                {{-- @endif --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -85,245 +85,236 @@
                                     <td>{{ $kunjungan->keluhan }}</td>
                                     <td>{{ $kunjungan->tanggal_kunjungan }}</td>
 
-                                    @if (auth()->user()->hasRole('admin'))
-                                        <td class="action-icons">
+                                    {{-- buttonxx --}}
+                                    {{-- @if (auth()->user()->hasRole('admin')) --}}
+                                    <td class="action-icons">
+                                        <button type="button" style="border: none; outline: none; background: transparent;"
+                                            onclick="btnOpenDetailModal({{ $kunjungan->id }})">
+                                            <i class="fas fa-eye h3 mr-1 main-color pointer"></i>
+                                        </button>
+                                        @foreach ($kunjungans as $kunjungan)
+                                            <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
+                                                aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div
+                                                        class="modal-content shadow-none animate__animated animate__zoomIn">
+                                                        <!-- Hapus shadow -->
+                                                        <div class="modal-header">
+                                                            <h2 class="modal-title h2 f-bolder"
+                                                                id="detailModalLabel{{ $kunjungan->id }}">
+                                                                Detail Kunjungan dan Rekam Medis
+                                                            </h2>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p class="h4 my-1"><strong>Pasien:</strong>
+                                                                {{ $kunjungan->pasien->nama }}
+                                                            </p>
+                                                            <p class="h4 my-1"><strong>Dokter:</strong>
+                                                                {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
+                                                            </p>
+                                                            <p class="h4 my-1"><strong>Keluhan:</strong>
+                                                                {{ $kunjungan->keluhan }}</p>
+                                                            <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
+                                                                {{ $kunjungan->tanggal_kunjungan }}</p>
 
-                                            <button type="button"
-                                                style="border: none; outline: none; background: transparent;"
-                                                onclick="btnOpenDetailModal({{ $kunjungan->id }})">
-                                                <i class="fas fa-eye h3 mr-1 main-color pointer"></i>
-                                            </button>
-                                            @foreach ($kunjungans as $kunjungan)
-                                                <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
-                                                    aria-labelledby="detailModalLabel{{ $kunjungan->id }}"
-                                                    aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content shadow-none"> <!-- Hapus shadow -->
-                                                            <div class="modal-header">
-                                                                <h2 class="modal-title h2 f-bolder"
-                                                                    id="detailModalLabel{{ $kunjungan->id }}">
-                                                                    Detail Kunjungan dan Rekam Medis
-                                                                </h2>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <p class="h4 my-1"><strong>Pasien:</strong> {{ $kunjungan->pasien->nama }}
-                                                                </p>
-                                                                <p class="h4 my-1"><strong>Dokter:</strong>
-                                                                    {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
-                                                                </p>
-                                                                <p class="h4 my-1"><strong>Keluhan:</strong> {{ $kunjungan->keluhan }}</p>
-                                                                <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
-                                                                    {{ $kunjungan->tanggal_kunjungan }}</p>
-
-                                                                <h2 class="h2 f-bolder">Detail Rekam Medis:</h2>
-                                                                @if ($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0)
-                                                                    @foreach ($kunjungan->rekamMedis as $rekamMedis)
-                                                                        <p class="h4 my-1"><strong>Diagnosa:</strong>
-                                                                            {{ $rekamMedis->diagnosa }}</p>
-                                                                        <p class="h4 my-1"><strong>Tindakan:</strong>
-                                                                            {{ $rekamMedis->tindakan }}</p>
-                                                                        <p class="h4 my-1"><strong>Obat:</strong></p>
-                                                                        @if ($rekamMedis->obats && $rekamMedis->obats->count() > 0)
-                                                                            @foreach ($rekamMedis->obats as $obat)
-                                                                                <p>{{ $obat->obat }} - Jumlah:
-                                                                                    {{ $obat->pivot->jumlah }}</p>
-                                                                            @endforeach
-                                                                        @else
-                                                                            <p>Tidak ada obat yang terkait</p>
-                                                                        @endif
-                                                                        <p class="h4 my-1"><strong>Resep:</strong>
-                                                                            {{ $rekamMedis->resep->deskripsi ?? 'Tidak ada resep' }}
-                                                                        </p>
-                                                                        <p class="h4 my-1"><strong>Gambar:</strong></p>
-                                                                        @foreach ($rekamMedis->images as $image)
-                                                                            <img src="{{ asset('storage/' . $image->image_path) }}"
-                                                                                height="150" width="120" class="mb-2"
-                                                                                alt="Gambar">
+                                                            <h2 class="h2 f-bolder">Detail Rekam Medis:</h2>
+                                                            @if ($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0)
+                                                                @foreach ($kunjungan->rekamMedis as $rekamMedis)
+                                                                    <p class="h4 my-1"><strong>Diagnosa:</strong>
+                                                                        {{ $rekamMedis->diagnosa }}</p>
+                                                                    <p class="h4 my-1"><strong>Tindakan:</strong>
+                                                                        {{ $rekamMedis->tindakan }}</p>
+                                                                    <p class="h4 my-1"><strong>Obat:</strong></p>
+                                                                    @if ($rekamMedis->obats && $rekamMedis->obats->count() > 0)
+                                                                        @foreach ($rekamMedis->obats as $obat)
+                                                                            <p>{{ $obat->obat }} - Jumlah:
+                                                                                {{ $obat->pivot->jumlah }}</p>
                                                                         @endforeach
+                                                                    @else
+                                                                        <p>Tidak ada obat yang terkait</p>
+                                                                    @endif
+                                                                    <p class="h4 my-1"><strong>Resep:</strong>
+                                                                        {{ $rekamMedis->resep->deskripsi ?? 'Tidak ada resep' }}
+                                                                    </p>
+                                                                    <p class="h4 my-1"><strong>Gambar:</strong></p>
+                                                                    @foreach ($rekamMedis->images as $image)
+                                                                        <img src="{{ asset('storage/' . $image->image_path) }}"
+                                                                            height="150" width="120" class="mb-2"
+                                                                            alt="Gambar">
                                                                     @endforeach
-                                                                @else
-                                                                    <p class="h4 my-1">Tidak ada rekam medis untuk kunjungan ini.</p>
-                                                                @endif
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="px-2 py-1 btn-close red-hover"
-                                                                    data-bs-dismiss="modal">Tutup</button>
-                                                            </div>
+                                                                @endforeach
+                                                            @else
+                                                                <p class="h4 my-1">Tidak ada rekam medis untuk kunjungan
+                                                                    ini.</p>
+                                                            @endif
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                                data-bs-dismiss="modal">Tutup</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endforeach
-
-                                            <script>
-                                                function btnOpenDetailModal(kunjunganId) {
-                                                    var modal = document.getElementById('detailModal' + kunjunganId);
-                                                    var modalInstance = new bootstrap.Modal(modal);
-                                                    modalInstance.show();
-                                                }
-                                            </script>
-
-                                            @php
-                                                $rekamMedisExists = \App\Models\RekamMedis::where(
-                                                    'kunjungan_id',
-                                                    $kunjungan->id,
-                                                )->exists();
-                                            @endphp
-
-                                            @if (!$rekamMedisExists)
-                                                <button type="button"
-                                                    style="border: none; outline: none; background: transparent;"
-                                                    onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
-                                                    <i class="fas fa-plus-circle add h3 mr-1 main-color pointer"></i>
-                                                </button>
-                                            @endif
-
-                                            <script>
-                                                function btnOpenAddRekamMedisModal(kunjunganId) {
-                                                    document.getElementById('kunjungan_id').value = kunjunganId; // Set kunjungan_id in the form
-                                                    document.getElementById('myModalAddRekamMedis').style.display = "block"; // Show modal
-                                                }
-
-                                                function closeAddRekamMedisModal() {
-                                                    document.getElementById('myModalAddRekamMedis').style.display = "none"; // Hide modal
-                                                }
-                                            </script>
-
-
-                                            <div class="modal animate__fadeIn" id="myModalAddRekamMedis">
-                                                <div class="modal-content animate__animated animate__zoomIn">
-                                                    <h2 class="h2 f-bolder">Tambah Rekam Medis</h2>
-                                                    <button type="button" class="btn-close"
-                                                        onclick="closeAddRekamMedisModal()"></button>
-
-                                                    <form id="addRekamMedisForm"
-                                                        action="{{ route('rekam_medis.store', $kunjungan->id) }}"
-                                                        method="POST" enctype="multipart/form-data">
-                                                        @csrf
-                                                        <input type="hidden" name="kunjungan_id" id="kunjungan_id">
-
-                                                        <div class="my-2">
-                                                            <label for="diagnosa" class="h4 f-bolder">Diagnosa</label>
-                                                            <div class="my-1">
-                                                                <input type="text"
-                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                    id="diagnosa" name="diagnosa" required>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Tindakan -->
-                                                        <div class="my-2">
-                                                            <label for="tindakan" class="h4 f-bolder">Tindakan</label>
-                                                            <div class="my-1">
-                                                                <input type="text"
-                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                    id="tindakan" name="tindakan" required>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Resep -->
-                                                        <div class="my-2">
-                                                            <label for="deskripsi" class="h4 f-bolder">Resep</label>
-                                                            <div class="my-1">
-                                                                <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi" required></textarea>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Obat -->
-                                                        <div class="my-2">
-                                                            <label for="obat_id" class="h4 f-bolder">Obat</label>
-                                                            <div class="my-1">
-                                                                <select name="obat_id[]" id="obat_id"
-                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                    multiple>
-                                                                    @foreach ($obats as $obat)
-                                                                        <option value="{{ $obat->id }}"
-                                                                            data-stok="{{ $obat->jumlah }}">
-                                                                            {{ $obat->obat }} (Stok:
-                                                                            {{ $obat->jumlah }})
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Jumlah Obat -->
-                                                        <div id="medication-quantity-section" class="my-2"></div>
-
-                                                        <!-- Peralatan -->
-                                                        <div class="my-2">
-                                                            <label for="peralatan_id"
-                                                                class="h4 f-bolder">Peralatan</label>
-                                                            <div class="my-1">
-                                                                <select name="peralatan_id[]" id="peralatan_id"
-                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                    multiple>
-                                                                    @foreach ($peralatans as $peralatan)
-                                                                        <option value="{{ $peralatan->id }}">
-                                                                            {{ $peralatan->nama_peralatan }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Gambar -->
-                                                        <div class="my-2">
-                                                            <label for="images" class="h4 f-bolder">Gambar</label>
-                                                            <div class="my-1">
-                                                                <input type="file"
-                                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                    id="images" name="images[]" multiple>
-                                                            </div>
-                                                        </div>
-
-                                                        <button type="button" class="px-2 py-1 btn-close red-hover"
-                                                            onclick="closeAddRekamMedisModal()">Batal</button>
-                                                        <button type="submit"
-                                                            class="px-2 py-1 btn-add main-color-hover">Simpan</button>
-                                                    </form>
-                                                </div>
                                             </div>
+                                        @endforeach
 
-                                            <button type="button"
-                                                style="border: none; outline: none; background: transparent;"
-                                                onclick="btnOpenEditModal({{ $kunjungan->id }})">
-                                                <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
-                                            </button>
+                                        <script>
+                                            function btnOpenDetailModal(kunjunganId) {
+                                                var modal = document.getElementById('detailModal' + kunjunganId);
+                                                var modalInstance = new bootstrap.Modal(modal);
+                                                modalInstance.show();
+                                            }
+                                        </script>
 
-                                            <form id="delete-form-{{ $kunjungan->id }}"
-                                                action="{{ route('kunjungan.destroy', $kunjungan->id) }}" method="POST"
-                                                style="display: none;">
-                                                @csrf
-                                                @method('DELETE')
-                                            </form>
-                                            <button type="submit"
-                                                style="background: transparent; outline: none; border: none"
-                                                onclick="confirmDelete({{ $kunjungan->id }})">
-                                                <i class="fas fa-trash delete h3 mr-1 red pointer"></i>
-                                            </button>
-                                            <script>
-                                                function confirmDelete(id) {
-                                                    Swal.fire({
-                                                        title: 'Apakah Anda yakin?',
-                                                        text: "Data ini akan dihapus secara permanen!",
-                                                        icon: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#3085d6',
-                                                        cancelButtonColor: '#d33',
-                                                        confirmButtonText: 'Ya, hapus!',
-                                                        cancelButtonText: 'Batal'
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            // Submit form hapus
-                                                            document.getElementById('delete-form-' + id).submit();
-                                                        }
-                                                    });
-                                                }
-                                            </script>
-                                        </td>
-                                    @endif
+                                        <button type="button" style="border: none; outline: none; background: transparent;"
+                                            onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
+                                            <i class="fas fa-plus-circle add h3 mr-1 main-color pointer"></i>
+                                        </button>
+
+                                        <script>
+                                            function btnOpenAddRekamMedisModal(kunjunganId) {
+                                                document.getElementById('kunjungan_id').value = kunjunganId; // Set kunjungan_id in the form
+                                                document.getElementById('myModalAddRekamMedis').style.display = "block"; // Show modal
+                                            }
+
+                                            function closeAddRekamMedisModal() {
+                                                document.getElementById('myModalAddRekamMedis').style.display = "none"; // Hide modal
+                                            }
+                                        </script>
+
+                                        <div class="modal animate__fadeIn" id="myModalAddRekamMedis">
+                                            <div class="modal-content animate__animated animate__zoomIn">
+                                                <h2 class="h2 f-bolder">Tambah Rekam Medis</h2>
+                                                <button type="button" class="btn-close"
+                                                    onclick="closeAddRekamMedisModal()"></button>
+
+                                                <form id="addRekamMedisForm"
+                                                    action="{{ route('rekam_medis.store', $kunjungan->id) }}"
+                                                    method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                    <input type="hidden" name="kunjungan_id" id="kunjungan_id">
+
+                                                    <div class="my-2">
+                                                        <label for="diagnosa" class="h4 f-bolder">Diagnosa</label>
+                                                        <div class="my-1">
+                                                            <input type="text"
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                id="diagnosa" name="diagnosa" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Tindakan -->
+                                                    <div class="my-2">
+                                                        <label for="tindakan" class="h4 f-bolder">Tindakan</label>
+                                                        <div class="my-1">
+                                                            <input type="text"
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                id="tindakan" name="tindakan" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Resep -->
+                                                    <div class="my-2">
+                                                        <label for="deskripsi" class="h4 f-bolder">Resep</label>
+                                                        <div class="my-1">
+                                                            <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi" required></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Obat -->
+                                                    <div class="my-2">
+                                                        <label for="obat_id" class="h4 f-bolder">Obat</label>
+                                                        <div class="my-1">
+                                                            <select name="obat_id[]" id="obat_id"
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                multiple>
+                                                                @foreach ($obats as $obat)
+                                                                    <option value="{{ $obat->id }}"
+                                                                        data-stok="{{ $obat->jumlah }}">
+                                                                        {{ $obat->obat }} (Stok:
+                                                                        {{ $obat->jumlah }})
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Jumlah Obat -->
+                                                    <div id="medication-quantity-section" class="my-2"></div>
+
+                                                    <!-- Peralatan -->
+                                                    <div class="my-2">
+                                                        <label for="peralatan_id" class="h4 f-bolder">Peralatan</label>
+                                                        <div class="my-1">
+                                                            <select name="peralatan_id[]" id="peralatan_id"
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                multiple>
+                                                                @foreach ($peralatans as $peralatan)
+                                                                    <option value="{{ $peralatan->id }}">
+                                                                        {{ $peralatan->nama_peralatan }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Gambar -->
+                                                    <div class="my-2">
+                                                        <label for="images" class="h4 f-bolder">Gambar</label>
+                                                        <div class="my-1">
+                                                            <input type="file"
+                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                id="images" name="images[]" multiple>
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                        onclick="closeAddRekamMedisModal()">Batal</button>
+                                                    <button type="submit"
+                                                        class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <button type="button"
+                                            style="border: none; outline: none; background: transparent;"
+                                            onclick="btnOpenEditModal({{ $kunjungan->id }})">
+                                            <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
+                                        </button>
+
+                                        <form id="delete-form-{{ $kunjungan->id }}"
+                                            action="{{ route('kunjungan.destroy', $kunjungan->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                        <button type="submit"
+                                            style="background: transparent; outline: none; border: none"
+                                            onclick="confirmDelete({{ $kunjungan->id }})">
+                                            <i class="fas fa-trash delete h3 mr-1 red pointer"></i>
+                                        </button>
+                                        <script>
+                                            function confirmDelete(id) {
+                                                Swal.fire({
+                                                    title: 'Apakah Anda yakin?',
+                                                    text: "Data ini akan dihapus secara permanen!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Ya, hapus!',
+                                                    cancelButtonText: 'Batal'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // Submit form hapus
+                                                        document.getElementById('delete-form-' + id).submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                    </td>
+                                    {{-- @endif --}}
                                 </tr>
                             @endforeach
                         </tbody>

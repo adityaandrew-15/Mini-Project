@@ -78,6 +78,8 @@ class RekamMedisController extends Controller
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:10240',  // Validasi gambar (maks 10MB)
         ]);
 
+        $id_dokter = auth()->user()->id; // Misalnya menggunakan Auth untuk mendapatkan user yang login
+
         // Get the kunjungan record
         $kunjungan = Kunjungan::findOrFail($validated['kunjungan_id']);
 
@@ -108,6 +110,7 @@ class RekamMedisController extends Controller
                 return back()->with('error', 'Stok obat tidak mencukupi untuk ' . $obat->obat);
             }
         }
+        
 
         // Update kunjungan status
         $kunjungan->status = 'DONE';

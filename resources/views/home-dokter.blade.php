@@ -538,18 +538,18 @@
     <div class="content-card">
         <div class="content-bottom-top d-flex row">
             <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
-                <h2>Total Pasien</h2>
+                <h2 style="font-size: 1.3rem;">Total Pasien</h2>
                 <div class="card-info d-flex p-1 row">
                     <i class="fa-solid fa-bed-pulse i2 main-color"></i>
                     <div class="card-info ml-2">
                         <h2>{{ DB::table('pasiens')->count() }}</h2>
                         </h2>
-                        <p class="f-normal">Jumlah Seluruh Pasien yang terdaftar di klinik</p>
+                        <p class="f-normal">Jumlah Seluruh Pasien</p>
                     </div>
                 </div>
             </div>
             <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
-                <h2>pasien yang sudah di periksa</h2>
+                <h2 style="font-size: 1.3rem;">pasien yang sudah di periksa</h2>
                 <div class="card-info d-flex p-1 row">
                     <i class="fa-solid fa-list-check i2 main-color "></i>
                     <div class="card-info ml-2">
@@ -559,7 +559,7 @@
                 </div>
             </div>
             <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
-                <h2>Menunggu</h2>
+                <h2 style="font-size: 1.3rem;">Menunggu</h2>
                 <div class="card-info d-flex p-1 row">
                     <i class="fa-solid fa-user-clock i2 main-color"></i>
                     <div class="card-info ml-2">

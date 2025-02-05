@@ -28,30 +28,35 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-{
-    $user = Auth::user();
-    $jumlahPasien = Pasien::count();
+    {
+        $user = Auth::user();
+        $jumlahPasien = Pasien::count();
 
-    $kunjunganPerBulan = DB::table('kunjungans')
-        ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
-        ->groupBy('bulan')
-        ->get();
+        $kunjunganPerBulan = DB::table('kunjungans')
+            ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('bulan')
+            ->get();
 
-    if ($user->role === 'admin') {
-        return view('admin-home', compact('jumlahPasien', 'kunjunganPerBulan'));
+        if ($user->role === 'admin') {
+            return view('admin-home', compact('jumlahPasien', 'kunjunganPerBulan'));
+        }
+
+        $diagnosaCount = RekamMedis::whereHas('kunjungan', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
+            ->selectRaw('kunjungan_id, count(diagnosa) as total')
+            ->groupBy('kunjungan_id')
+            ->get();
+
+        $kunjunganhistory = Kunjungan::with(['dokter', 'pasien', 'rekamMedis.obats', 'rekamMedis.peralatans', 'rekamMedis.images'])
+            ->where('user_id', $user->id)
+            ->get();
+
+        $dokter = Dokter::all();
+        $pasien = Pasien::where('user_id', $user->id)->get();
+        $kunjungan = Kunjungan::where('user_id', $user->id)->get();
+        $jumlah = Kunjungan::where('user_id', $user->id)->count();
+
+        return view('home', compact('jumlahPasien', 'diagnosaCount', 'pasien', 'kunjungan', 'jumlah', 'dokter', 'kunjunganhistory'));
     }
-
-    $diagnosaCount = RekamMedis::selectRaw('kunjungan_id, count(diagnosa) as total')
-        ->groupBy('kunjungan_id')
-        ->get();
-
-        $kunjunganhistory = Kunjungan::with(['dokter', 'pasien', 'rekamMedis.obats', 'rekamMedis.peralatans', 'rekamMedis.images'])->get();
-    $dokter = Dokter::all();
-    $pasien = Pasien::where('user_id', auth()->id())->get();
-    $kunjungan = Kunjungan::where('user_id', auth()->id())->get();
-    $jumlah = Kunjungan::count();
-
-    return view('home', compact('jumlahPasien', 'diagnosaCount', 'pasien', 'kunjungan', 'jumlah', 'dokter', 'kunjunganhistory'));
-}
-
 }

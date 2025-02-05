@@ -49,60 +49,36 @@ class PasienController extends Controller
 
     public function store(Request $request)
     {
-        if (auth()->user()->hasRole('user')) {
-            try {
-                $request->validate([
-                    'nama' => 'required|string|max:255',
-                    'alamat' => 'nullable|string',
-                    'no_hp' => 'nullable|unique:pasiens,no_hp|numeric',
-                    'tanggal_lahir' => [
-                        'nullable',
-                        'date',
-                        function ($attribute, $value, $fail) {
-                            $today = now()->toDateString();  // Mendapatkan tanggal hari ini
+        // Validasi input
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'alamat' => 'nullable|string',
+            'no_hp' => 'nullable|numeric|unique:pasiens,no_hp',
+            'tanggal_lahir' => 'nullable|date|before:today',  // Lebih simpel
+        ], [
+            'nama.required' => 'Nama wajib diisi.',
+            'nama.string' => 'Nama harus berupa teks.',
+            'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'alamat.string' => 'Alamat harus berupa teks.',
+            'no_hp.numeric' => 'Nomor HP harus berupa angka.',
+            'no_hp.unique' => 'Nomor HP ini sudah digunakan.',
+            'tanggal_lahir.date' => 'Tanggal lahir harus berupa tanggal yang valid.',
+            'tanggal_lahir.before' => 'Tanggal lahir tidak boleh hari ini atau di masa depan.',
+        ]);
 
-                            if ($value >= $today) {  // Jika tanggal inputan lebih besar atau sama dengan hari ini
-                                $fail("$attribute tidak boleh hari ini atau di masa depan.");
-                            }
-                        },
-                    ],
-                ]);
+        // Simpan data
+        Pasien::create([
+            'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'user_id' => auth()->id(),
+        ]);
 
-                $data = $request->all();
-                $data['user_id'] = auth()->id();
-
-                Pasien::create($data);
-
-                return redirect()->route('home')->with('success', 'Data pasien berhasil ditambahkan.');
-            } catch (ValidationException $e) {
-                return redirect('pasien.index')
-                    ->withInput()
-                    ->withErrors($e->errors());
-            }
-        } else {
-            $request->validate([
-                'nama' => 'required|string|max:255',
-                'alamat' => 'nullable|string',
-                'no_hp' => 'nullable|unique:pasiens,no_hp|numeric',
-                'tanggal_lahir' => [
-                    'nullable',
-                    'date',
-                    function ($attribute, $value, $fail) {
-                        $today = now()->toDateString();  // Mendapatkan tanggal hari ini
-
-                        if ($value >= $today) {  // Jika tanggal inputan lebih besar atau sama dengan hari ini
-                            $fail("$attribute tidak boleh hari ini atau di masa depan.");
-                        }
-                    },
-                ],
-            ]);
-
-            $data = $request->all();
-            $data['user_id'] = auth()->id();
-
-            Pasien::create($data);
-            return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil ditambahkan');
-        }
+        // Redirect dengan pesan sukses
+        return redirect()
+            ->route(auth()->user()->hasRole('user') ? 'home' : 'pasien.index')
+            ->with('success', 'Data pasien berhasil ditambahkan.');
     }
 
     public function show(Pasien $pasien)

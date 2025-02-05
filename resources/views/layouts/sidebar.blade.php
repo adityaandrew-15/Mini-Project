@@ -20,18 +20,49 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/globaladmin.css') }}">
-    <link href="Medicio/assets/css/main.css" rel="stylesheet">
+    {{-- <link href="Medicio/assets/css/main.css" rel="stylesheet"> --}}
 
     <!-- Vendor CSS Files -->
-    {{-- <link href="Medicio/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> --}}
-    <link href="Medicio/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="Medicio/assets/vendor/aos/aos.css" rel="stylesheet">
-    <link href="Medicio/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="Medicio/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="Medicio/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 </head>
 
 <body>
+    @if (session('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                @if (session('success'))
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 7000
+                    });
+                @endif
+            });
+        </script>
+    @endif
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if ($errors->any())
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Validasi Gagal!',
+                    html: `
+                        <ul style="text-align: left;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                    showConfirmButton: false,
+                    timer: 10000
+                });
+            @endif
+        });
+    </script>
     <div class="app-container">
         <div class="sidebar" id="sidebar">
             <div onclick="toggleSidebar()" class="btn-toggle-sidebar">

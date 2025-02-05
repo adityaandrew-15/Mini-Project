@@ -45,7 +45,7 @@ class KunjunganController extends Controller
             ->when($searchTanggal, function ($query, $searchTanggal) {
                 return $query->whereDate('tanggal_kunjungan', $searchTanggal);
             })
-            ->with(['pasien', 'dokter'])
+            ->with(['pasien', 'dokter', 'rekamMedis'])
             ->paginate(10);
 
         // $pasiens = auth()->user()->hasRole('admin') ? Pasien::all() : Pasien::where('user_id', auth()->id())->get();
@@ -200,31 +200,30 @@ class KunjunganController extends Controller
     }
 
     public function destroy(Kunjungan $kunjungan)
-{
-    // Cari dan hapus semua rekam medis yang terkait dengan kunjungan ini
-    $rekamMedis = RekamMedis::where('kunjungan_id', $kunjungan->id)->get();
+    {
+        // Cari dan hapus semua rekam medis yang terkait dengan kunjungan ini
+        $rekamMedis = RekamMedis::where('kunjungan_id', $kunjungan->id)->get();
 
-    if ($rekamMedis->count() > 0) {
-        foreach ($rekamMedis as $rekam) {
-            // Hapus gambar dari storage jika ada
-            if ($rekam->image) {
-                Storage::delete('public/' . $rekam->image);
+        if ($rekamMedis->count() > 0) {
+            foreach ($rekamMedis as $rekam) {
+                // Hapus gambar dari storage jika ada
+                if ($rekam->image) {
+                    Storage::delete('public/' . $rekam->image);
+                }
+                // Hapus rekam medis secara permanen
+                $rekam->forceDelete();
             }
-            // Hapus rekam medis secara permanen
-            $rekam->forceDelete();
+        }
+
+        // Hapus kunjungan setelah semua rekam medisnya dihapus
+        $kunjungan->forceDelete();
+
+        if (Auth()->user()->hasRole('admin')) {
+            return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan dan rekam medis berhasil dihapus.');
+        } else {
+            return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan dan rekam medis berhasil dihapus.');
         }
     }
-
-    // Hapus kunjungan setelah semua rekam medisnya dihapus
-    $kunjungan->forceDelete();
-
-    if (Auth()->user()->hasRole('admin')) {
-        return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan dan rekam medis berhasil dihapus.');
-    } else {
-        return redirect()->route('home')->with('success', 'Data kunjungan dan rekam medis berhasil dihapus.');
-    }
-}
-
 
     public function dashboard(Request $request)
     {
