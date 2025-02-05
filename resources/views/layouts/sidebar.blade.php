@@ -16,13 +16,53 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/globaladmin.css') }}">
+    {{-- <link href="Medicio/assets/css/main.css" rel="stylesheet"> --}}
+
+    <!-- Vendor CSS Files -->
 </head>
 
 <body>
+    @if (session('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                @if (session('success'))
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: '{{ session('success') }}',
+                        showConfirmButton: false,
+                        timer: 7000
+                    });
+                @endif
+            });
+        </script>
+    @endif
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            @if ($errors->any())
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Validasi Gagal!',
+                    html: `
+                        <ul style="text-align: left;">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    `,
+                    showConfirmButton: false,
+                    timer: 10000
+                });
+            @endif
+        });
+    </script>
     <div class="app-container">
         <div class="sidebar" id="sidebar">
             <div onclick="toggleSidebar()" class="btn-toggle-sidebar">
@@ -30,13 +70,13 @@
             </div>
             <ul>
                 <li>
-                @if (auth()->user()->hasRole('admin'))
-                    <a href="{{ route('admin-home') }}">
-                @elseif (auth()->user()->hasRole('dokter'))
-                    <a href="{{ route('home-dokter') }}">
-                @endif
-                        <img src="{{ asset('icons/logos.svg') }}" alt="">
-                        <span style="font-family: 'Handlee', cursive; font-size: 24px;">ALLCARE</span>
+                    @if (auth()->user()->hasRole('admin'))
+                        <a href="{{ route('admin-home') }}">
+                        @elseif (auth()->user()->hasRole('dokter'))
+                            <a href="{{ route('home-dokter') }}">
+                    @endif
+                    <img src="{{ asset('icons/logos.svg') }}" alt="">
+                    <span style="font-family: 'Handlee', cursive; font-size: 24px;">ALLCARE</span>
                     </a>
 
                 </li>
@@ -50,35 +90,36 @@
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
-                        @endif
-                    </li>
-                    <li>
+                @endif
+                </li>
+                <li>
                     @if (auth()->user()->hasRole('dokter'))
                         <a href="{{ route('home-dokter') }}"
                             class="{{ request()->routeIs('home-dokter') ? 'active' : '' }}">
                             <i class="fas fa-home"></i>
                             <span>Dashboard</span>
                         </a>
-                        @endif
-                    </li>
+                    @endif
+                </li>
 
 
                 @if (auth()->user()->hasRole('admin'))
-                <li>
-                    <a href="{{ route('dokter.index') }}"
-                        class="{{ request()->routeIs('dokter.index') ? 'active' : '' }}">
-                        <i class="fa fa-user-md"></i>
-                        <span>Dokter</span>
-                    </a>
-                </li>
+                    <li>
+                        <a href="{{ route('dokter.index') }}"
+                            class="{{ request()->routeIs('dokter.index') ? 'active' : '' }}">
+                            <i class="fa fa-user-md"></i>
+                            <span>Dokter</span>
+                        </a>
+                    </li>
                 @endif
-                 @if (auth()->user()->hasRole('admin'))
-                 <li>
-                    <a href="{{ route('obat.index') }}" class="{{ request()->routeIs('obat.index') ? 'active' : '' }}">
-                        <i class="fa fa-pills"></i>
-                        <span>Obat</span>
-                    </a>
-                </li>
+                @if (auth()->user()->hasRole('admin'))
+                    <li>
+                        <a href="{{ route('obat.index') }}"
+                            class="{{ request()->routeIs('obat.index') ? 'active' : '' }}">
+                            <i class="fa fa-pills"></i>
+                            <span>Obat</span>
+                        </a>
+                    </li>
                 @endif
 
                 <li>
@@ -111,16 +152,16 @@
                         <span>Jadwal Praktek</span>
                     </a>
                 </li>
-                
+
                 @if (auth()->user()->hasRole('admin'))
-                <li>
-                    <a href="{{ route('peralatan.index') }}"
-                        class="{{ request()->routeIs('peralatan.index') ? 'active' : '' }}">
-                        <i class="bi bi-tools"></i>
-                        <span>peralatan</span>
-                    </a>
-                </li>
-               @endif
+                    <li>
+                        <a href="{{ route('peralatan.index') }}"
+                            class="{{ request()->routeIs('peralatan.index') ? 'active' : '' }}">
+                            <i class="bi bi-tools"></i>
+                            <span>peralatan</span>
+                        </a>
+                    </li>
+                @endif
                 <li>
                     <a href="#" class="q-btn" style="color: inherit; cursor: pointer;"
                         onclick="confirmLogout(event)">
@@ -160,11 +201,11 @@
                         <img class="photo-profile-sidebar" src="{{ asset('asset/img/dokter.png') }}" alt="">
                         <span>
                             <h6>Welcome</h2>
-                            @if (auth()->user()->hasRole('admin'))
-                            <p>admin</p>
-                            @elseif (auth()->user()->hasRole('dokter'))
-                            <p>{{ Auth::user()->name }}</p>
-                            @endif
+                                @if (auth()->user()->hasRole('admin'))
+                                    <p>admin</p>
+                                @elseif (auth()->user()->hasRole('dokter'))
+                                    <p>{{ Auth::user()->name }}</p>
+                                @endif
                         </span>
                     </a>
                 </li>

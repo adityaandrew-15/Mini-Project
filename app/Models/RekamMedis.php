@@ -13,10 +13,9 @@ class RekamMedis extends Model
     protected $guarded = ['id'];
 
     public function kunjungan()
-{
-    return $this->belongsTo(Kunjungan::class);
-}
-
+    {
+        return $this->belongsTo(Kunjungan::class);
+    }
 
     public function images()
     {
@@ -24,10 +23,9 @@ class RekamMedis extends Model
     }
 
     public function resep()
-{
-    return $this->hasOne(Resep::class); // Make sure this is a "hasOne" relationship
-}
-
+    {
+        return $this->hasOne(Resep::class);  // Make sure this is a "hasOne" relationship
+    }
 
     public function obats()
     {
@@ -40,11 +38,14 @@ class RekamMedis extends Model
     }
 
     public function peralatans()
-{
-    return $this->belongsToMany(Peralatan::class, 'peralatan_rekam_medis');
+    {
+        return $this->belongsToMany(Peralatan::class, 'peralatan_rekam_medis');
+    }
+
+    // Model Kunjungan
+
+    public function rekamMedis()
+    {
+        return $this->hasMany(RekamMedis::class);
+    }
 }
-
-
-}
-
-

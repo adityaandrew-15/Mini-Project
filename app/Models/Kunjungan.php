@@ -20,16 +20,15 @@ class Kunjungan extends Model
         return $this->belongsTo(Pasien::class);
     }
 
-    
-public function obats()
-{
-    return $this->belongsToMany(Obat::class)->withPivot('jumlah');
-}
+    public function obats()
+    {
+        return $this->belongsToMany(Obat::class)->withPivot('jumlah');
+    }
 
-public function peralatans()
-{
-    return $this->belongsToMany(Peralatan::class);
-}
+    public function peralatans()
+    {
+        return $this->belongsToMany(Peralatan::class);
+    }
 
     public function dokter()
     {
@@ -37,10 +36,9 @@ public function peralatans()
     }
 
     public function rekamMedis()
-{
-    return $this->hasMany(RekamMedis::class);
-}
-
+    {
+        return $this->hasMany(RekamMedis::class, 'kunjungan_id');
+    }
 
     public function resep()
     {

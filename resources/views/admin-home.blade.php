@@ -126,17 +126,25 @@
             background-color: #4CAF50;
             transition: height 0.5s ease-in-out;
         }
+
         .bar-value {
-    position: absolute;
-    bottom: 100%; /* Tempatkan angka di atas batang */
-    left: 50%;
-    transform: translateX(-50%); /* Pusatkan angka */
-    font-size: 14px; /* Ukuran font untuk angka */
-    color: #fff; /* Warna font untuk angka */
-    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang semi-transparan untuk kontras */
-    padding: 2px 5px; /* Padding untuk angka */
-    border-radius: 5px; /* Sudut membulat untuk latar belakang */
-}
+            position: absolute;
+            bottom: 100%;
+            /* Tempatkan angka di atas batang */
+            left: 50%;
+            transform: translateX(-50%);
+            /* Pusatkan angka */
+            font-size: 14px;
+            /* Ukuran font untuk angka */
+            color: #fff;
+            /* Warna font untuk angka */
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Latar belakang semi-transparan untuk kontras */
+            padding: 2px 5px;
+            /* Padding untuk angka */
+            border-radius: 5px;
+            /* Sudut membulat untuk latar belakang */
+        }
 
         .labels {
             display: flex;
@@ -350,7 +358,7 @@
                 <div class="card-info d-flex p-1 row">
                     <i class="fa-solid fa-bed-pulse i2 main-color"></i>
                     <div class="card-info ml-2">
-                        <h2>{{DB::table('pasiens')->count()}}</h2>
+                        <h2>{{ DB::table('pasiens')->count() }}</h2>
                         <p>Jumlah Seluruh Pasien yang terdaftar di klinik</p>
                     </div>
                 </div>
@@ -360,7 +368,7 @@
                 <div class="card-info d-flex p-1 row">
                     <i class="fa-solid fa-user-doctor i2 main-color"></i>
                     <div class="card-info ml-2">
-                        <h2>{{DB::table('dokters')->count()}}</h2>
+                        <h2>{{ DB::table('dokters')->count() }}</h2>
                         <p>Jumlah Seluruh dokter yang terdaftar di klinik</p>
                     </div>
                 </div>
@@ -370,7 +378,7 @@
                 <div class="card-info d-flex p-1 row">
                     <i class="fa-solid fa-list-check i2 main-color "></i>
                     <div class="card-info ml-2">
-                        <h2>{{DB::table('kunjungans')->count()}}</h2>
+                        <h2>{{ DB::table('kunjungans')->count() }}</h2>
                         <p>Janji Hari Ini</p>
                     </div>
                 </div>
@@ -378,118 +386,154 @@
         </div>
     </div>
     <div class="content-end ml-2 mr-2 mb-2 d-flex">
-    <div class="content-tree-chart m-1 drop-shadow">
-    <h2 class="h2">Chart Batang Kunjungan Per Bulan</h2>
-    <div class="chart-tree-container">
-    <div class="bar" id="jan" data-value="{{ $kunjunganPerBulan->where('bulan', 1)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 1)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="feb" data-value="{{ $kunjunganPerBulan->where('bulan', 2)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 2)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="mar" data-value="{{ $kunjunganPerBulan->where('bulan', 3)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 3)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="apr" data-value="{{ $kunjunganPerBulan->where('bulan', 4)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 4)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="may" data-value="{{ $kunjunganPerBulan->where('bulan', 5)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 5)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="jun" data-value="{{ $kunjunganPerBulan->where('bulan', 6)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 6)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="jul" data-value="{{ $kunjunganPerBulan->where('bulan', 7)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 7)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="aug" data-value="{{ $kunjunganPerBulan->where('bulan', 8)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 8)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="sep" data-value="{{ $kunjunganPerBulan->where('bulan', 9)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 9)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="oct" data-value="{{ $kunjunganPerBulan->where('bulan', 10)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 10)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="nov" data-value="{{ $kunjunganPerBulan->where('bulan', 11)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 11)->first()->jumlah ?? 0 }}</span>
-    </div>
-    <div class="bar" id="dec" data-value="{{ $kunjunganPerBulan->where('bulan', 12)->first()->jumlah ?? 0 }}">
-        <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 12)->first()->jumlah ?? 0 }}</span>
-    </div>
-</div>
-    <div class="labels">
-        <span>Jan</span>
-        <span>Feb</span>
-        <span>Mar</span>
-        <span>Apr</span>
-        <span>May</span>
-        <span>Jun</span>
-        <span>Jul</span>
-        <span>Aug</span>
-        <span>Sep</span>
-        <span>Oct</span>
-        <span>Nov</span>
-        <span>Dec</span>
-    </div>
-</div>
+        <div class="content-tree-chart m-1 drop-shadow">
+            <h2 class="h2">Chart Batang Kunjungan Per Bulan</h2>
+            <div class="chart-tree-container">
+                <div class="bar" id="jan"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 1)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 1)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="feb"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 2)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 2)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="mar"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 3)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 3)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="apr"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 4)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 4)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="may"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 5)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 5)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="jun"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 6)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 6)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="jul"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 7)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 7)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="aug"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 8)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 8)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="sep"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 9)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 9)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="oct"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 10)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 10)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="nov"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 11)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 11)->first()->jumlah ?? 0 }}</span>
+                </div>
+                <div class="bar" id="dec"
+                    data-value="{{ $kunjunganPerBulan->where('bulan', 12)->first()->jumlah ?? 0 }}">
+                    <span class="bar-value">{{ $kunjunganPerBulan->where('bulan', 12)->first()->jumlah ?? 0 }}</span>
+                </div>
+            </div>
+            <div class="labels">
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Mar</span>
+                <span>Apr</span>
+                <span>May</span>
+                <span>Jun</span>
+                <span>Jul</span>
+                <span>Aug</span>
+                <span>Sep</span>
+                <span>Oct</span>
+                <span>Nov</span>
+                <span>Dec</span>
+            </div>
+        </div>
         <div class="content-chart m-1 drop-shadow">
-                <h1>Chart Kunjungan Dokter</h1>
-                <canvas id="dokterChart" width="400" height="400"></canvas>
+            <h1>Chart Kunjungan Dokter</h1>
+            <canvas id="dokterChart" width="400" height="400"></canvas>
         </div>
     </div>
     <script>
-    // Data kunjungan per bulan
-    const visitsData = {
-        jan: 0,
-        feb: 0,
-        mar: 0,
-        apr: 0,
-        may: 0,
-        jun: 0,
-        jul: 0,
-        aug: 0,
-        sep: 0,
-        oct: 0,
-        nov: 0,
-        dec: 0
-    };
+        // Data kunjungan per bulan
+        const visitsData = {
+            jan: 0,
+            feb: 0,
+            mar: 0,
+            apr: 0,
+            may: 0,
+            jun: 0,
+            jul: 0,
+            aug: 0,
+            sep: 0,
+            oct: 0,
+            nov: 0,
+            dec: 0
+        };
 
-    // Mengisi data kunjungan dari backend
-    @if(isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
-        @foreach($kunjunganPerBulan as $kunjungan)
-            switch({{ $kunjungan->bulan }}) {
-                case 1: visitsData.jan = {{ $kunjungan->jumlah }}; break;
-                case 2: visitsData.feb = {{ $kunjungan->jumlah }}; break;
-                case 3: visitsData.mar = {{ $kunjungan->jumlah }}; break;
-                case 4: visitsData.apr = {{ $kunjungan->jumlah }}; break;
-                case 5: visitsData.may = {{ $kunjungan->jumlah }}; break;
-                case 6: visitsData.jun = {{ $kunjungan->jumlah }}; break;
-                case 7: visitsData.jul = {{ $kunjungan->jumlah }}; break;
-                case 8: visitsData.aug = {{ $kunjungan->jumlah }}; break;
-                case 9: visitsData.sep = {{ $kunjungan->jumlah }}; break;
-                case 10: visitsData.oct = {{ $kunjungan->jumlah }}; break;
-                case 11: visitsData.nov = {{ $kunjungan->jumlah }}; break;
-                case 12: visitsData.dec = {{ $kunjungan->jumlah }}; break;
+        // Mengisi data kunjungan dari backend
+        @if (isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
+            @foreach ($kunjunganPerBulan as $kunjungan)
+                switch ({{ $kunjungan->bulan }}) {
+                    case 1:
+                        visitsData.jan = {{ $kunjungan->jumlah }};
+                        break;
+                    case 2:
+                        visitsData.feb = {{ $kunjungan->jumlah }};
+                        break;
+                    case 3:
+                        visitsData.mar = {{ $kunjungan->jumlah }};
+                        break;
+                    case 4:
+                        visitsData.apr = {{ $kunjungan->jumlah }};
+                        break;
+                    case 5:
+                        visitsData.may = {{ $kunjungan->jumlah }};
+                        break;
+                    case 6:
+                        visitsData.jun = {{ $kunjungan->jumlah }};
+                        break;
+                    case 7:
+                        visitsData.jul = {{ $kunjungan->jumlah }};
+                        break;
+                    case 8:
+                        visitsData.aug = {{ $kunjungan->jumlah }};
+                        break;
+                    case 9:
+                        visitsData.sep = {{ $kunjungan->jumlah }};
+                        break;
+                    case 10:
+                        visitsData.oct = {{ $kunjungan->jumlah }};
+                        break;
+                    case 11:
+                        visitsData.nov = {{ $kunjungan->jumlah }};
+                        break;
+                    case 12:
+                        visitsData.dec = {{ $kunjungan->jumlah }};
+                        break;
+                }
+            @endforeach
+        @endif
+
+        // Fungsi untuk mengupdate tinggi batang sesuai dengan data kunjungan
+        function updateChart() {
+            for (let month in visitsData) {
+                let bar = document.getElementById(month);
+                let height = visitsData[month] * 2; // Mengalikan dengan 2 untuk memperbesar tinggi batang
+
+                // Atur tinggi batang berdasarkan data kunjungan
+                bar.style.height = height + 'px';
             }
-        @endforeach
-    @endif
-
-    // Fungsi untuk mengupdate tinggi batang sesuai dengan data kunjungan
-    function updateChart() {
-        for (let month in visitsData) {
-            let bar = document.getElementById(month);
-            let height = visitsData[month] * 2; // Mengalikan dengan 2 untuk memperbesar tinggi batang
-
-            // Atur tinggi batang berdasarkan data kunjungan
-            bar.style.height = height + 'px';
         }
-    }
 
-    // Panggil fungsi updateChart setelah halaman dimuat
-    window.onload = updateChart;
-</script>
-<script>
+        // Panggil fungsi updateChart setelah halaman dimuat
+        window.onload = updateChart;
+    </script>
+    <script>
         const ctx = document.getElementById('dokterChart').getContext('2d');
         const dokterKunjungan = @json($dokterKunjungan);
 

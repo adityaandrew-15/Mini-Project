@@ -2,11 +2,6 @@
 <style></style>
 @section('side')
     <div class="m-3">
-        @if (session('success'))
-            <script>
-                Swal.fire('Success', '{{ session('success') }}', 'success');
-            </script>
-        @endif
         {{-- <div class="row">
             <div class="col">
                 <label for="start_time" class="form-label">Jam Mulai</label>

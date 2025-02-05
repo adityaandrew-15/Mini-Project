@@ -10,36 +10,36 @@ use Illuminate\Http\Request;
 class ObatController extends Controller
 {
     public function index(Request $request)
-{
-    if(auth()->user()->hasRole('admin|dokter')){
-        $layout = 'layouts.sidebar';
-        $content = 'side';
-    }else{
-        $layout = 'layouts.app';
-        $content = 'content';
+    {
+        if (auth()->user()->hasRole('admin|dokter')) {
+            $layout = 'layouts.sidebar';
+            $content = 'side';
+        } else {
+            $layout = 'layouts.app';
+            $content = 'content';
+        }
+
+        $search = $request->input('search');
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+
+        $obats = Obat::when($search, function ($query) use ($search) {
+            return $query
+                ->where('obat', 'like', "%{$search}%")
+                ->orWhere('harga', 'like', "%{$search}%");
+        })
+            ->when($minPrice, function ($query) use ($minPrice) {
+                return $query->where('harga', '>=', $minPrice);
+            })
+            ->when($maxPrice, function ($query) use ($maxPrice) {
+                return $query->where('harga', '<=', $maxPrice);
+            })
+            ->paginate(10);
+
+        $resep = Resep::all();
+        return view('obat.index', compact('obats', 'resep', 'layout', 'content'));
     }
 
-    // Get the search query from the request
-    $search = $request->input('search');
-    $minPrice = $request->input('min_price');
-    $maxPrice = $request->input('max_price');
-
-    // Query the Obat model
-    $obats = Obat::when($search, function($query) use ($search) {
-        return $query->where('obat', 'like', "%{$search}%")
-                     ->orWhere('harga', 'like', "%{$search}%");
-    })
-    ->when($minPrice, function($query) use ($minPrice) {
-        return $query->where('harga', '>=', $minPrice);
-    })
-    ->when($maxPrice, function($query) use ($maxPrice) {
-        return $query->where('harga', '<=', $maxPrice);
-    })
-    ->paginate(10);
-
-    $resep = Resep::all();
-    return view('obat.index', compact('obats', 'resep', 'layout', 'content'));
-}
     public function create()
     {
         return view('obat.create');
@@ -51,6 +51,14 @@ class ObatController extends Controller
             'obat' => 'required',
             'jumlah' => 'required|numeric|min:1',
             'harga' => 'required|numeric|min:1',
+        ], [
+            'obat.required' => 'Nama obat wajib diisi.',
+            'jumlah.required' => 'Jumlah obat wajib diisi.',
+            'jumlah.numeric' => 'Jumlah obat harus berupa angka.',
+            'jumlah.min' => 'Jumlah obat minimal 1.',
+            'harga.required' => 'Harga obat wajib diisi.',
+            'harga.numeric' => 'Harga obat harus berupa angka.',
+            'harga.min' => 'Harga obat minimal 1.',
         ]);
 
         Obat::create($request->only(['obat', 'jumlah', 'harga']));

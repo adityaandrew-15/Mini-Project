@@ -2,12 +2,6 @@
 <style></style>
 @section('side')
     <div class="m-3">
-        @if (session('success'))
-            <script>
-                Swal.fire('Success', '{{ session('success') }}', 'success');
-            </script>
-        @endif
-
         <div class="d-flex j-between m-2 a-center">
             <div class="d-flex a-center">
                 <h2 class="h2 f-bolder mr-4">Data Pasien</h2>

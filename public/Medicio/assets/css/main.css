@@ -993,14 +993,14 @@ section,
   z-index: 1;
 }
 
-.featured-services .service-item:before {
+/* .featured-services .service-item:before {
   content: "";
   position: absolute;
   background: var(--accent-color);
   inset: 100% 0 0 0;
   transition: all 0.3s;
   z-index: -1;
-}
+} */
 
 .featured-services .service-item .icon {
   margin-bottom: 10px;
@@ -1030,17 +1030,17 @@ section,
   transition: ease-in-out 0.3s;
 }
 
-.featured-services .service-item:hover h4 a,
+/* .featured-services .service-item:hover h4 a,
 .featured-services .service-item:hover .icon i,
 .featured-services .service-item:hover p {
   color: var(--contrast-color);
-}
+} */
 
-.featured-services .service-item:hover:before {
+/* .featured-services .service-item:hover:before {
   background: var(--accent-color);
   inset: 0;
   border-radius: 0px;
-}
+} */
 
 /*--------------------------------------------------------------
 # Call To Action Section
