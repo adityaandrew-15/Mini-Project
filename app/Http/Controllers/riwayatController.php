@@ -32,16 +32,17 @@ class riwayatController extends Controller
 
                 $kunjunganhistory = Kunjungan::query();
 
-                if (auth()->user()->hasRole('dokter')) {
-                    $dokterId = auth()->user()->dokter->id;
-                    $kunjunganhistory = $kunjunganhistory->where('dokter_id', $dokterId);
-                }
-                
-                $kunjunganhistory = $kunjunganhistory->get(); // Pastikan get() dipanggil
-                
-                if ($kunjunganhistory->isEmpty()) {
-                    return 'Tidak ada riwayat kunjungan.';
-                }
+if (auth()->user()->hasRole('dokter')) {
+    $dokterId = auth()->user()->dokter->id;
+    $kunjunganhistory = $kunjunganhistory->where('dokter_id', $dokterId);
+}
+
+// Filter hanya kunjungan yang memiliki rekam medis
+$kunjunganhistory = $kunjunganhistory->whereHas('rekamMedis')->get();
+
+if ($kunjunganhistory->isEmpty()) {
+    return 'Tidak ada riwayat kunjungan dengan rekam medis.';
+}
                 
         
             $dokter = Dokter::all();
