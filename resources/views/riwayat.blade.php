@@ -246,7 +246,7 @@
     <section id="patien-info" class="featured-services section">
         <div class="container section-title aos-init aos-animate">
             <h2>
-                Riwayat Kunjungan Anda
+                Riwayat Kunjungan pasien anda
             </h2>
         </div>
         <div class="container">
