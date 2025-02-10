@@ -162,6 +162,15 @@
                         </a>
                     </li>
                 @endif
+                @if (auth()->user()->hasRole('dokter'))
+                    <li>
+                        <a href="{{ route('riwayat') }}"
+                            class="{{ request()->routeIs('riwayat') ? 'active' : '' }}">
+                            <i class="bi bi-clock-history"></i>
+                            <span>riwayat</span>
+                        </a>
+                    </li>
+                @endif
                 <li>
                     <a href="#" class="q-btn" style="color: inherit; cursor: pointer;"
                         onclick="confirmLogout(event)">

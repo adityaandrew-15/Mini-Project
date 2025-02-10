@@ -18,44 +18,53 @@ use Illuminate\Support\Carbon;
 class KunjunganController extends Controller
 {
     public function index(Request $request)
-    {
-        if (auth()->user()->hasRole('admin|dokter')) {
-            $layout = 'layouts.sidebar';
-            $content = 'side';
-        } else {
-            $layout = 'layouts.app';
-            $content = 'content';
-        }
+{
+    if (auth()->user()->hasRole('admin|dokter')) {
+        $layout = 'layouts.sidebar';
+        $content = 'side';
+    } else {
+        $layout = 'layouts.app';
+        $content = 'content';
+    }
 
-        // Ambil nilai input pencarian
-        $searchPasien = $request->get('search_pasien');
-        $searchDokter = $request->get('search_dokter');
-        $searchTanggal = $request->get('search_tanggal');
+    // Ambil nilai input pencarian
+    $searchPasien = $request->get('search_pasien');
+    $searchDokter = $request->get('search_dokter');
+    $searchTanggal = $request->get('search_tanggal');
 
-        $kunjungans = Kunjungan::when($searchPasien, function ($query, $searchPasien) {
-            return $query->whereHas('pasien', function ($query) use ($searchPasien) {
-                $query->where('nama', 'like', '%' . $searchPasien . '%');
+    $kunjungans = Kunjungan::query();
+
+    // Filter berdasarkan peran user
+    if (auth()->user()->hasRole('dokter')) {
+        $dokterId = auth()->user()->dokter->id;  // Ambil ID dokter yang sedang login
+        $kunjungans = $kunjungans->where('dokter_id', $dokterId);
+    }
+
+    // Filter pencarian
+    $kunjungans = $kunjungans->when($searchPasien, function ($query, $searchPasien) {
+        return $query->whereHas('pasien', function ($query) use ($searchPasien) {
+            $query->where('nama', 'like', '%' . $searchPasien . '%');
+        });
+    })
+        ->when($searchDokter, function ($query, $searchDokter) {
+            return $query->whereHas('dokter', function ($query) use ($searchDokter) {
+                $query->where('nama', 'like', '%' . $searchDokter . '%');
             });
         })
-            ->when($searchDokter, function ($query, $searchDokter) {
-                return $query->whereHas('dokter', function ($query) use ($searchDokter) {
-                    $query->where('nama', 'like', '%' . $searchDokter . '%');
-                });
-            })
-            ->when($searchTanggal, function ($query, $searchTanggal) {
-                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
-            })
-            ->with(['pasien', 'dokter', 'rekamMedis'])
-            ->paginate(10);
+        ->when($searchTanggal, function ($query, $searchTanggal) {
+            return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+        })
+        ->with(['pasien', 'dokter', 'rekamMedis'])
+        ->paginate(10);
 
-        // $pasiens = auth()->user()->hasRole('admin') ? Pasien::all() : Pasien::where('user_id', auth()->id())->get();
-        $dokters = Dokter::all();
-        $pasiens = Pasien::all();
-        $obats = Obat::all();  // Ensure this line is present
-        $peralatans = Peralatan::all();
+    $dokters = Dokter::all();
+    $pasiens = Pasien::all();
+    $obats = Obat::all();
+    $peralatans = Peralatan::all();
 
-        return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters', 'obats', 'peralatans', 'layout', 'content'));
-    }
+    return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters', 'obats', 'peralatans', 'layout', 'content'));
+}
+
 
     public function create()
     {

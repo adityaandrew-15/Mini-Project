@@ -106,6 +106,8 @@ Route::middleware('auth')->group(function () {
 Route::get('/detail', [App\Http\Controllers\detailController::class, 'index'])->name('detail');
 Route::get('/cek-rekam-medis/{kunjunganId}', [RekamMedisController::class, 'cekRekamMedis']);
 Route::put('/rekam-medis/update/{id}', [RekamMedisController::class, 'update'])->name('rekam_medis.update');
+Route::get('/riwayat', [App\Http\Controllers\riwayatController::class, 'index'])->name('riwayat');
+
 
 
 // Halaman kedua (page2)
