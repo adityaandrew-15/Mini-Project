@@ -212,7 +212,6 @@
             </ul>
         </div>
 
-
         <div class="wrapper-container" id="wrapper-container">
             @yield('side')
         </div>

@@ -1,4 +1,4 @@
-@extends('layouts.sidebar')
+@extends('layouts.argonsidebar')
 <style></style>
 @section('side')
     <div class="m-3">

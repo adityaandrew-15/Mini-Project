@@ -25,22 +25,6 @@
                 </div>
             </div>
 
-            <!-- Search Form -->
-            {{-- <div class="row mb-3">
-                <div class="col-md-6">
-                    <form action="{{ route('peralatan.index') }}" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Cari peralatan..."
-                                value="{{ request('search') }}">
-                            <button class="btn btn-outline-secondary" type="submit">Cari</button>
-                            @if (request('search'))
-                                <a href="{{ route('peralatan.index') }}" class="btn btn-outline-danger">Clear</a>
-                            @endif
-                        </div>
-                    </form>
-                </div>
-            </div> --}}
-
             <!-- Add Modal -->
             <div class="modal animate__animated" id="myModalAdd" tabindex="-1" aria-labelledby="addModalLabel"
                 aria-hidden="true">
