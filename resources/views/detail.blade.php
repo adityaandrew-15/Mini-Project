@@ -146,8 +146,8 @@
             @else
                 <div class="row gy-4">
                     @foreach ($kunjunganhistory as $kunj)
-                    <div class="col-md-6 aos-init aos-animate">
-                        <div class="service-item position-relative">
+                        <div class="col-md-6 aos-init aos-animate">
+                            <div class="service-item position-relative">
                                 <h2>Data pasien: </h2>
                                 <p>
                                     <i class="fas fa-user"></i>
@@ -169,22 +169,77 @@
                                     <span>Tanggal Kunjungan :</span>
                                     <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
                                 </p>
+
                                 @if ($kunj->rekamMedis->isNotEmpty())
+                                    <h3>Informasi Tambahan</h3>
+
+                                    <p>
+                                        <i class="fas fa-pills"></i>
+                                        <span>Obat:</span>
+                                        @if ($kunj->rekamMedis->first()->obats->isNotEmpty())
+                                            <ul>
+                                                @php $totalObat = 0; @endphp
+                                                @foreach ($kunj->rekamMedis->first()->obats as $obat)
+                                                    @php
+                                                        $hargaObat = $obat->harga * $obat->pivot->jumlah; // Hitung total harga untuk obat ini
+                                                        $totalObat += $hargaObat; // Tambahkan ke total
+                                                    @endphp
+                                                    <li>{{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }} -
+                                                        Harga: Rp{{ number_format($hargaObat, 0, ',', '.') }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <span class="value">Tidak ada obat yang terkait</span>
+                                        @endif
+                                    </p>
+
+                                    <p>
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <span>Total Harga Obat:</span>
+                                        <span class="value">Rp{{ number_format($totalObat, 0, ',', '.') }}</span>
+                                    </p>
+
+                                    <p>
+                                        <i class="fas fa-tools"></i>
+                                        <span>Peralatan:</span>
+                                        @if ($kunj->rekamMedis->first()->peralatans->isNotEmpty())
+                                            <ul>
+                                                @foreach ($kunj->rekamMedis->first()->peralatans as $peralatan)
+                                                    <li>{{ $peralatan->nama_peralatan }} - Harga:
+                                                        Rp{{ number_format($peralatan->harga, 0, ',', '.') }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <span class="value">Tidak ada peralatan yang terkait</span>
+                                        @endif
+                                    </p>
+
+                                    <p>
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <span>Total Harga:</span>
+                                        <span class="value">
+                                            Rp{{ number_format($totalObat + $kunj->rekamMedis->first()->peralatans->sum('harga'), 0, ',', '.') }}
+                                        </span>
+                                    </p>
+
                                     <div class="text-start mt-4">
                                         <a href="#" class="btn btn-info btn-sm"
                                             id="detailBtn{{ $kunj->rekamMedis->first()->id }}">
                                             <p>Detail</p>
                                         </a>
                                     </div>
+                                @else
+                                    <p>Tidak ada rekam medis untuk kunjungan ini.</p>
+                                @endif
 
-                                    <script>
-                                        // Trigger SweetAlert when the button is clicked
-                                        document.getElementById('detailBtn{{ $kunj->rekamMedis->first()->id }}').addEventListener('click', function(
-                                            event) {
-                                            event.preventDefault(); // Prevent default anchor link behavior
+                                <script>
+                                    // Trigger SweetAlert when the button is clicked
+                                    document.getElementById('detailBtn{{ $kunj->rekamMedis->first()->id }}').addEventListener('click', function(
+                                        event) {
+                                        event.preventDefault(); // Prevent default anchor link behavior
 
-                                            // Collect the modal content
-                                            let content = `
+                                        // Collect the modal content
+                                        let content = `
                 <strong>Pasien:</strong> {{ $kunj->rekamMedis->first()->kunjungan->pasien->nama }} <br>
                 <strong>Diagnosa:</strong> {{ $kunj->rekamMedis->first()->diagnosa }} <br>
                 <strong>Tindakan:</strong> {{ $kunj->rekamMedis->first()->tindakan }} <br>
@@ -212,33 +267,32 @@
                 @else
                     Tidak ada gambar yang terkait <br>
                 @endif
+                 <strong>Total Harga Keseluruhan:</strong> Rp{{ number_format($totalObat + $kunj->rekamMedis->first()->peralatans->sum('harga'), 0, ',', '.') }} <br>
             `;
 
-                                            // Show SweetAlert
-                                            Swal.fire({
-                                                title: 'Detail Rekam Medis',
-                                                html: content,
-                                                showCloseButton: true,
-                                                confirmButtonText: 'Close',
-                                                width: '50%',
-                                                padding: '20px',
-                                                didOpen: () => {
-                                                    // Prevent page scrolling when the SweetAlert is open
-                                                    document.body.style.overflow = 'hidden';
-                                                },
-                                                didClose: () => {
-                                                    // Allow page scrolling back when the SweetAlert is closed
-                                                    document.body.style.overflow = 'auto';
-                                                }
-                                            });
+                                        // Show SweetAlert
+                                        Swal.fire({
+                                            title: 'Detail Rekam Medis',
+                                            html: content,
+                                            showCloseButton: true,
+                                            confirmButtonText: 'Close',
+                                            width: '50%',
+                                            padding: '20px',
+                                            didOpen: () => {
+                                                // Prevent page scrolling when the SweetAlert is open
+                                                document.body.style.overflow = 'hidden';
+                                            },
+                                            didClose: () => {
+                                                // Allow page scrolling back when the SweetAlert is closed
+                                                document.body.style.overflow = 'auto';
+                                            }
                                         });
-                                    </script>
-                                @else
-                                    <p>Tidak ada rekam medis untuk kunjungan ini.</p>
-                                @endif
+                                    });
+                                </script>
+
                             </div>
                         </div>
-                        @endforeach
+                    @endforeach
                 </div>
             @endif
         </div>
