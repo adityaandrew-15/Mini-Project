@@ -2,9 +2,87 @@
 <!-- Link CSS Bootstrap -->
 {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
 
-<!-- Link JS Bootstrap -->
 <style>
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        justify-content: flex-end;
+    }
 
+    .tab-button {
+        background: none;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 16px;
+        color: #555;
+        border-bottom: 3px solid transparent;
+        transition: 0.3s;
+    }
+
+    .tab-button.active {
+        border-bottom: 3px solid #007bff;
+        color: #007bff;
+    }
+
+    .tab-content {
+        display: none;
+        padding: 15px;
+        border: 1px solid #ddd;
+        margin-top: -1px;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .content-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        /* Grid responsif */
+        gap: 15px;
+        /* max-width: 1200px; */
+        /* margin: auto; */
+        padding: 10px;
+        height: 600px;
+    }
+
+    .list-item {
+        background: white;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 250px;
+        max-width: 480px;
+    }
+
+    .list-item .top,
+    .list-item .bottom {
+        display: flex;
+        /* justify-content: space-between; */
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .list-item .top strong,
+    .list-item .bottom strong {
+        margin-right: 16px;
+    }
+
+    .truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 220px;
+    }
+
+    .separator {
+        border-top: 1px solid #ddd;
+        margin: 10px 0;
+    }
 </style>
 @section('side')
     <div class="m-3">
@@ -14,7 +92,7 @@
         <a href="{{ route('notifikasi.index') }}">Lihat Notifikasi</a>
     </div>
     @endif --}}
-{{-- 
+        {{-- 
         @if (session('success'))
             <script>
                 Swal.fire('Success', '{{ session('success') }}', 'success');
@@ -27,11 +105,11 @@
                 <button><i class="fas fa-sign-out-alt"></i> Keluar</button>
             </form>
         </div> --}}
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center">
                 <h2 class="h2 f-bolder mr-4">Data Kunjungan</h2>
                 <div class="btn"></div>
-                <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                <button type="button" class="btn-add" id="btnOpenAddModal">
                     Tambah Data Kunjungan
                 </button>
             </div>
@@ -52,19 +130,20 @@
                 <style>
                     .invisible-btn {
                         opacity: 0;
-                        /* Tombol tidak terlihat */
                         position: absolute;
-                        /* Menghindari layout bergeser */
                         pointer-events: none;
-                        /* Mencegah klik langsung */
                     }
                 </style>
-
-
             </form>
 
             <div class="outer-table">
-                <div class="content-table-table">
+                <div class="tabs">
+                    <button class="tab-button " data-tab="done-table">Belum direspon</button>
+                    <button class="tab-button" data-tab="pending">Pending</button>
+                    <button class="tab-button" data-tab="done-list">Selesai</button>
+                </div>
+
+                <div class="content-table-table tab-content " style="margin: 0;" id="done-table">
                     <table>
                         <thead class="h4 f-bolder">
                             <tr>
@@ -83,9 +162,8 @@
                                     <td>{{ $kunjungan->pasien->nama }}</td>
                                     <td>{{ $kunjungan->dokter->nama ?? 'Edit untuk menambahkan dokter' }}</td>
                                     <td>{{ $kunjungan->keluhan }}</td>
-                                    <td>{{ $kunjungan->tanggal_kunjungan }}</td>
+                                    <td class="truncate-tb">{{ $kunjungan->tanggal_kunjungan }}</td>
 
-                                    {{-- @if (auth()->user()->hasRole('admin')) --}}
                                     <td class="action-icons">
                                         <button type="button" style="border: none; outline: none; background: transparent;"
                                             onclick="btnOpenDetailModal({{ $kunjungan->id }})">
@@ -100,12 +178,14 @@
                                             }
                                         </script>
                                         {{-- @if ($kunjungan->rekamMedis()->doesntExist() && !$kunjungan->dokter_id) --}}
-                                        @if ($kunjungan->rekamMedis()->doesntExist())
-                                            <button type="button"
-                                                style="border: none; outline: none; background: transparent;"
-                                                onclick="btnOpenEditModal({{ $kunjungan->id }})">
-                                                <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
-                                            </button>
+                                        @if (auth()->user()->hasRole('admin'))
+                                            @if ($kunjungan->rekamMedis()->doesntExist())
+                                                <button type="button"
+                                                    style="border: none; outline: none; background: transparent;"
+                                                    onclick="btnOpenEditModal({{ $kunjungan->id }})">
+                                                    <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
+                                                </button>
+                                            @endif
                                         @endif
 
 
@@ -132,9 +212,6 @@
                                         <div class="modal animate__fadeIn" id="myModalAddRekamMedis">
                                             <div class="modal-content animate__animated animate__zoomIn">
                                                 <h2 class="h2 f-bolder">Tambah Rekam Medis</h2>
-                                                <button type="button" class="btn-close"
-                                                    onclick="closeAddRekamMedisModal()"></button>
-
                                                 <form id="addRekamMedisForm"
                                                     action="{{ route('rekam_medis.store', $kunjungan->id) }}"
                                                     method="POST" enctype="multipart/form-data">
@@ -217,8 +294,7 @@
 
                                                     <button type="button" class="px-2 py-1 btn-close red-hover"
                                                         onclick="closeAddRekamMedisModal()">Batal</button>
-                                                    <button type="submit"
-                                                        class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                                    <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -261,8 +337,327 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="content-table-table tab-content " style="margin: 0;" id="pending">
+                    <table>
+                        <thead class="h4 f-bolder">
+                            <tr>
+                                <th>Pasien</th>
+                                <th>Dokter</th>
+                                <th>Keluhan</th>
+                                <th>Tanggal Kunjungan</th>
+                                <th>Status</th>
+                                {{-- @if (auth()->user()->hasRole('admin')) --}}
+                                <th>Aksi</th>
+                                {{-- @endif --}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($pendingkunjungans as $kunjungan)
+                                <tr>
+                                    <td>{{ $kunjungan->pasien->nama }}</td>
+                                    <td>{{ $kunjungan->dokter->nama ?? 'Edit untuk menambahkan dokter' }}</td>
+                                    <td>{{ $kunjungan->keluhan }}</td>
+                                    <td class="truncate-tb">{{ $kunjungan->tanggal_kunjungan }}</td>
+                                    <td>Menunggu pembayaran</td>
+                                    <td class="action-icons">
+                                        <a href="{{ route('pendingdetails', $kunjungan->id) }}"><i
+                                                class="fas fa-eye h3 mr-1 main-color pointer"></i></a>
+                                        {{-- <button type="button"
+                                            style="border: none; outline: none; background: transparent;"
+                                            onclick="btnOpenpendingDetailModal({{ $kunjungan->id }})">
+                                            <i class="fas fa-eye h3 mr-1 main-color pointer"></i>
+                                        </button> --}}
+
+                                        {{-- <script>
+                                            function btnOpenpendingDetailModal(kunjunganId) {
+                                                var modal = document.getElementById('pendingdetailModal' + kunjunganId);
+                                                var modalInstance = new bootstrap.Modal(modal);
+                                                modalInstance.show();
+                                            }
+                                        </script> --}}
+                                        {{-- @if ($kunjungan->rekamMedis()->doesntExist() && !$kunjungan->dokter_id) --}}
+
+                                        {{-- <form id="delete-form-{{ $kunjungan->id }}"
+                                            action="{{ route('kunjungan.destroy', $kunjungan->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                        <button type="submit"
+                                            style="background: transparent; outline: none; border: none"
+                                            onclick="confirmDelete({{ $kunjungan->id }})">
+                                            <i class="fa-solid fa-clock-rotate-left h3 mr-1 red pointer"></i>
+                                        </button> --}}
+                                        {{-- <script>
+                                            function confirmDelete(id) {
+                                                Swal.fire({
+                                                    title: 'Apakah Anda yakin?',
+                                                    text: "Data ini akan dihapus secara permanen!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Ya, hapus!',
+                                                    cancelButtonText: 'Batal'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // Submit form hapus
+                                                        document.getElementById('delete-form-' + id).submit();
+                                                    }
+                                                });
+                                            }
+                                        </script> --}}
+
+                                        {{-- <form action="{{ route('kunjungan.updateStatus', $kunjungan->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit">Tandai Selesai</button>
+                                        </form> --}}
+
+                                        <form id="delete-form-{{ $kunjungan->id }}"
+                                            action="{{ route('kunjungan.updateStatus', $kunjungan->id) }}" method="POST"
+                                            style="display: none;">
+                                            @csrf
+                                        </form>
+                                        <button type="submit"
+                                            style="background: transparent; outline: none; border: none"
+                                            onclick="confirmDelete({{ $kunjungan->id }})">
+                                            {{-- <i class="fa-solid fa-check-double"></i> --}}
+                                            <i class="fa-solid fa-check-double h3 mr-1 red pointer"></i>
+                                        </button>
+                                        <script>
+                                            function confirmDelete(id) {
+                                                Swal.fire({
+                                                    title: 'Apakah Anda yakin?',
+                                                    text: "Tandai pembayaran selesai?",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Ya, Selesaikan!',
+                                                    cancelButtonText: 'Batal'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        // Submit form hapus
+                                                        document.getElementById('delete-form-' + id).submit();
+                                                    }
+                                                });
+                                            }
+                                        </script>
+
+                                    </td>
+                                    {{-- @endif --}}
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="content-table-table tab-content" style="margin: 0;" id="done-list">
+                    <div class="content-list">
+                        @foreach ($donekunjungans as $kunjungan)
+                            <div class="list-item">
+                                <!-- Atas -->
+                                <div class="top">
+                                    <strong>Pasien :</strong> <span>{{ $kunjungan->pasien->nama }}</span>
+                                </div>
+                                <div class="top">
+                                    <strong>Keluhan :</strong> <span class="truncate">{{ $kunjungan->keluhan }}</span>
+                                </div>
+
+                                <!-- Bawah -->
+                                <div class="bottom">
+                                    <strong>Dokter :</strong>
+                                    <span>{{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}</span>
+                                </div>
+                                <div class="bottom">
+                                    <strong>Tanggal :</strong> <span>{{ $kunjungan->tanggal_kunjungan }}</span>
+                                </div>
+
+                                <div class="separator"></div>
+
+                                <!-- Tombol -->
+                                {{-- <a href="javascript:void(0)" class="btn-add" onclick="btnOpenDetailModal({{ $kunjungan->id }})">
+                                    <i class="fas fa-eye"></i> Lihat Detail
+                                </a> --}}
+                                <a href="{{ route('kunjhistoryshow', $kunjungan->id) }}" class="btn-add"
+                                    style="width: max-content">
+                                    <i class="fas fa-eye"></i> Lihat Detail
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <script>
+                        function btnOpenDetailModal(kunjunganId) {
+                            var modal = document.getElementById('detailModal' + kunjunganId);
+                            var modalInstance = new bootstrap.Modal(modal);
+                            modalInstance.show();
+                        }
+                    </script>
+                </div>
+
+                @foreach ($kunjungans as $kunjungan)
+                    {{-- iki detail modal undone --}}
+                    <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
+                        aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modaldetail-content p-2 shadow-none animate__animated animate__zoomIn">
+                                <!-- Hapus shadow -->
+                                <div class="modal-header d-flex t-center a-center">
+                                    <span class="square"
+                                        style="width: 25px; height: 25px; background: #ccc; margin-right: 10px;"></span>
+                                    <h2 class="modal-title h2 f-bolder" id="detailModalLabel{{ $kunjungan->id }}">
+                                        Detail Kunjungan dan Rekam Medis
+                                    </h2>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="h4 my-2"><strong>Pasien:</strong><br>
+                                        {{ $kunjungan->pasien->nama }}
+                                    </p>
+                                    <p class="h4 my-2"><strong>Keluhan:</strong><br>
+                                        {{ $kunjungan->keluhan }}</p>
+                                    <p class="h4 my-1"><strong>Dokter:</strong>
+                                        {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
+                                    </p>
+                                    <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
+                                        {{ $kunjungan->tanggal_kunjungan }}</p>
+                                    <hr class="my-2">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                                        data-bs-dismiss="modal">Tutup</button>
+                                    {{-- @if ($kunjungan->rekamMedis()->exists())
+                                        <a href="{{ route('rekam_medis.nota', $kunjungan->rekamMedis->id) }}" class="btn-cek-nota">
+                                            Cek Nota
+                                            <i class="fa-solid fa-print"></i>
+                                        </a>
+                                    @endif --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- iki detail modal pending --}}
+                    <div class="modal" id="pendingdetailModal{{ $kunjungan->id }}" tabindex="-1"
+                        aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modaldetail-content p-2 shadow-none animate__animated animate__zoomIn">
+                                <!-- Hapus shadow -->
+                                <div class="modal-header d-flex t-center a-center">
+                                    <span class="square"
+                                        style="width: 25px; height: 25px; background: #ccc; margin-right: 10px;"></span>
+                                    <h2 class="modal-title h2 f-bolder" id="detailModalLabel{{ $kunjungan->id }}">
+                                        Detail Kunjungan dan Rekam Medis
+                                    </h2>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="h4 my-2"><strong>Pasien:</strong><br>
+                                        {{ $kunjungan->pasien->nama }}
+                                    </p>
+                                    <p class="h4 my-2"><strong>Keluhan:</strong><br>
+                                        {{ $kunjungan->keluhan }}</p>
+                                    <p class="h4 my-1"><strong>Dokter:</strong>
+                                        {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
+                                    </p>
+                                    <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
+                                        {{ $kunjungan->tanggal_kunjungan }}</p>
+                                    <hr class="my-2">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                                        data-bs-dismiss="modal">Tutup</button>
+                                    {{-- @if ($kunjungan->rekamMedis()->exists())
+                                        <a href="{{ route('rekam_medis.nota', $rekamMedis->id) }}" class="btn-cek-nota">
+                                            Cek Nota
+                                            <i class="fa-solid fa-print"></i>
+                                        </a>
+                                    @endif --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
+            {{-- <a style="text-align: right;" href="{{ route('kunjhistory') }}">riwayat kunjungan</a> --}}
         </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                let tabButtons = document.querySelectorAll(".tab-button");
+                let tabContents = document.querySelectorAll(".tab-content");
+                let defaultTab = "done-table"; // Default tab
+                let savedTab = localStorage.getItem("activeTab");
+
+                // Aktifkan tab yang tersimpan di localStorage atau default tab
+                let activeTab = savedTab ? savedTab : defaultTab;
+                document.querySelector(`[data-tab='${activeTab}']`).classList.add("active");
+                document.getElementById(activeTab).classList.add("active");
+
+                // Event listener untuk berpindah tab
+                tabButtons.forEach(button => {
+                    button.addEventListener("click", function() {
+                        let selectedTab = this.dataset.tab;
+
+                        // Hapus semua active
+                        tabButtons.forEach(btn => btn.classList.remove("active"));
+                        tabContents.forEach(content => content.classList.remove("active"));
+
+                        // Tambahkan active ke tab yang diklik
+                        this.classList.add("active");
+                        document.getElementById(selectedTab).classList.add("active");
+
+                        // Simpan tab yang aktif ke localStorage
+                        localStorage.setItem("activeTab", selectedTab);
+                    });
+                });
+
+                // Search functionality
+                document.getElementById("searchInput").addEventListener("keyup", function() {
+                    let value = this.value.toLowerCase();
+                    let activeTab = document.querySelector(".tab-content.active").id;
+
+                    if (activeTab === "done-table") {
+                        filterTable("doneTable", value);
+                    } else if (activeTab === "pending") {
+                        filterTable("pendingTable", value);
+                    } else if (activeTab === "done-list") {
+                        filterList("doneList", value);
+                    }
+                });
+
+                function filterTable(tableId, value) {
+                    let rows = document.getElementById(tableId).getElementsByTagName("tr");
+                    for (let row of rows) {
+                        let text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(value) ? "" : "none";
+                    }
+                }
+
+                function filterList(listId, value) {
+                    let items = document.getElementById(listId).getElementsByTagName("li");
+                    for (let item of items) {
+                        let text = item.textContent.toLowerCase();
+                        item.style.display = text.includes(value) ? "" : "none";
+                    }
+                }
+            });
+        </script>
+        <script>
+            function showContent(id) {
+                // Sembunyikan semua konten
+                document.querySelectorAll('.content').forEach((el) => el.classList.remove('active'));
+
+                // Tampilkan yang dipilih
+                document.getElementById(id).classList.add('active');
+
+                // Update tab aktif
+                document.querySelectorAll('.tab').forEach((el) => el.classList.remove('active'));
+                event.currentTarget.classList.add('active');
+            }
+        </script>
 
         <script>
             document.getElementById('obat_id').addEventListener('change', function() {
@@ -307,7 +702,6 @@
             <div class="modal-content animate__animated animate__zoomIn">
                 @if (auth()->user()->hasRole('admin'))
                     <h2 class="h2 f-bolder">Tambah Kunjungan</h2>
-                    <button type="button" class="btn-close" onclick="closeAddKunjunganModal()"></button>
                 @endif
 
                 <form action="{{ route('kunjungan.store') }}" method="POST">
@@ -370,7 +764,7 @@
 
                     <button type="button" class="px-2 py-1 btn-close red-hover"
                         onclick="btnCloseAddKunjunganModal()">Batal</button>
-                    <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                    <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
                 </form>
             </div>
         </div>
@@ -380,27 +774,27 @@
             <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
                 aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
                 <div class="modal-dialog">
-                    <div class="modal-content shadow-none animate__animated animate__zoomIn">
+                    <div class="modaldetail-content p-2 shadow-none animate__animated animate__zoomIn">
                         <!-- Hapus shadow -->
-                        <div class="modal-header">
+                        <div class="modal-header d-flex t-center a-center">
+                            <span class="square"
+                                style="width: 50px; height: 50px; background: #ccc; margin-right: 10px;"></span>
                             <h2 class="modal-title h2 f-bolder" id="detailModalLabel{{ $kunjungan->id }}">
                                 Detail Kunjungan dan Rekam Medis
                             </h2>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <p class="h4 my-1"><strong>Pasien:</strong>
+                            <p class="h4 my-2"><strong>Pasien:</strong><br>
                                 {{ $kunjungan->pasien->nama }}
                             </p>
+                            <p class="h4 my-2"><strong>Keluhan:</strong><br>
+                                {{ $kunjungan->keluhan }}</p>
                             <p class="h4 my-1"><strong>Dokter:</strong>
                                 {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
                             </p>
-                            <p class="h4 my-1"><strong>Keluhan:</strong>
-                                {{ $kunjungan->keluhan }}</p>
                             <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
                                 {{ $kunjungan->tanggal_kunjungan }}</p>
-
+                            <hr class="my-2">
                             <h2 class="h2 f-bolder">Detail Rekam Medis:</h2>
                             @if ($kunjungan->rekamMedis && $kunjungan->rekamMedis->count() > 0)
                                 @foreach ($kunjungan->rekamMedis as $rekamMedis)
@@ -449,8 +843,6 @@
             <div class="modal animate__fadeIn" id="myModalEdit{{ $kunjungan->id }}">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Edit Kunjungan</h2>
-                    <button type="button" class="btn-close" onclick="closeEditModal({{ $kunjungan->id }})"></button>
-
                     <form action="{{ route('kunjungan.update', $kunjungan->id) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -528,7 +920,7 @@
 
                         <button type="button" class="px-2 py-1 btn-close red-hover"
                             onclick="closeEditModal({{ $kunjungan->id }})">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
                     </form>
                 </div>
             </div>

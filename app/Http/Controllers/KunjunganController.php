@@ -9,6 +9,7 @@ use App\Models\Pasien;
 use App\Models\Peralatan;
 use App\Models\RekamMedis;
 use App\Models\Resep;
+use App\Models\History;
 use App\Notifications\DokterAssignedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,53 +19,91 @@ use Illuminate\Support\Carbon;
 class KunjunganController extends Controller
 {
     public function index(Request $request)
-{
-    if (auth()->user()->hasRole('admin|dokter')) {
-        $layout = 'layouts.sidebar';
-        $content = 'side';
-    } else {
-        $layout = 'layouts.app';
-        $content = 'content';
+    {
+        if (auth()->user()->hasRole('admin|dokter')) {
+            $layout = 'layouts.sidebar';
+            $content = 'side';
+        } else {
+            $layout = 'layouts.app';
+            $content = 'content';
+        }
+
+        $searchPasien = $request->get('search_pasien');
+        $searchDokter = $request->get('search_dokter');
+        $searchTanggal = $request->get('search_tanggal');
+
+        $kunjungans = Kunjungan::query();
+        $donekunjungans = Kunjungan::query();
+        $pendingkunjungans = Kunjungan::query();
+
+        if (auth()->user()->hasRole('dokter')) {
+            $dokterId = auth()->user()->dokter->id;
+            $kunjungans = $kunjungans->where('dokter_id', $dokterId);
+            $donekunjungans = $donekunjungans->where('dokter_id', $dokterId);
+            $pendingkunjungans = $pendingkunjungans->where('dokter_id', $dokterId);
+        }
+
+        $kunjungans = $kunjungans
+            ->when($searchPasien, function ($query, $searchPasien) {
+                return $query->whereHas('pasien', function ($query) use ($searchPasien) {
+                    $query->where('nama', 'like', '%' . $searchPasien . '%');
+                });
+            })
+            ->when($searchDokter, function ($query, $searchDokter) {
+                return $query->whereHas('dokter', function ($query) use ($searchDokter) {
+                    $query->where('nama', 'like', '%' . $searchDokter . '%');
+                });
+            })
+            ->when($searchTanggal, function ($query, $searchTanggal) {
+                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            })
+            ->where('status', 'UNDONE')
+            ->with(['pasien', 'dokter', 'rekamMedis'])
+            ->paginate(10);
+
+        $donekunjungans = $donekunjungans
+            ->when($searchPasien, function ($query, $searchPasien) {
+                return $query->whereHas('pasien', function ($query) use ($searchPasien) {
+                    $query->where('nama', 'like', '%' . $searchPasien . '%');
+                });
+            })
+            ->when($searchDokter, function ($query, $searchDokter) {
+                return $query->whereHas('dokter', function ($query) use ($searchDokter) {
+                    $query->where('nama', 'like', '%' . $searchDokter . '%');
+                });
+            })
+            ->when($searchTanggal, function ($query, $searchTanggal) {
+                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            })
+            ->where('status', 'DONE')
+            ->with(['pasien', 'dokter', 'rekamMedis'])
+            ->paginate(10);
+
+        $pendingkunjungans = $pendingkunjungans
+            ->when($searchPasien, function ($query, $searchPasien) {
+                return $query->whereHas('pasien', function ($query) use ($searchPasien) {
+                    $query->where('nama', 'like', '%' . $searchPasien . '%');
+                });
+            })
+            ->when($searchDokter, function ($query, $searchDokter) {
+                return $query->whereHas('dokter', function ($query) use ($searchDokter) {
+                    $query->where('nama', 'like', '%' . $searchDokter . '%');
+                });
+            })
+            ->when($searchTanggal, function ($query, $searchTanggal) {
+                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            })
+            ->where('status', 'PENDING')
+            ->with(['pasien', 'dokter', 'rekamMedis'])
+            ->paginate(10);
+
+        $dokters = Dokter::all();
+        $pasiens = Pasien::all();
+        $obats = Obat::all();
+        $peralatans = Peralatan::all();
+
+        return view('kunjungan.index', compact('pendingkunjungans', 'donekunjungans', 'kunjungans', 'pasiens', 'dokters', 'obats', 'peralatans', 'layout', 'content'));
     }
-
-    // Ambil nilai input pencarian
-    $searchPasien = $request->get('search_pasien');
-    $searchDokter = $request->get('search_dokter');
-    $searchTanggal = $request->get('search_tanggal');
-
-    $kunjungans = Kunjungan::query();
-
-    // Filter berdasarkan peran user
-    if (auth()->user()->hasRole('dokter')) {
-        $dokterId = auth()->user()->dokter->id;  // Ambil ID dokter yang sedang login
-        $kunjungans = $kunjungans->where('dokter_id', $dokterId);
-    }
-
-    // Filter pencarian
-    $kunjungans = $kunjungans->when($searchPasien, function ($query, $searchPasien) {
-        return $query->whereHas('pasien', function ($query) use ($searchPasien) {
-            $query->where('nama', 'like', '%' . $searchPasien . '%');
-        });
-    })
-        ->when($searchDokter, function ($query, $searchDokter) {
-            return $query->whereHas('dokter', function ($query) use ($searchDokter) {
-                $query->where('nama', 'like', '%' . $searchDokter . '%');
-            });
-        })
-        ->when($searchTanggal, function ($query, $searchTanggal) {
-            return $query->whereDate('tanggal_kunjungan', $searchTanggal);
-        })
-        ->with(['pasien', 'dokter', 'rekamMedis'])
-        ->paginate(10);
-
-    $dokters = Dokter::all();
-    $pasiens = Pasien::all();
-    $obats = Obat::all();
-    $peralatans = Peralatan::all();
-
-    return view('kunjungan.index', compact('kunjungans', 'pasiens', 'dokters', 'obats', 'peralatans', 'layout', 'content'));
-}
-
 
     public function create()
     {
@@ -307,4 +346,118 @@ class KunjunganController extends Controller
 
         return view('admin-home', compact('kunjunganPerBulan'));
     }
+
+    public function kunjhistory(Request $request)
+    {
+        if (auth()->user()->hasRole('admin|dokter')) {
+            $layout = 'layouts.sidebar';
+            $content = 'side';
+        } else {
+            $layout = 'layouts.app';
+            $content = 'content';
+        }
+
+        // Ambil nilai input pencarian
+        $searchPasien = $request->get('search_pasien');
+        $searchDokter = $request->get('search_dokter');
+        $searchTanggal = $request->get('search_tanggal');
+
+        $kunjungans = Kunjungan::query();
+
+        // Filter berdasarkan peran user
+        if (auth()->user()->hasRole('dokter')) {
+            $dokterId = auth()->user()->dokter->id;  // Ambil ID dokter yang sedang login
+            $kunjungans = $kunjungans->where('dokter_id', $dokterId);
+        }
+
+        // Filter pencarian
+        $kunjungans = $kunjungans
+            ->when($searchPasien, function ($query, $searchPasien) {
+                return $query->whereHas('pasien', function ($query) use ($searchPasien) {
+                    $query->where('nama', 'like', '%' . $searchPasien . '%');
+                });
+            })
+            ->when($searchDokter, function ($query, $searchDokter) {
+                return $query->whereHas('dokter', function ($query) use ($searchDokter) {
+                    $query->where('nama', 'like', '%' . $searchDokter . '%');
+                });
+            })
+            ->when($searchTanggal, function ($query, $searchTanggal) {
+                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            })
+            ->where('status', 'DONE')
+            ->with(['pasien', 'dokter', 'rekamMedis'])
+            ->paginate(10);
+
+        $dokters = Dokter::all();
+        $pasiens = Pasien::all();
+        $obats = Obat::all();
+        $peralatans = Peralatan::all();
+
+        return view('kunjungan.history', compact('kunjungans', 'pasiens', 'dokters', 'obats', 'peralatans', 'layout', 'content'));
+    }
+
+    public function kunjhistoryshow($id)
+    {
+        $kunjungan = Kunjungan::with(['pasien', 'dokter', 'rekamMedis' => function ($query) {
+            $query->with(['obats', 'images']);
+        }])->findOrFail($id);
+
+        return view('kunjungan.detail', compact('kunjungan'));
+    }
+
+    public function pendingdetails($id)
+    {
+        $kunjungan = Kunjungan::with(['pasien', 'dokter', 'rekamMedis' => function ($query) {
+            $query->with(['obats', 'images']);
+        }])->findOrFail($id);
+        // $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'peralatans'])->findOrFail($id);
+        // $totalHarga = $rekamMedis->obats->sum(function ($obat) {
+        //     return $obat->pivot->jumlah * $obat->harga;
+        // }) + $rekamMedis->peralatans->sum('harga');
+
+        return view('kunjungan.pendingdetail', compact('kunjungan'));
+    }
+
+    public function updateStatus($id)
+{
+    $kunjungan = Kunjungan::with(['rekamMedis.obats', 'rekamMedis.peralatans', 'pasien'])->find($id);
+
+    if (!$kunjungan || $kunjungan->status != 'PENDING') {
+        return back()->with('error', 'Kunjungan tidak valid atau sudah selesai');
+    }
+
+    // Pastikan hanya mengambil satu rekam medis
+    $rekamMedis = $kunjungan->rekamMedis()->first();
+
+    if (!$rekamMedis) {
+        return back()->with('error', 'Rekam medis tidak ditemukan.');
+    }
+
+    // Hitung total pembayaran
+    $totalHargaObat = $rekamMedis->obats->sum(function ($obat) {
+        return $obat->pivot->jumlah * $obat->harga;
+    });
+
+    $totalHargaPeralatan = $rekamMedis->peralatans->sum('harga');
+    $totalPembayaran = $totalHargaObat + $totalHargaPeralatan;
+
+    // Simpan riwayat pembayaran ke tabel histories
+    History::create([
+        'type' => 'payment',
+        'action' => 'paid',
+        'reference_id' => $rekamMedis->id,
+        'details' => [
+            'patient_name' => $kunjungan->pasien->nama,
+            'total' => $totalPembayaran
+        ],
+    ]);
+
+    // Update status kunjungan menjadi DONE
+    $kunjungan->status = 'DONE';
+    $kunjungan->save();
+
+    return back()->with('success', 'Status kunjungan berhasil diperbarui dan riwayat pembayaran tersimpan.');
+}
+
 }

@@ -154,42 +154,6 @@
         });
     </script>
 
-
-    {{-- <nav class="navbar">
-        <h1>
-            AllCare
-        </h1>
-        <ul>
-            <li><a href="#page-doctor">
-                    Dokter
-                </a></li>
-            <li><a href="#form-section">
-                    Pasien
-                </a></li>
-            <li><a href="#form-section-kunjungan">
-                    Buat Kunjungan
-                </a></li>
-            <li><a href="#patient-info">
-                    Riwayat kunjungan
-                </a></li>
-
-        </ul>
-        <ul>
-
-            <li class="nav-item" style="margin-left: 20px; margin-top: 15px">
-                <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
-                                 document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <p>Logout</p>
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </li>
-        </ul>
-        <div class="gap"></div>
-    </nav> --}}
     <header id="header" class="header sticky-top">
 
         <div class="topbar d-flex align-items-center">
@@ -200,7 +164,7 @@
                 <div class="d-flex align-items-center">
                 </div>
             </div>
-        </div><!-- End Top Bar -->
+        </div>
 
         <div class="branding d-flex align-items-center">
 
@@ -208,8 +172,6 @@
             <div class="container position-relative d-flex align-items-center justify-content-end">
                 <a href="/dashboard" class="logo d-flex align-items-center me-auto">
                     <h1>AllCare</h1>
-                    <!-- Uncomment the line below if you also wish to use a text logo -->
-                    <!-- <h1 class="sitename">AllCore</h1>  -->
                 </a>
 
                 <nav id="navmenu" class="navmenu">
@@ -229,11 +191,6 @@
                     </ul>
                     <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
                 </nav>
-
-                {{-- <a class="cta-btn"
-                    href="{{ Auth::check() ? route(Auth::user()->hasRole('admin') ? 'admin-home' : (Auth::user()->hasRole('dokter') ? 'home-dokter' : 'home')) : route('login') }}">
-                    {{ Auth::check() ? 'Home' : 'JOIN US' }}
-                </a> --}}
 
                 <a class="cta-btn" href="#" onclick="confirmLogout(event)">
                     <i class="fas fa-sign-out-alt"></i> <!-- Ikon Logout -->
@@ -273,9 +230,7 @@
 
     </header>
     <section id="hero" class="hero section">
-
         <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-
             <div class="carousel-item active">
                 <img src="Medicio/assets/img/hero-carousel/hero-carousel-1.jpg" alt="">
                 <div class="container">
@@ -284,75 +239,8 @@
                     <p>Jangan ragu untuk membuat janji temu dengan dokter melalui website ini.</p>
                     <a href="#" id="scrollToForm" class="btn-get-started">lanjut -></a>
                 </div>
-            </div><!-- End Carousel Item -->
-
-            {{-- <a class="carousel-control-prev" href="#hero-carousel" role="button" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
-            </a>
-
-            <a class="carousel-control-next" href="#hero-carousel" role="button" data-bs-slide="next">
-                <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
-            </a> --}}
-
+            </div>
             <ol class="carousel-indicators"></ol>
-
-        </div>
-
-    </section>
-    {{-- <section id="hero" class="hero">
-        <div class="hero-content">
-            <div>
-                <h2>
-                    Selamat Datang di <br>
-                    <span>
-                        KLINIK
-                    </span>
-                </h2>
-                <p>
-                    Jangan ragu untuk membuat janji temu dengan dokter <br> melalui website ini.
-                </p>
-
-            </div>
-            <div class="button">
-                <a href="#" id="scrollToForm">Janji Temu</a>
-            </div>
-        </div>
-        <div class="img">
-            <img alt="Dokter memegang clipboard" src="{{ asset('Medicio/assets/img/doctorphoto.png') }}" />
-        </div>
-    </section> --}}
-    <section id="page-doctor" class="doctors section">
-        <div id="section-title" class="section-title">
-            <h2>
-                Tim Dokter Spesialis Kami
-            </h2>
-            <p>
-                Kami menghadirkan layanan kesehatan terbaik dengan <br> dukungan dokter berpengalaman di bidangnya.
-            </p>
-        </div>
-        <div id="doctors" class="container">
-            <div class="row">
-                @foreach ($dokter as $dok)
-                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch aos-init aos-animate">
-                        <div class="team-member">
-                            <div class="member-img">`
-                                <img src="{{ asset('storage/' . $dok->image) }}" class="img-fluid"" alt="gambar">
-                            </div>
-                            <div class="member-info">
-                                <h4>
-                                    {{ $dok->nama }}
-                                </h4>
-                                <span>
-                                    {{ $dok->spesialis }}
-                                </span>
-                                <span>
-                                    {{ $dok->no_hp }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
         </div>
     </section>
     <section id="form-section" class="appointment section light-background">
@@ -543,122 +431,6 @@
             </div>
         </div>
     </section>
-    {{-- <section id="info-kunjungan" class="info-kunjungan">
-        <div class="history-section">
-            <h2>Riwayat Kunjungan Anda</h2>
-            <p>Berikut adalah daftar kunjungan yang telah Anda buat.</p>
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Nama Pasien</th>
-                        <th>Nama Dokter</th>
-                        <th>Keluhan</th>
-                        <th>Tanggal Kunjungan</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach ($kunjungan as $kun)
-                <tr>
-                    <td>{{$kun->pasien->nama}}</td>
-                    <td>{{$kun->dokter->nama ?? 'tunggu beberapa saat lagi'}}</td>
-                    <td>{{$kun->keluhan}}</td>
-                    <td>{{$kun->tanggal_kunjungan}}</td>
-                    <td class="action-icons">
-                        <button class="edit" type="button" style="border: none; outline: none; background: transparent;" data-bs-toggle="modal"
-                        data-bs-target="#editModal{{ $kun->id }}">
-                        <i class="fas fa-edit edit"></i>
-                        </button>
-                        <form id="delete-form-{{ $kun->id }}" action="{{ route('kunjungan.destroy', $kun->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button class="delete" type="button" style="background: transparent; outline: none; border: none" onclick="confirmDelete({{ $kun->id }})">
-                                <i class="fas fa-trash delete"></i>
-                            </button>
-                        </form>
-
-                        <script>
-                            function confirmDelete(id) {
-                                Swal.fire({
-                                    title: 'Apakah Anda yakin?',
-                                    text: "Data ini akan dihapus secara permanen!",
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Ya, hapus!',
-                                    cancelButtonText: 'Batal'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        // Submit form hapus
-                                        document.getElementById('delete-form-' + id).submit();
-                                    }
-                                });
-                            }
-                        </script>
-                    </td>
-                </tr>
-
-                <div class="modal fade" id="editModal{{ $kun->id }}" tabindex="-1"
-                    aria-labelledby="editModalLabel{{ $kun->id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addModalLabel">Edit Kunjungan</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <form action="{{ route('kunjungan.update', $kun->id) }}" method="POST">
-                                @csrf
-                                @method('put')
-                                <div class="modal-body">
-                                    <div class="mb-3 row">
-                                        <label for="pasien" class="col-sm-2 col-form-label">Nama Pasien</label>
-                                        <div class="col-sm-10">
-                                            <select name="pasien_id" class="form-control">
-                                                <option value="{{$kun->pasien_id}}">{{$kun->pasien->nama}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="keluhan" class="col-sm-2 col-form-label">Keluhan</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="jumlah"
-                                                name="keluhan" value="{{ $kun->keluhan }}">
-                                        </div>
-                                        @error('keluhan')
-                                            <script>
-                                                Swal.fire('Error', '{{ $message }}', 'error');
-                                            </script>
-                                        @enderror
-                                    </div>
-                                    <div class="mb-3 row">
-                                        <label for="Tanggal_kunjungan" class="col-sm-2 col-form-label">Tanggal Kunjungan</label>
-                                        <div class="col-sm-10">
-                                            <input type="date" class="form-control" id="tanggal_kunjungan"
-                                                name="tanggal_kunjungan" value="{{ $kun->tanggal_kunjungan }}">
-                                        </div>
-                                        @error('tanggal_kunjungan')
-                                            <script>
-                                                Swal.fire('Error', '{{ $message }}', 'error');
-                                            </script>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
-    </section> --}}
     <section id="patient-info" class="featured-services section">
         <div class="container section-title aos-init aos-animate">
             <h2>
@@ -677,16 +449,18 @@
                         <div class="col-md-6">
                             <div class="service-item position-relative">
                                 {{-- <h2>Data Anda</h2> --}}
-                                <h2>Data Kunjungan : <span class="value">{{ $kunj->pasien->nama }}</span></h2>
+                                <h2 class="mb-3"><strong>Data Kunjungan : </strong><span
+                                        class="value">{{ $kunj->pasien->nama }}</span></h2>
                                 {{-- <p>
                                     <i class="fas fa-user"></i>
                                     <span class="label">Nama :</span>
                                     <span class="value">{{ $kunj->pasien->nama }}</span>
                                 </p> --}}
-                                <p>
+                                <p class="mb-2">
                                     <i class="fas fa-phone"></i>
                                     <span class="label">Keluhan :</span>
-                                    <span class="value">{{ $kunj->keluhan }}</span>
+                                    <span
+                                        class="value">{{ \Illuminate\Support\Str::limit($kunj->keluhan, 50, '...') }}</span>
                                 </p>
                                 <p class="mb-2">
                                     <i class="fas fa-calendar-alt"></i>
@@ -785,6 +559,40 @@
             @endif
             <div class="text-end mt-4">
                 <a href="{{ route('detail') }}" class="cta-btn">Lihat semua</a>
+            </div>
+        </div>
+    </section>
+        <section id="page-doctor" class="doctors section">
+        <div id="section-title" class="section-title">
+            <h2>
+                Tim Dokter Spesialis Kami
+            </h2>
+            <p>
+                Kami menghadirkan layanan kesehatan terbaik dengan <br> dukungan dokter berpengalaman di bidangnya.
+            </p>
+        </div>
+        <div id="doctors" class="container">
+            <div class="row">
+                @foreach ($dokter as $dok)
+                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch aos-init aos-animate">
+                        <div class="team-member">
+                            <div class="member-img">`
+                                <img src="{{ asset('storage/' . $dok->image) }}" class="img-fluid"" alt="gambar">
+                            </div>
+                            <div class="member-info">
+                                <h4>
+                                    {{ $dok->nama }}
+                                </h4>
+                                <span>
+                                    {{ $dok->spesialis }}
+                                </span>
+                                <span>
+                                    {{ $dok->no_hp }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </section>

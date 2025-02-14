@@ -7,7 +7,7 @@
         overflow: hidden;
         width: 100%;
         height: 300px;
-        background: url('/asset/img/hero.png') no-repeat left bottom;
+        background: url('/asset/img/hero2.png') no-repeat left bottom;
         background-size: cover;
         border-radius: 1.2rem;
         color: rgb(255, 255, 255);
@@ -86,8 +86,8 @@
 
     .profile-info img {
         width: 150px;
-        margin: 1rem 2rem 1rem 3rem;
         height: auto;
+        margin: 1rem 2rem 1rem 3rem;
         border-radius: 50%;
         border: 1px solid #ccc;
         object-fit: cover;
@@ -354,453 +354,455 @@
 </style>
 
 @section('side')
-    <div class="d-flex j-between">
-        <div class="welcome drop-shadow ml-2 mt-2 mb-2">
-            <div class="welcome-text ml-3 col d-flex j-center">
-                <h2 class="h1 f-bolder">Selamat Datang, Dr. {{ Auth::user()->name }}</h2>
-                <p class="p3 f-bolder">Semoga Harimu Menyenangkan</p>
+    <div class="ml-3">
+        <div class="d-flex j-between">
+            <div class="welcome drop-shadow ml-2 mt-2 mb-2">
+                <div class="welcome-text ml-3 col d-flex j-center">
+                    <h2 style="font-size: 2rem; font-weight: 900">Selamat Datang, Dr. {{ Auth::user()->name }}</h2>
+                    <p style="font-size: 1rem; font-weight: 600">Semoga Harimu Menyenangkan</p>
+                </div>
+                <img src="{{ asset('asset/img/dokter.png') }}" alt="">
             </div>
-            <img src="{{ asset('asset/img/dokter.png') }}" alt="">
-        </div>
-        <div class="profile m-2">
-            <div class="profile-header p-1">
-                <h1>Profile Saya</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                    style="background: transparent; outline: none; border: none;" id="openModal"><i
-                        class="fa-solid fa-pen"></i></button>
-            </div>
-            @if (Auth::check())
-                <div class="profile-info drop-shadow">
-                    @if ($dokter)
-                        <img src="{{ $dokter->image ? asset('storage/' . $dokter->image) : asset('storage/' . Auth::user()->image) }}"
-                            alt="Foto Profil">
-                    @else
-                        <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="Foto Profil">
-                    @endif
-                    <div class="profile-info-text">
-                        <h2 class="h2">{{ Auth::user()->name }}</h2>
-                        <p class="p4 f-bold mb-1">spesialisasi: {{ Auth::user()->spesialis }}</p>
-                        <!-- Change the link to a button -->
-                        <a href="#" class="f-bold" id="openProfileModal">Ubah Profil</a>
+            <div class="profile m-2">
+                <div class="profile-header p-1">
+                    <h1>Profile Saya</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        style="background: transparent; outline: none; border: none;" id="openModal"><i
+                            class="fa-solid fa-pen"></i></button>
+                </div>
+                @if (Auth::check())
+                    <div class="profile-info drop-shadow">
+                        @if ($dokter)
+                            <img src="{{ $dokter->image ? asset('storage/' . $dokter->image) : asset('storage/' . Auth::user()->image) }}"
+                                alt="Foto Profil">
+                        @else
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="Foto Profil">
+                        @endif
+                        <div class="profile-info-text">
+                            <h2 class="h2">{{ Auth::user()->name }}</h2>
+                            <p class="p4 f-bold mb-1">spesialisasi: {{ Auth::user()->spesialis }}</p>
+                            <!-- Change the link to a button -->
+                            <a href="#" class="f-bold" id="openProfileModal">Ubah Profil</a>
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
 
+            </div>
         </div>
-    </div>
 
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span id="closeModal" class="close">&times;</span>
-            <h2>Edit Profile</h2>
-            <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span id="closeModal" class="close">&times;</span>
+                <h2>Edit Profile</h2>
+                <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
 
-                <div class="form-group">
-                    <label for="name">Nama:</label>
-                    <input type="text" id="name" name="name" value="{{ Auth::user()->name }}" required>
-                </div>
+                    <div class="form-group">
+                        <label for="name">Nama:</label>
+                        <input type="text" id="name" name="name" value="{{ Auth::user()->name }}" required>
+                    </div>
 
-                <div class="form-group">
-                    <label for="image">Foto:</label>
-                    <input type="file" id="image" name="image">
-                </div>
+                    <div class="form-group">
+                        <label for="image">Foto:</label>
+                        <input type="file" id="image" name="image">
+                    </div>
 
-                <div class="form-group">
-                    <label for="spesialis">Spesialis:</label>
-                    <input type="text" id="spesialis" name="spesialis"
-                        value="{{ Auth::user()->spesialis ?? Auth::user()->dokter->spesialis }}" required>
+                    <div class="form-group">
+                        <label for="spesialis">Spesialis:</label>
+                        <input type="text" id="spesialis" name="spesialis"
+                            value="{{ Auth::user()->spesialis ?? Auth::user()->dokter->spesialis }}" required>
 
-                </div>
+                    </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" id="closeModalButton" class="btn btn-secondary">Cancel</button>
-                </div>
-            </form>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" id="closeModalButton" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-color: #ffffff;
-            border-radius: 10px;
-            padding: 20px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 0.3s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
+        <style>
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.5);
+                justify-content: center;
+                align-items: center;
             }
 
-            to {
-                opacity: 1;
-                transform: scale(1);
+            .modal-content {
+                background-color: #ffffff;
+                border-radius: 10px;
+                padding: 20px;
+                width: 90%;
+                max-width: 400px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                animation: fadeIn 0.3s ease-in-out;
             }
-        }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.9);
+                }
 
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
 
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+            }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+            .close:hover,
+            .close:focus {
+                color: #000;
+                text-decoration: none;
+                cursor: pointer;
+            }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+            h2 {
+                font-size: 24px;
+                margin-bottom: 20px;
+                text-align: center;
+            }
 
-        input[type="text"],
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
+            .form-group {
+                margin-bottom: 15px;
+            }
 
-        input[type="file"] {
-            padding: 5px;
-        }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+            }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+            input[type="text"],
+            input[type="file"] {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+            }
 
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-        }
+            input[type="file"] {
+                padding: 5px;
+            }
 
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
+            .btn {
+                display: inline-block;
+                padding: 10px 15px;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
 
-        .btn:hover {
-            opacity: 0.9;
-        }
+            .btn-primary {
+                background-color: #007bff;
+                color: white;
+            }
 
-        .form-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-    </style>
+            .btn-secondary {
+                background-color: #6c757d;
+                color: white;
+            }
+
+            .btn:hover {
+                opacity: 0.9;
+            }
+
+            .form-actions {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+        </style>
 
 
-    <div class="content-card">
-        <div class="content-bottom-top d-flex row">
-            <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
-                <h2 style="font-size: 1.3rem;">Total Pasien</h2>
-                <div class="card-info d-flex p-1 row">
-                    <i class="fa-solid fa-bed-pulse i2 main-color"></i>
-                    <div class="card-info ml-2">
-                        <h2>{{ DB::table('pasiens')->count() }}</h2>
-                        </h2>
-                        <p class="f-normal">Jumlah Seluruh Pasien</p>
+        <div class="content-card">
+            <div class="content-bottom-top d-flex row">
+                <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
+                    <h2 style="font-size: 1.3rem;">Total Pasien</h2>
+                    <div class="card-info d-flex p-1 row">
+                        <i class="fa-solid fa-bed-pulse i2 main-color"></i>
+                        <div class="card-info ml-2">
+                            <h2>{{ DB::table('pasiens')->count() }}</h2>
+                            </h2>
+                            <p class="f-normal">Jumlah Seluruh Pasien</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
-                <h2 style="font-size: 1.3rem;">pasien yang sudah di periksa</h2>
-                <div class="card-info d-flex p-1 row">
-                    <i class="fa-solid fa-list-check i2 main-color "></i>
-                    <div class="card-info ml-2">
-                        <h2>{{ $selesai }}</h2>
-                        <p class="f-normal">Jumlah Seluruh Pasien yang sudah di periksa</p>
+                <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
+                    <h2 style="font-size: 1.3rem;">pasien yang sudah di periksa</h2>
+                    <div class="card-info d-flex p-1 row">
+                        <i class="fa-solid fa-list-check i2 main-color "></i>
+                        <div class="card-info ml-2">
+                            <h2>{{ $selesai }}</h2>
+                            <p class="f-normal">Jumlah Seluruh Pasien yang sudah di periksa</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
-                <h2 style="font-size: 1.3rem;">Menunggu</h2>
-                <div class="card-info d-flex p-1 row">
-                    <i class="fa-solid fa-user-clock i2 main-color"></i>
-                    <div class="card-info ml-2">
-                        <h2>{{ $count }}</h2>
-                        </h2>
-                        <p class="f-normal">pasien menunggu diperiksa</p>
+                <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
+                    <h2 style="font-size: 1.3rem;">Menunggu</h2>
+                    <div class="card-info d-flex p-1 row">
+                        <i class="fa-solid fa-user-clock i2 main-color"></i>
+                        <div class="card-info ml-2">
+                            <h2>{{ $count }}</h2>
+                            </h2>
+                            <p class="f-normal">pasien menunggu diperiksa</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="content-table m-2 d-flex j-between">
-        <div class="outer-table drop-shadow mr-1">
-            <div class="d-flex j-between">
-                <div class="content-table-text m-1 a-center">
-                    <h2 class="h2">Data Terbaru Kunjungan Pasien</h2>
+        <div class="content-table m-2 d-flex j-between">
+            <div class="outer-table drop-shadow mr-1">
+                <div class="d-flex j-between">
+                    <div class="content-table-text m-1 a-center">
+                        <h2 class="h2">Data Terbaru Kunjungan Pasien</h2>
+                    </div>
+                    <div class="m-1">
+                        <form action="{{ route('home-dokter') }}" method="GET">
+                            <input style="outline: none;" type="text" name="search_terbaru" placeholder="Search here..."
+                                value="{{ request('search_terbaru') }}">
+                            {{-- <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button> --}}
+                        </form>
+                    </div>
                 </div>
-                <div class="m-1">
-                    <form action="{{ route('home-dokter') }}" method="GET">
-                        <input style="outline: none;" type="text" name="search_terbaru" placeholder="Search here..."
-                            value="{{ request('search_terbaru') }}">
-                        {{-- <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button> --}}
-                    </form>
-                </div>
-            </div>
-            <div class="content-table-table">
-                <table>
-                    <tr>
-                        <th>Nama Pasien</th>
-                        <th>Keluhan</th>
-                        <th>Status</th>
-                    </tr>
-                    @foreach ($kunjungans as $kun)
+                <div class="content-table-table">
+                    <table>
                         <tr>
-                            <td>{{ $kun->pasien->nama }}</td>
-                            <td>{{ $kun->keluhan }}</td>
-                            <td style="color: red;">{{ $kun->status }}</td>
+                            <th>Nama Pasien</th>
+                            <th>Keluhan</th>
+                            <th>Status</th>
                         </tr>
-                    @endforeach
-                </table>
+                        @foreach ($kunjungans as $kun)
+                            <tr>
+                                <td>{{ $kun->pasien->nama }}</td>
+                                <td>{{ $kun->keluhan }}</td>
+                                <td style="color: red;">{{ $kun->status }}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
             </div>
-        </div>
-        <div class="content-chart m-1 drop-shadow">
-            <h2 class="h2 f-bolder">Data Kunjungan Perbulan</h2 class="h2 f-bolder">
-            <div class="chart-container">
-                <canvas id="myChart"></canvas>
-            </div>
+            <div class="content-chart m-1 drop-shadow">
+                <h2 class="h2 f-bolder">Data Kunjungan Perbulan</h2 class="h2 f-bolder">
+                <div class="chart-container">
+                    <canvas id="myChart"></canvas>
+                </div>
 
-            @php
-                $total = $selesai + $count;
-                $selesaiPercent = $total > 0 ? number_format(($selesai / $total) * 100) : 0;
-                $menungguPercent = $total > 0 ? number_format(($count / $total) * 100) : 0;
-            @endphp
-            <div class="legend">
-                <div class="legend-left">
+                @php
+                    $total = $selesai + $count;
+                    $selesaiPercent = $total > 0 ? number_format(($selesai / $total) * 100) : 0;
+                    $menungguPercent = $total > 0 ? number_format(($count / $total) * 100) : 0;
+                @endphp
+                <div class="legend">
+                    <div class="legend-left">
 
-                    <div class="selesai"><span></span>Selesai: <span id="selesai-count"
-                            style="margin-top:-10px">{{ $selesai }}</span> (<span id="selesai-percent"
-                            style="margin-top: -10px">{{ $selesaiPercent }}</span>%)</div>
-                    <div class="menunggu"><span></span>Menunggu: <span id="menunggu-count"
-                            style="margin-top: -10px">{{ $count }}</span> (<span id="menunggu-percent"
-                            style="margin-top: -10px">{{ $menungguPercent }}</span>%)</div>
+                        <div class="selesai"><span></span>Selesai: <span id="selesai-count"
+                                style="margin-top:-10px">{{ $selesai }}</span> (<span id="selesai-percent"
+                                style="margin-top: -10px">{{ $selesaiPercent }}</span>%)</div>
+                        <div class="menunggu"><span></span>Menunggu: <span id="menunggu-count"
+                                style="margin-top: -10px">{{ $count }}</span> (<span id="menunggu-percent"
+                                style="margin-top: -10px">{{ $menungguPercent }}</span>%)</div>
 
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="content-table m-2">
-        <div class="outer-table drop-shadow mr-1">
-            <div class="d-flex j-between">
-                <div class="content-table-text m-1">
-                    <h2 class="h2">Data Kunjungan Pasien</h2>
+        <div class="content-table m-2">
+            <div class="outer-table drop-shadow mr-1">
+                <div class="d-flex j-between">
+                    <div class="content-table-text m-1">
+                        <h2 class="h2">Data Kunjungan Pasien</h2>
+                    </div>
+                    <div class="m-1">
+                        <form action="{{ route('home-dokter') }}" method="GET">
+                            <input style="outline: none;" type="text" name="search_kunjungan"
+                                placeholder="Search here..." value="{{ request('search_kunjungan') }}">
+                            {{-- <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button> --}}
+                        </form>
+                    </div>
                 </div>
-                <div class="m-1">
-                    <form action="{{ route('home-dokter') }}" method="GET">
-                        <input style="outline: none;" type="text" name="search_kunjungan" placeholder="Search here..."
-                            value="{{ request('search_kunjungan') }}">
-                        {{-- <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button> --}}
-                    </form>
-                </div>
-            </div>
-            <div class="content-table-table">
-                <table>
-                    <tr>
-                        <th>Nama Pasien</th>
-                        <th>Keluhan</th>
-                        <th>status</th>
-                    </tr>
-                    @foreach ($kunjungan as $k)
+                <div class="content-table-table">
+                    <table>
                         <tr>
-                            <td>{{ $k->pasien->nama }}</td>
-                            <td>{{ $k->keluhan }}</td>
-                            <td style="color: green;">{{ $k->status }}</td>
+                            <th>Nama Pasien</th>
+                            <th>Keluhan</th>
+                            <th>status</th>
                         </tr>
-                    @endforeach
-                </table>
+                        @foreach ($kunjungan as $k)
+                            <tr>
+                                <td>{{ $k->pasien->nama }}</td>
+                                <td>{{ $k->keluhan }}</td>
+                                <td style="color: green;">{{ $k->status }}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
-    <script>
-        const selesai = {{ $selesai }};
-        const menunggu = {{ $count }};
-        const total = selesai + menunggu; // Total kunjungan
+        <script>
+            const selesai = {{ $selesai }};
+            const menunggu = {{ $count }};
+            const total = selesai + menunggu; // Total kunjungan
 
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Selesai', 'Menunggu'],
-                datasets: [{
-                    data: [selesai, menunggu],
-                    backgroundColor: [
-                        '#ff6384', // Warna untuk Selesai
-                        '#36a2eb', // Warna untuk Menunggu
-                    ],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Selesai', 'Menunggu'],
+                    datasets: [{
+                        data: [selesai, menunggu],
+                        backgroundColor: [
+                            '#ff6384', // Warna untuk Selesai
+                            '#36a2eb', // Warna untuk Menunggu
+                        ],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += context.raw;
+                                    label += ' (' + (context.raw / total * 100).toFixed(2) + '%)';
+                                    return label;
                                 }
-                                label += context.raw;
-                                label += ' (' + (context.raw / total * 100).toFixed(2) + '%)';
-                                return label;
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // Update persentase di legend
-        document.getElementById('selesai-percent').textContent = (selesai / total * 100);
-        document.getElementById('menunggu-percent').textContent = (menunggu / total * 100);
-    </script>
+            // Update persentase di legend
+            document.getElementById('selesai-percent').textContent = (selesai / total * 100);
+            document.getElementById('menunggu-percent').textContent = (menunggu / total * 100);
+        </script>
 
-    <script>
-        // Dapatkan elemen
-        const modal = document.getElementById('modal');
-        const openModalBtn = document.getElementById('openModal');
-        const openProfileModalBtn = document.getElementById('openProfileModal'); // New button
-        const closeModalBtn = document.getElementById('closeModal');
-        const welcomeSection = document.querySelector('.welcome'); // Select the welcome section
+        <script>
+            // Dapatkan elemen
+            const modal = document.getElementById('modal');
+            const openModalBtn = document.getElementById('openModal');
+            const openProfileModalBtn = document.getElementById('openProfileModal'); // New button
+            const closeModalBtn = document.getElementById('closeModal');
+            const welcomeSection = document.querySelector('.welcome'); // Select the welcome section
 
-        // Fungsi untuk membuka modal
-        const openModal = () => {
-            modal.style.display = 'block';
-            welcomeSection.classList.add('blur'); // Add blur class
-        };
+            // Fungsi untuk membuka modal
+            const openModal = () => {
+                modal.style.display = 'block';
+                welcomeSection.classList.add('blur'); // Add blur class
+            };
 
-        openModalBtn.addEventListener('click', openModal);
-        openProfileModalBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default anchor behavior
-            openModal(); // Call the open modal function
-        });
+            openModalBtn.addEventListener('click', openModal);
+            openProfileModalBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default anchor behavior
+                openModal(); // Call the open modal function
+            });
 
-        // Fungsi untuk menutup modal
-        closeModalBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            welcomeSection.classList.remove('blur'); // Remove blur class
-        });
-
-        // Tutup modal jika pengguna klik di luar area modal
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
+            // Fungsi untuk menutup modal
+            closeModalBtn.addEventListener('click', () => {
                 modal.style.display = 'none';
                 welcomeSection.classList.remove('blur'); // Remove blur class
-            }
-        });
-    </script>
+            });
 
-    <script>
-        // Dapatkan elemen
-        const modal = document.getElementById('modal');
-        const openModalBtn = document.getElementById('openModal'); // Button with pen icon
-        const openProfileModalBtn = document.getElementById('openProfileModal'); // New button
-        const closeModalBtn = document.getElementById('closeModal');
-        const welcomeSection = document.querySelector('.welcome'); // Select the welcome section
+            // Tutup modal jika pengguna klik di luar area modal
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    welcomeSection.classList.remove('blur'); // Remove blur class
+                }
+            });
+        </script>
 
-        // Fungsi untuk membuka modal
-        const openModal = () => {
-            modal.style.display = 'block';
-            welcomeSection.classList.add('blur'); // Add blur class
-        };
+        <script>
+            // Dapatkan elemen
+            const modal = document.getElementById('modal');
+            const openModalBtn = document.getElementById('openModal'); // Button with pen icon
+            const openProfileModalBtn = document.getElementById('openProfileModal'); // New button
+            const closeModalBtn = document.getElementById('closeModal');
+            const welcomeSection = document.querySelector('.welcome'); // Select the welcome section
 
-        // Attach event listeners
-        openModalBtn.addEventListener('click', openModal);
-        openProfileModalBtn.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default anchor behavior
-            openModal(); // Call the open modal function
-        });
+            // Fungsi untuk membuka modal
+            const openModal = () => {
+                modal.style.display = 'block';
+                welcomeSection.classList.add('blur'); // Add blur class
+            };
 
-        // Fungsi untuk menutup modal
-        closeModalBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            welcomeSection.classList.remove('blur'); // Remove blur class
-        });
+            // Attach event listeners
+            openModalBtn.addEventListener('click', openModal);
+            openProfileModalBtn.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default anchor behavior
+                openModal(); // Call the open modal function
+            });
 
-        // Tutup modal jika pengguna klik di luar area modal
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
+            // Fungsi untuk menutup modal
+            closeModalBtn.addEventListener('click', () => {
                 modal.style.display = 'none';
                 welcomeSection.classList.remove('blur'); // Remove blur class
-            }
-        });
-    </script>
+            });
 
-    <script>
-        // Dapatkan elemen
+            // Tutup modal jika pengguna klik di luar area modal
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    welcomeSection.classList.remove('blur'); // Remove blur class
+                }
+            });
+        </script>
 
-        const modal = document.getElementById('modal');
-        const openModalBtn = document.getElementById('openModal');
-        const closeModalBtn = document.getElementById('closeModal');
+        <script>
+            // Dapatkan elemen
 
-        // Fungsi untuk membuka modal
-        openModalBtn.addEventListener('click', () => {
-            modal.style.display = 'block';
-        });
+            const modal = document.getElementById('modal');
+            const openModalBtn = document.getElementById('openModal');
+            const closeModalBtn = document.getElementById('closeModal');
 
-        // Fungsi untuk menutup modal
-        closeModalBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
+            // Fungsi untuk membuka modal
+            openModalBtn.addEventListener('click', () => {
+                modal.style.display = 'block';
+            });
 
-        // Tutup modal jika pengguna klik di luar area modal
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
+            // Fungsi untuk menutup modal
+            closeModalBtn.addEventListener('click', () => {
                 modal.style.display = 'none';
-            }
-        });
-    </script>
+            });
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            // Tutup modal jika pengguna klik di luar area modal
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </div>
 @endsection

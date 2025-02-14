@@ -17,7 +17,7 @@
             <div class="d-flex a-center">
                 <h2 class="h2 f-bolder mr-4">Data Jadwal Praktik</h2>
                 <div class="btn"></div>
-                <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                     Tambah Jadwal Praktik
                 </button>
             </div>
@@ -131,7 +131,6 @@
             <div class="modal animate__fadeIn" id="myModalEdit{{ $jadwal->id }}">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Edit Jadwal Praktek</h2>
-                    <button type="button" class="btn-close" onclick="closeEditModalJadwal()"></button>
                     <form action="{{ route('jadwal_praktek.update', $jadwal->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
@@ -180,9 +179,9 @@
                             </div>
                         </div>
 
-                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                        <button type="button" class="btn-close red-hover"
                             onclick="closeEditModal()">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -236,8 +235,8 @@
                     </div>
 
                     <div class="my-2">
-                        <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </div>
                 </form>
             </div>

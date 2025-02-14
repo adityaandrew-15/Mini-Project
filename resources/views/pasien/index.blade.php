@@ -2,11 +2,11 @@
 <style></style>
 @section('side')
     <div class="m-3">
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center">
                 <h2 class="h2 f-bolder mr-4">Data Pasien</h2>
                 <div class="btn"></div>
-                <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                     Tambah Pasien
                 </button>
             </div>
@@ -15,7 +15,6 @@
         <div class="modal animate__animated" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 <h2 class="h2 f-bolder">Tambah Pasien</h2>
-                <button type="button" class="btn-close"></button>
                 <form action="{{ route('pasien.store') }}" method="POST">
                     @csrf
                     <div class="my-2">
@@ -62,8 +61,8 @@
                         @enderror
                     </div>
 
-                    <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
-                    <button type="submit" id="btnCloseAddModal" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                    <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
+                    <button type="submit" id="btnCloseAddModal" class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>
@@ -150,8 +149,6 @@
                                 <div class="modal animate__fadeIn" id="myModalEdit{{ $pasien->id }}">
                                     <div class="modal-content animate__animated animate__zoomIn">
                                         <h2 class="h2 f-bolder">Edit Pasien</h2>
-                                        <button type="button" class="btn-close"
-                                            onclick="closeEditModal({{ $pasien->id }})"></button>
                                         <form action="{{ route('pasien.update', $pasien->id) }}" method="POST">
                                             @csrf
                                             @method('PUT')
@@ -226,10 +223,10 @@
                                                 </div>
                                             </div>
 
-                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                            <button type="button" class="btn-close red-hover"
                                                 onclick="closeEditModal({{ $pasien->id }})">Batal</button>
                                             <button type="submit"
-                                                class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                                class="btn-add main-color-hover">Simpan</button>
                                         </form>
                                     </div>
                                 </div>
@@ -238,7 +235,6 @@
                                 <div class="modal animate__fadeIn" id="myModalDetail{{ $pasien->id }}">
                                     <div class="modal-content animate__animated animate__zoomIn">
                                         <h2 class="h2 f-bolder">Detail Pasien: {{ $pasien->nama }}</h2>
-                                        <button type="button" class="btn-close" onclick="closeEditModal()"></button>
                                         <div class="modal-body">
                                             <p class="h4 my-1"><strong>Nama:</strong> {{ $pasien->nama }}</p>
                                             <p class="h4 my-1"><strong>Alamat:</strong> {{ $pasien->alamat ?: 'kosong' }}
@@ -247,34 +243,8 @@
                                             </p>
                                             <p class="h4 my-1"><strong>Tanggal Lahir:</strong>
                                                 {{ $pasien->tanggal_lahir ?: 'kosong' }}</p>
-                                            <hr>
-                                            <h2 class="h2 f-bolder mb-1">Kunjungan</h2>
-                                            @if ($pasien->kunjungan->isEmpty())
-                                                <p class="h4 my-1">Tidak ada kunjungan yang tercatat.</p>
-                                            @else
-                                                @foreach ($pasien->kunjungan as $kunjungan)
-                                                    <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
-                                                        {{ $kunjungan->tanggal_kunjungan ?? 'kosong' }}</p>
-                                                    <hr>
-                                                @endforeach
-                                            @endif
-
-                                            <h2 class="h2 f-bolder mb-1">Rekam Medis</h2>
-                                            @if ($pasien->rekamMedis->isEmpty())
-                                                <p class="h4 my-1">Tidak ada rekam medis yang tercatat.</p>
-                                            @else
-                                                @foreach ($pasien->rekamMedis as $rekamMedis)
-                                                    <p class="h4 my-1"><strong>Tanggal Rekam Medis:</strong>
-                                                        {{ $rekamMedis->created_at ?? 'kosong' }}</p>
-                                                    <p class="h4 my-1"><strong>Diagnosa:</strong>
-                                                        {{ $rekamMedis->diagnosa ?? 'kosong' }}</p>
-                                                    <p class="h4 my-1"><strong>Tindakan:</strong>
-                                                        {{ $rekamMedis->tindakan ?? 'kosong' }}</p>
-                                                    <hr>
-                                                @endforeach
-                                            @endif
-
-                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                            <hr class="my-1">
+                                            <button type="button" class="btn-close"
                                                 onclick="closeDetailModal({{ $pasien->id }})">Close</button>
                                         </div>
                                     </div>

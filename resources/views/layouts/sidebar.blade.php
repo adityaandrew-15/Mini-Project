@@ -22,6 +22,9 @@
     <link rel="stylesheet" href="{{ asset('css/globaladmin.css') }}">
     {{-- <link href="Medicio/assets/css/main.css" rel="stylesheet"> --}}
 
+    {{-- bootrapp additional--}}
+    {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
+
     <!-- Vendor CSS Files -->
 </head>
 
@@ -75,8 +78,8 @@
                         @elseif (auth()->user()->hasRole('dokter'))
                             <a href="{{ route('home-dokter') }}">
                     @endif
-                    <img src="{{ asset('icons/logos.svg') }}" alt="">
-                    <span style="font-family: 'Handlee', cursive; font-size: 24px;">ALLCARE</span>
+                    <img src="{{ asset('asset/img/Logo.png') }}" alt="">
+                    <span style="font-size: 20px;">ALLCARE</span>
                     </a>
 
                 </li>
@@ -87,7 +90,8 @@
                     <li>
                         <a href="{{ route('admin-home') }}"
                             class="{{ request()->routeIs('admin-home') ? 'active' : '' }}">
-                            <i class="fas fa-home"></i>
+                            <i class="fa-brands fa-squarespace"></i>
+                            {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
                             <span>Dashboard</span>
                         </a>
                 @endif
@@ -96,7 +100,8 @@
                     @if (auth()->user()->hasRole('dokter'))
                         <a href="{{ route('home-dokter') }}"
                             class="{{ request()->routeIs('home-dokter') ? 'active' : '' }}">
-                            <i class="fas fa-home"></i>
+                            <i class="fa-brands fa-squarespace"></i>
+                            {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
                             <span>Dashboard</span>
                         </a>
                     @endif
@@ -145,6 +150,9 @@
                     </a>
                 </li>
 
+                <li class="sparepart" style="margin-top: 2rem; margin-bottom: 2rem;">
+                </li>
+
                 <li>
                     <a href="{{ route('jadwal_praktek.index') }}"
                         class="{{ request()->routeIs('jadwal_praktek.index') ? 'active' : '' }}">
@@ -166,13 +174,13 @@
                     <li>
                         <a href="{{ route('riwayat') }}"
                             class="{{ request()->routeIs('riwayat') ? 'active' : '' }}">
-                            <i class="bi bi-clock-history"></i>
+                            <i class="fa-solid fa-clock-rotate-left"></i>
                             <span>riwayat</span>
                         </a>
                     </li>
                 @endif
                 <li>
-                    <a href="#" class="q-btn" style="color: inherit; cursor: pointer;"
+                    <a href="#" class="q-btn" 
                         onclick="confirmLogout(event)">
                         <i class="fa fa-sign-out-alt"></i>
                         <span>Keluar</span>
@@ -209,7 +217,7 @@
                     <a href="#">
                         <img class="photo-profile-sidebar" src="{{ asset('asset/img/dokter.png') }}" alt="">
                         <span>
-                            <h6>Welcome</h2>
+                            <h4>Welcome</h4>
                                 @if (auth()->user()->hasRole('admin'))
                                     <p>admin</p>
                                 @elseif (auth()->user()->hasRole('dokter'))
@@ -220,7 +228,6 @@
                 </li>
             </ul>
         </div>
-
 
         <div class="wrapper-container" id="wrapper-container">
             @yield('side')
@@ -302,6 +309,11 @@
             mainContent.classList.toggle('expanded');
         }
     </script>
+
+    {{-- bootsrapp additional--}}
+    {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
 </body>
 
 </html>

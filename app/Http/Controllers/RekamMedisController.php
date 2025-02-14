@@ -78,7 +78,7 @@ class RekamMedisController extends Controller
             'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:10240',  // Validasi gambar (maks 10MB)
         ]);
 
-        $id_dokter = auth()->user()->id; // Misalnya menggunakan Auth untuk mendapatkan user yang login
+        $id_dokter = auth()->user()->id;  // Misalnya menggunakan Auth untuk mendapatkan user yang login
 
         // Get the kunjungan record
         $kunjungan = Kunjungan::findOrFail($validated['kunjungan_id']);
@@ -110,10 +110,9 @@ class RekamMedisController extends Controller
                 return back()->with('error', 'Stok obat tidak mencukupi untuk ' . $obat->obat);
             }
         }
-        
 
         // Update kunjungan status
-        $kunjungan->status = 'DONE';
+        $kunjungan->status = 'PENDING';
         $kunjungan->save();
 
         // Handle equipment if any
@@ -121,7 +120,6 @@ class RekamMedisController extends Controller
             $rekamMedis->peralatans()->sync($validated['peralatan_id']);
         }
 
-        // Handle the image uploads
         // Handle the image uploads
         if ($request->hasFile('images')) {
             $images = $request->file('images');
@@ -253,12 +251,25 @@ class RekamMedisController extends Controller
     public function nota($id)
     {
         $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'peralatans'])->findOrFail($id);
+        $kunjungan = Kunjungan::findOrFail($id);
 
         $totalHarga = $rekamMedis->obats->sum(function ($obat) {
             return $obat->pivot->jumlah * $obat->harga;
         }) + $rekamMedis->peralatans->sum('harga');
 
-        return view('rekam_medis.nota', compact('rekamMedis', 'totalHarga'));
+        return view('rekam_medis.nota', compact('rekamMedis', 'totalHarga', 'kunjungan'));
+    }
+
+    public function pendingnota($id)
+    {
+        $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'peralatans'])->findOrFail($id);
+        // $kunjungan = Kunjungan::findOrFail($id);
+
+        $totalHarga = $rekamMedis->obats->sum(function ($obat) {
+            return $obat->pivot->jumlah * $obat->harga;
+        }) + $rekamMedis->peralatans->sum('harga');
+
+        return view('kunjungan.pendingnota', compact('rekamMedis', 'totalHarga'));
     }
 
     public function detail($id)
