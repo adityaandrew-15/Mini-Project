@@ -8,12 +8,12 @@
             </script>
         @endif
 
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center">
                 <h2 class="h2 f-bolder mr-4">Data Resep</h2>
                 <div class="btn"></div>
                 @if (auth()->user()->hasRole('admin'))
-                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                         Tambah Resep
                     </button>
                 @endif

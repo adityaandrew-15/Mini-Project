@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Obat;
 use App\Models\RekamMedis;
 use App\Models\Resep;
@@ -61,7 +62,19 @@ class ObatController extends Controller
             'harga.min' => 'Harga obat minimal 1.',
         ]);
 
-        Obat::create($request->only(['obat', 'jumlah', 'harga']));
+        $obat = Obat::create($request->only(['obat', 'jumlah', 'harga']));
+
+        History::create([
+            'type' => 'medicine',
+            'action' => 'added',
+            'reference_id' => $obat->id,
+            'details' => [
+                'name' => $obat->obat,
+                'quantity' => $obat->jumlah,
+                'price' => $obat->harga
+            ],
+        ]);
+
         return redirect()->route('obat.index')->with('success', 'Obat berhasil ditambahkan.');
     }
 

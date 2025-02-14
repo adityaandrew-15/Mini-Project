@@ -3,16 +3,16 @@
 @section('side')
     <div class="m-3">
         <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+            <div class="d-flex j-between w-100 a-center">
                 <h2 class="h2 f-bolder mr-4">Data Dokter</h2>
                 <div class="btn"></div>
                 @if (auth()->user()->hasRole('admin'))
-                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                         Tambah Dokter
                     </button>
                 @endif
             </div>
-            <h2>Dokter aktif: {{ DB::table('dokters')->count() }}</h2>
+            {{-- <h2>Dokter aktif: {{ DB::table('dokters')->count() }}</h2> --}}
         </div>
         <div class="content-table m-2 d-flex col">
             <form method="GET" action="{{ route('dokter.index') }}" class="d-flex w-100 gap-2">
@@ -115,7 +115,6 @@
             <div class="modal animate__fadeIn" id="myModalEdit{{ $dokter->id }}">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Edit Dokter</h2>
-                    <button type="button" class="btn-close" onclick="closeEditModal({{ $dokter->id }})"></button>
                     <form action="{{ route('dokter.update', $dokter->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -147,13 +146,13 @@
                                     name="image">
                             </div>
                             @if ($dokter->image)
-                                <img src="{{ asset('storage/dokters/' . $dokter->image) }}" class="mt-2" width="100">
+                                <img src="{{ asset('storage/' . $dokter->image) }}" class="mt-2" width="100">
                             @endif
                         </div>
 
-                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                        <button type="button" class="btn-close red-hover"
                             onclick="closeEditModal({{ $dokter->id }})">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -162,7 +161,6 @@
         <div class="modal animate__animated" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 <h2 class="h2 f-bolder">Tambah Dokter</h2>
-                <button type="button" class="btn-close"></button>
                 <form action="{{ route('dokter.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="my-2">
@@ -224,9 +222,9 @@
                         </div>
                     </div>
 
-                    <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
+                    <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
                     <button type="submit" id="btnCloseAddModal"
-                        class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>

@@ -149,26 +149,26 @@
                         <div class="col-md-6 aos-init aos-animate">
                             <div class="service-item position-relative">
                                 <h2>Data pasien: </h2>
-                                <p>
+                                <p style="margin: 1rem 0;">
                                     <i class="fas fa-user"></i>
-                                    <span>Nama :</span>
+                                    <span><strong>Nama :</strong></span>
                                     <span class="value">{{ $kunj->pasien->nama }}</span>
                                 </p>
-                                <p>
+                                <p style="margin: 1rem 0;">
                                     <i class="fas fa-map-marker-alt"></i>
-                                    <span>Dokter :</span>
+                                    <span><strong>Dokter :</strong></span>
                                     <span class="value">{{ $kun->dokter->nama ?? 'tunggu beberapa saat lagi' }}</span>
                                 </p>
-                                <p>
+                                <p style="margin: 1rem 0;">
                                     <i class="fas fa-phone"></i>
-                                    <span>Keluhan :</span>
+                                    <span><strong>Keluhan :</strong></span><br>
                                     <span class="value">{{ $kunj->keluhan }}</span>
                                 </p>
-                                <p>
+                                <p style="margin: 1rem 0;">
                                     <i class="fas fa-calendar-alt"></i>
-                                    <span>Tanggal Kunjungan :</span>
+                                    <span><strong>Tanggal Kunjungan :</strong></span>
                                     <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
-                                </p>
+                                </p>                                
 
                                 @if ($kunj->rekamMedis->isNotEmpty())
                                     <h3>Informasi Tambahan</h3>
@@ -223,7 +223,7 @@
                                     </p>
 
                                     <div class="text-start mt-4">
-                                        <a href="#" class="btn btn-info btn-sm"
+                                        <a href="#" class="btn btn-nota-check"
                                             id="detailBtn{{ $kunj->rekamMedis->first()->id }}">
                                             <p>Detail</p>
                                         </a>

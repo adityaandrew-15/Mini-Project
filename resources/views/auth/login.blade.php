@@ -4,514 +4,601 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <title>Log In & Sign Up</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
-        :root {
-            --primary-color: #4E86A6;
-            --secondary-color: #5794B8;
-            --black: #000000;
-            --white: #ffffff;
-            --gray: #efefef;
-            --gray-2: #757575;
-
-            --facebook-color: #4267B2;
-            --google-color: #DB4437;
-            --twitter-color: #1DA1F2;
-            --insta-color: #E1306C;
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
-
-        * {
-            font-family: 'Poppins', sans-serif;
+        body {
+            overflow: hidden;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            background-color: white;
+            background-image: url('/asset/img/vector_bg.png');
+            background-repeat: no-repeat;
+            background-position: right top;
+            background-size: 400px;
         }
 
-        html,
-        body {
-            height: 100vh;
-            overflow: hidden;
+        .outer-container {
+            background-color: #ffffff;
+            /* Dark blue */
+
         }
 
         .container {
-            position: relative;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            height: 100vh;
-        }
-
-        .col {
-            width: 50%;
-        }
-
-        .align-items-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .form-wrapper {
-            width: 100%;
-            max-width: 28rem;
-        }
-
-        .form {
-            padding: 1rem;
-            background-color: var(--white);
-            border-radius: 1.5rem;
-            width: 100%;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-            transform: scale(0);
-            transition: .5s ease-in-out;
-            transition-delay: 1s;
-        }
-
-        .input-group {
-            position: relative;
-            width: 100%;
-            margin: 1rem 0;
-        }
-
-        .input-group i {
+            background-color: #ffffff;
+            /* Medium blue */
+            width: auto;
+            height: auto;
+            border-radius: 10px;
             position: absolute;
-            top: 50%;
-            left: 1rem;
-            transform: translateY(-50%);
-            font-size: 1.4rem;
-            color: var(--gray-2);
+            display: flex;
+            top: 120px;
+            left: 400px;
         }
 
-        .input-group input {
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        */ .wrapper {
+            width: 400px;
+            background: #fff;
+            padding: 30px;
+            border-radius: px;
+            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .wrapper .title-text {
+            display: flex;
+            width: 200%;
+        }
+
+        .wrapper .title {
+            width: 50%;
+            font-size: 35px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .wrapper .slide-controls {
+            position: relative;
+            display: flex;
+            height: 50px;
             width: 100%;
-            padding: 1rem 3rem;
-            font-size: 1rem;
-            background-color: var(--gray);
-            border-radius: .5rem;
-            border: 0.125rem solid var(--white);
-            outline: none;
+            margin: 15px 0 10px 0;
+            justify-content: space-between;
+            border-radius: 5px;
+            right: 30px;
         }
 
-        .input-group input:focus {
-            border: 0.125rem solid var(--primary-color);
-        }
-
-        .form button {
+        .slide-controls .slide {
+            height: 100%;
+            width: 100%;
+            color: #000000;
+            font-size: 18px;
+            text-align: center;
+            line-height: 48px;
             cursor: pointer;
-            width: 100%;
-            padding: .6rem 0;
-            border-radius: .5rem;
-            border: none;
-            background-color: var(--primary-color);
-            color: var(--white);
-            font-size: 1.2rem;
-            outline: none;
+            z-index: 1;
+            transition: all 0.6s ease;
+            font-size: 25px;
         }
 
-        .form p {
-            margin: 1rem 0;
-            font-size: .7rem;
+        .slide-controls label.signup {
+
+            color: #000;
         }
 
-        .flex-col {
+        .slide-controls .slider-tab {
+            position: absolute;
+            height: 100%;
+            width: 50%;
+            left: 0;
+            z-index: 0;
+            border-radius: 5px;
+
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        #signup:checked~.slider-tab {
+            left: 50%;
+        }
+
+        #signup:checked~label.signup {
+            cursor: default;
+            user-select: none;
+        }
+
+        #signup:checked~label.login {
+            color: #000;
+
+        }
+
+        #login:checked~label.signup {
+            color: #000;
+        }
+
+        #login:checked~label.login {
+            margin-bottom: 10px;
+            cursor: default;
+            user-select: none;
+        }
+
+        .signup:hover {
+            text-decoration: underline;
+            text-underline-offset: 10px;
+            color: #c689cf;
+
+        }
+
+        .login:hover {
+            text-decoration: underline;
+            text-underline-offset: 10px;
+            color: #c689cf;
+        }
+
+        .form-container {
+            position: relative;
+            overflow: hidden;
+            transition: height 0.5s ease-in-out;
+        }
+
+        .form-inner {
+            display: flex;
             flex-direction: column;
         }
 
-        .social-list {
-            margin: 2rem 0;
-            padding: 1rem;
-            border-radius: 1.5rem;
+        form {
+            display: none;
+        }
+
+        form.active {
+            display: block;
+        }
+
+        .form-container .form-inner form {
+            width: 50%;
+
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .form-inner form .field {
+            height: 40px;
+            width: 75%;
+            margin-top: 10px;
+        }
+
+        .form-inner form .field input {
+            height: 100%;
+            width: 300px;
+            outline: none;
+            padding-left: 15px;
+            border-radius: 15px;
+            border: 1px solid lightgrey;
+            border-bottom-width: 2px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+        }
+
+        .form-inner form .field input:focus {
+            border-color: #fc83bb;
+            /* box-shadow: inset 0 0 3px #fb6aae; */
+        }
+
+        .form-inner form .field input::placeholder {
+            color: #000000;
+            transition: all 0.3s ease;
+        }
+
+        form .field input:focus::placeholder {
+            color: #000000;
+        }
+
+        .form-inner form .pass-link {
+            margin-top: 5px;
+        }
+
+        .form-inner form .signup-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .form-inner form .pass-link a,
+        .form-inner form .signup-link a {
+            color: rgb(160, 160, 229);
+            text-decoration: none;
+        }
+
+        .form-inner form .pass-link a:hover,
+        .form-inner form .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        form .btn {
+            height: 50px;
             width: 100%;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-            transform: scale(0);
-            transition: .5s ease-in-out;
-            transition-delay: 1.2s;
+            border-radius: 20px;
+
         }
 
-        .social-list>div {
-            color: var(--white);
-            margin: 0 .5rem;
-            padding: .7rem;
-            cursor: pointer;
-            border-radius: .5rem;
-            cursor: pointer;
-            transform: scale(0);
-            transition: .5s ease-in-out;
+        .slide-btn {
+            margin-left: 70px;
+
         }
 
-        .social-list>div:nth-child(1) {
-            transition-delay: 1.4s;
-        }
-
-        .social-list>div:nth-child(2) {
-            transition-delay: 1.6s;
-        }
-
-        .social-list>div:nth-child(3) {
-            transition-delay: 1.8s;
-        }
-
-        .social-list>div:nth-child(4) {
-            transition-delay: 2s;
-        }
-
-        .social-list>div>i {
-            font-size: 1.5rem;
-            transition: .4s ease-in-out;
-        }
-
-        .social-list>div:hover i {
-            transform: scale(1.5);
-        }
-
-        .facebook-bg {
-            background-color: var(--facebook-color);
-        }
-
-        .google-bg {
-            background-color: var(--google-color);
-        }
-
-        .twitter-bg {
-            background-color: var(--twitter-color);
-        }
-
-        .insta-bg {
-            background-color: var(--insta-color);
-        }
-
-        .pointer {
-            cursor: pointer;
-        }
-
-        .container.sign-in .form.sign-in,
-        .container.sign-in .social-list.sign-in,
-        .container.sign-in .social-list.sign-in>div,
-        .container.sign-up .form.sign-up,
-        .container.sign-up .social-list.sign-up,
-        .container.sign-up .social-list.sign-up>div {
-            transform: scale(1);
-        }
-
-        .content-row {
+        form .btn .btn-layer {
+            height: 100%;
+            width: 300%;
             position: absolute;
-            top: 0;
+            left: -100%;
+            background-color: rgb(160, 160, 229);
+            border-radius: 5px;
+            transition: all 0.4s ease;
+            ;
+        }
+
+        form .btn:hover .btn-layer {
             left: 0;
-            pointer-events: none;
-            z-index: 6;
-            width: 100%;
         }
 
-        .text {
-            margin: 4rem;
-            color: var(--white);
+        .field.btn input[type="submit"] {
+            margin-left: -10px;
+            background: #4e73df;
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
         }
 
-        .text h2 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin: 2rem 0;
-            transition: 1s ease-in-out;
-        }
-
-        .text p {
-            font-weight: 600;
-            transition: 1s ease-in-out;
-            transition-delay: .2s;
-        }
-
-        .img img {
-            width: 30vw;
-            transition: 1s ease-in-out;
-            transition-delay: .4s;
-        }
-
-        .text.sign-in h2,
-        .text.sign-in p,
-        .img.sign-in img {
-            transform: translateX(-250%);
-        }
-
-        .text.sign-up h2,
-        .text.sign-up p,
-        .img.sign-up img {
-            transform: translateX(250%);
-        }
-
-        .container.sign-in .text.sign-in h2,
-        .container.sign-in .text.sign-in p,
-        .container.sign-in .img.sign-in img,
-        .container.sign-up .text.sign-up h2,
-        .container.sign-up .text.sign-up p,
-        .container.sign-up .img.sign-up img {
-            transform: translateX(0);
-        }
-
-        /* BACKGROUND */
-
-        .container::before {
-            content: "";
+        /* Lottie animation at the top */
+        dotlottie-player {
             position: absolute;
-            top: 0;
-            right: 0;
-            height: 100vh;
-            width: 300vw;
-            transform: translate(35%, 0);
-            background-image: linear-gradient(-45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            transition: 1s ease-in-out;
-            z-index: 6;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-            border-bottom-right-radius: max(50vw, 50vh);
-            border-top-left-radius: max(50vw, 50vh);
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
         }
 
-        .container.sign-in::before {
-            transform: translate(0, 0);
-            right: 50%;
+        .header-text {
+            color: rgb(100, 100, 192);
+            display: flex;
+            justify-self: center;
+
         }
 
-        .container.sign-up::before {
-            transform: translate(100%, 0);
-            right: 50%;
+        .lotie {
+            position: absolute;
+            top: 25%;
+            left: 75%;
+            z-index: 4;
         }
 
-        /* RESPONSIVE */
 
-        @media only screen and (max-width: 425px) {
+        .btn-no-color {
+            background-color: transparent !important;
+            border-color: transparent !important;
+            color: inherit !important;
+            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
 
-            .container::before,
-            .container.sign-in::before,
-            .container.sign-up::before {
-                height: 100vh;
-                border-bottom-right-radius: 0;
-                border-top-left-radius: 0;
-                z-index: 0;
-                transform: none;
-                right: 0;
-            }
+        }
 
-            .container.sign-in .col.sign-up {
-                transform: translateY(100%);
-            }
+        #specialty-field.hidden {
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
 
-            .container.sign-in .col.sign-in,
-            .container.sign-up .col.sign-up {
-                transform: translateY(0);
-            }
+        #nohp-field.hidden {
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
 
-            .content-row {
-                align-items: flex-start !important;
-            }
+        .gambar img {
+            position: relative;
+            z-index: 10;
+            top: 240px;
+        }
 
-            .content-row .col {
-                transform: translateY(0);
-                background-color: unset;
-            }
-
-            .col {
-                width: 100%;
-                position: absolute;
-                padding: 2rem;
-                background-color: var(--white);
-                border-top-left-radius: 2rem;
-                border-top-right-radius: 2rem;
-                transform: translateY(100%);
-                transition: 1s ease-in-out;
-            }
-
-            .row {
-                align-items: flex-end;
-                justify-content: flex-end;
-            }
-
-            .form,
-            .social-list {
-                box-shadow: none;
-                margin: 0;
-                padding: 0;
-            }
-
-            .text {
-                margin: 0;
-            }
-
-            .text p {
-                display: none;
-            }
-
-            .text h2 {
-                margin: .5rem;
-                font-size: 2rem;
-            }
+        .field select {
+            width: 300px;
+            border-radius: 15px;
+            /* Atur radius sesuai keinginan */
+            padding: 8px;
+            /* Tambahkan padding agar lebih rapi */
+            border: 1px solid #ccc;
+            /* Tambahkan border */
+            outline: none;
+            /* Hilangkan outline saat focus */
+            appearance: none;
+            /* Menghilangkan gaya default browser */
         }
     </style>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 </head>
 
 <body>
-    @if (session('error'))
-        <script>
-            swal({
-                title: "Error!",
-                text: "{{ session('error') }}",
-                type: "error",
-                confirmButtonText: "OK"
-            });
-        </script>
-    @endif
+    <div class="header-text">
+        <h1 style="font-family: open sans; font-weight: bold">KLINIK</h1>
+    </div>
+    <div class="login-body">
+        <div class="gambar">
+            <img src="{{ asset('asset/img/titik.png') }}" alt="">
+        </div>
+        <div class="container">
+            <div class="wrapper">
+                <div class="form-container">
+                    <div class="slide-controls">
+                        <input type="radio" name="slide" id="login" checked>
+                        <input type="radio" name="slide" id="signup">
+                        <label for="login" class="slide login">Login</label>
+                        <label for="signup" class="slide signup">Register</label>
+                        <div class="slider-tab"></div>
+                    </div>
 
-    @if (session('success'))
-        <script>
-            swal({
-                title: "Success!",
-                text: "{{ session('success') }}",
-                type: "success",
-                confirmButtonText: "OK"
-            });
-        </script>
-    @endif
-    <div id="container" class="container">
-        <!-- FORM SECTION -->
-        <div class="row">
-            <!-- SIGN UP -->
-            <div class="col align-items-center flex-col sign-up">
-                <div class="form-wrapper align-items-center">
-                    <div class="form sign-up">
-                        <form action="{{ route('register') }}" method="post">
+                    <div class="form-inner">
+                        <!-- Form Login -->
+                        <form action="{{ route('login') }}" class="login active" method="POST">
                             @csrf
-                            <div class="input-group">
-                                <i class='bx bxs-user'></i>
+                            <div class="field">
+                                <input type="text" placeholder="Email Address" name="email" required>
+                            </div>
+                            <div class="field">
+                                <input type="password" placeholder="Password" name="password" required>
+                            </div>
+                            <div class="field btn">
+                                <input type="submit" value="Login">
+                            </div>
+                            <div class="signup-link" style="position: relative; left: 50%;">
+                                Not a member? <a href="/register">Signup now</a>
+                            </div>
+                        </form>
+
+                        <!-- Form Register -->
+                        <form action="{{ route('register') }}" method="POST"
+                            class="{{ $errors->any() ? 'active' : '' }}">
+                            @csrf
+                            @if ($errors->any())
+                                <div class="alert alert-danger" style="display: none;">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <div class="field">
                                 <input type="text" placeholder="Name" name="name" required
                                     value="{{ old('name') }}">
                             </div>
-                            <div class="input-group">
-                                <i class='bx bx-mail-send'></i>
+                            <div class="field">
                                 <input type="email" placeholder="Email Address" name="email" required
                                     value="{{ old('email') }}">
                             </div>
-                            <div class="input-group">
-                                <i class='bx bx-mail-send'></i>
-                                <input type="number" id="nohp" placeholder="Phone Number" name="phone" required
+
+                            <div class="field" id="nohp-field">
+                                <input type="text" id="nohp" placeholder="Phone Number" name="phone" required
                                     value="{{ old('phone') }}">
+                                @error('phone')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="input-group">
-                                <i class='bx bxs-lock-alt'></i>
+                            <div class="field">
                                 <input type="password" placeholder="Password" name="password" required
                                     value="{{ old('password') }}">
                             </div>
-                            <div class="input-group">
-                                <i class='bx bxs-lock-alt'></i>
+                            <div class="field">
                                 <input type="password" placeholder="Confirm Password" name="password_confirmation"
-                                    required>
+                                    required value="{{ old('spesialis') }}">
                             </div>
-                            <button type="submit">
-                                Sign up
-                            </button>
+                            <div class="field btn">
+                                <input type="submit" value="Register">
+                            </div>
                         </form>
-                        <p>
-                            <span>
-                                Already have an account?
-                            </span>
-                            <b onclick="toggle()" class="pointer">
-                                Sign in here
-                            </b>
-                        </p>
                     </div>
                 </div>
-
             </div>
-            <!-- END SIGN UP -->
-            <!-- SIGN IN -->
-            <div class="col align-items-center flex-col sign-in">
-                <div class="form-wrapper align-items-center">
-                    <div class="form sign-in">
-                        <form action="{{ route('login') }}" method="post">
-                            @csrf
-                            <div class="input-group">
-                                <i class='bx bxs-user'></i>
-                                <input type="text" placeholder="Email Address" name="email" required>
-                            </div>
-                            <div class="input-group">
-                                <i class='bx bxs-lock-alt'></i>
-                                <input type="password" placeholder="Password" name="password" required>
-                            </div>
-                            <button>
-                                Sign in
-                            </button>
-                        </form>
-                        <p>
-                            <b>
-                                Forgot password?
-                            </b>
-                        </p>
-                        <p>
-                            <span>
-                                Don't have an account?
-                            </span>
-                            <b onclick="toggle()" class="pointer">
-                                Sign up here
-                            </b>
-                        </p>
-                    </div>
-                </div>
-                <div class="form-wrapper">
-
-                </div>
-            </div>
-            <!-- END SIGN IN -->
         </div>
-        <!-- END FORM SECTION -->
-        <!-- CONTENT SECTION -->
-        <div class="row content-row">
-            <!-- SIGN IN CONTENT -->
-            <div class="col align-items-center flex-col">
-                <div class="text sign-in">
-                    <h2>
-                        Welcome
-                    </h2>
-
-                </div>
-                <div class="img sign-in">
-
-                </div>
-            </div>
-            <!-- END SIGN IN CONTENT -->
-            <!-- SIGN UP CONTENT -->
-            <div class="col align-items-center flex-col">
-                <div class="img sign-up">
-
-                </div>
-                <div class="text sign-up">
-                    <h2>
-                        Join with us
-                    </h2>
-
-                </div>
-            </div>
-            <!-- END SIGN UP CONTENT -->
-        </div>
-        <!-- END CONTENT SECTION -->
     </div>
+
+    <div class="lotie">
+        <dotlottie-player src="https://lottie.host/621f36a4-85ad-48cc-aa5f-acbae0c13265/iO2nGuesOg.lottie"
+            background="transparent" speed="1" style="width: 300px; height: 300px" loop
+            autoplay></dotlottie-player>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        let container = document.getElementById('container')
+        let currentlyVisible = ".form-log-in";
+        let currentlyHidden = ".form-sign-up";
 
-        toggle = () => {
-            container.classList.toggle('sign-in')
-            container.classList.toggle('sign-up')
-        }
-
-        setTimeout(() => {
-            container.classList.add('sign-in')
-        }, 200)
+        $(".info-item .btn").click(function() {
+            $(".form-container").toggleClass("active");
+            $(currentlyVisible).fadeToggle(750, function() {
+                $(currentlyHidden).fadeToggle();
+                let temp = currentlyVisible;
+                currentlyVisible = currentlyHidden;
+                currentlyHidden = temp;
+            });
+        });
     </script>
+    <script>
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Failed',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Errors',
+                html: "<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>",
+                confirmButtonText: 'OK'
+            });
+        @endif
+
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
+    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const errorMessages = @json($errors->all());
+            const formContainer = document.querySelector("container");
+            const loginForm = document.querySelector(".form-inner .login");
+            const signupForm = document.querySelector(".form-inner form:nth-child(2)");
+            const loginRadio = document.getElementById("login");
+            const signupRadio = document.getElementById("signup");
+
+            // Fungsi untuk menyesuaikan tinggi container
+            function adjustHeight(form) {
+                formContainer.style.height = `${form.offsetHeight}px`;
+            }
+
+            if (errorMessages.length > 0) {
+                // Tampilkan SweetAlert dengan pesan kesalahan
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan',
+                    html: `<ul>${errorMessages.map(error => `<li>${error}</li>`).join('')}</ul>`,
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // Setelah pengguna menekan OK, sembunyikan formulir login dan tampilkan formulir pendaftaran
+                    const loginForm = document.querySelector(".form-inner .login");
+                    const signupForm = document.querySelector(".form-inner form:nth-child(2)");
+
+                    loginForm.classList.remove("active"); // Sembunyikan formulir login
+                    signupForm.classList.add("active"); // Tampilkan formulir pendaftaran
+                });
+            }
+
+
+            // Event listener untuk mengubah form saat radio button diklik
+            loginRadio.addEventListener("change", function() {
+                loginForm.classList.add("active");
+                signupForm.classList.remove("active");
+                adjustHeight(loginForm);
+            });
+
+            signupRadio.addEventListener("change", function() {
+                signupForm.classList.add("active");
+                loginForm.classList.remove("active");
+                adjustHeight(signupForm);
+            });
+
+            // Set tinggi awal sesuai form login
+            adjustHeight(loginForm);
+        });
+    </script>
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ $errors->first() }}',
+                confirmButtonText: 'Tutup'
+            });
+        </script>
+    @endif
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const roleSelect = document.getElementById("role-select"); // Dropdown select
+            const specialtyField = document.getElementById("specialty-field"); // Div Specialty
+            const phoneField = document.getElementById("phone-field"); // Div Specialty
+
+
+            // Tambahkan event listener untuk mendeteksi perubahan di select
+            roleSelect.addEventListener("change", function() {
+                if (roleSelect.value === "2") { // Jika "Dokter" dipilih
+                    specialtyField.style.display = "block"; // Tampilkan input Specialty
+                    phoneField.style.display = "block"; // Tampilkan input phone
+                    specialtyField.querySelector("input").setAttribute("required", "true");
+                } else { // Jika "Pasien" dipilih
+                    specialtyField.style.display = "none"; // Sembunyikan input Specialty
+                    specialtyField.querySelector("input").removeAttribute("required");
+                    specialtyField.querySelector("input").value = ""; // Bersihkan nilai input
+                }
+            });
+
+            // Default: Sembunyikan input Specialty saat halaman dimuat
+            specialtyField.style.display = "none";
+        });
+    </script>
+    <script>
+        @if (session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Registration Failed',
+                text: "{{ session('error') }}",
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Tampilkan form login dan sembunyikan form register
+                document.querySelector('.form-inner .login').classList.add('active');
+                document.querySelector('.form-inner form:nth-child(2)').classList.remove('active');
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Errors',
+                html: "<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>",
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Tampilkan form login dan sembunyikan form register
+                document.querySelector('.form-inner .login').classList.add('active');
+                document.querySelector('.form-inner form:nth-child(2)').classList.remove('active');
+            });
+        @endif
+
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: "{{ session('success') }}",
+                confirmButtonText: 'OK'
+            });
+        @endif
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

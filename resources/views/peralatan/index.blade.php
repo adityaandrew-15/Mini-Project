@@ -15,11 +15,11 @@
     <body>
 
         <div class="m-3">
-            <div class="d-flex j-between m-2 a-center">
-                <div class="d-flex a-center">
+            <div class="d-flex m-2 a-center">
+                <div class="d-flex j-between w-100 a-center">
                     <h2 class="h2 f-bolder mr-4">Peralatan Medis</h2>
                     <div class="btn"></div>
-                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                         Tambah peralatan
                     </button>
                 </div>
@@ -62,8 +62,8 @@
                             </div>
                         </div>
 
-                        <button type="button" class="px-2 py-1 btn-close red-hover" id="btnCloseAddModal">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="button" class="btn-close red-hover" id="btnCloseAddModal">Batal</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -168,8 +168,6 @@
                                     <div class="modal animate__fadeIn" id="myModalEdit{{ $per->id }}">
                                         <div class="modal-content animate__animated animate__zoomIn">
                                             <h2 class="h2 f-bolder">Edit Peralatan</h2>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
                                             <form action="{{ route('peralatan.update', $per->id) }}" method="POST"
                                                 enctype="multipart/form-data">
                                                 @csrf
@@ -215,10 +213,10 @@
                                                     @endif
                                                 </div>
 
-                                                <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                <button type="button" class="btn-close red-hover"
                                                     onclick="closeEditModal({{ $per->id }})">Batal</button>
                                                 <button type="submit"
-                                                    class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                                    class="btn-add main-color-hover">Simpan</button>
                                             </form>
                                         </div>
                                     </div>

@@ -1,8 +1,9 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\HomeController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PasienController;
 use App\Http\Controllers\ResepController;
@@ -12,12 +13,7 @@ use App\Http\Controllers\RekamMedisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PeralatanController;
 use App\Http\Controllers\detailController;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Kunjungan;
-
-
-
-
 
 // Home Route
 Route::get('/', function () {
@@ -32,7 +28,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/rekam-medis/{id}/detail', [RekamMedisController::class, 'detail'])->name('rekam_medis.detail');
 Route::get('kunjungan/{id}/detail', [KunjunganController::class, 'showDetail']);
 
-
 // Admin Dashboard (accessible by admin only)
 Route::get('/admin', function () {
     $kunjunganPerBulan = DB::table('kunjungans')
@@ -46,8 +41,6 @@ Route::get('/admin', function () {
 
     return view('admin-home', compact('kunjunganPerBulan','dokterKunjungan'));
 })->middleware(['auth', 'role:admin'])->name('admin-home');
-
-
 
 Route::get('/notifikasi', function () {
     $notifications = auth()->user()->notifications;
@@ -91,23 +84,23 @@ Route::middleware(['auth', 'role:dokter|admin'])->group(function () {
     Route::resource('obat', ObatController::class);
     Route::resource('resep', ResepController::class);
     Route::resource('rekam_medis', RekamMedisController::class);
-
-
 });
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
-
 Route::get('/detail', [App\Http\Controllers\detailController::class, 'index'])->name('detail');
 Route::get('/cek-rekam-medis/{kunjunganId}', [RekamMedisController::class, 'cekRekamMedis']);
 Route::put('/rekam-medis/update/{id}', [RekamMedisController::class, 'update'])->name('rekam_medis.update');
 Route::get('/riwayat', [App\Http\Controllers\riwayatController::class, 'index'])->name('riwayat');
 
+Route::get('/kunj-history', [KunjunganController::class, 'kunjhistory'])->name('kunjhistory');
+Route::get('/kunj-historyshow/{id}', [KunjunganController::class, 'kunjhistoryshow'])->name('kunjhistoryshow');
+Route::post('/kunjungan/update-status/{id}', [KunjunganController::class, 'updateStatus'])->name('kunjungan.updateStatus');
+Route::get('/pendingdetails/{id}' , [KunjunganController::class, 'pendingdetails'])->name('pendingdetails');
+Route::get('/pendingnota/{id}',[RekamMedisController::class, 'pendingnota'])->name('pendingnota');
 
-
+Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 // Halaman kedua (page2)

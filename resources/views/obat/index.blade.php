@@ -1,13 +1,13 @@
-@extends('layouts.argonsidebar')
+@extends('layouts.sidebar')
 <style></style>
 @section('side')
     <div class="m-3">
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center">
                 <h2 class="h2 f-bolder mr-4">Data Obat</h2>
                 <div class="btn"></div>
                 @if (auth()->user()->hasRole('admin'))
-                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                         Tambah Obat
                     </button>
                 @endif
@@ -100,8 +100,6 @@
                                 <div class="modal animate__fadeIn" id="myModalEdit{{ $obt->id }}">
                                     <div class="modal-content animate__animated animate__zoomIn">
                                         <h2 class="h2 f-bolder">Edit Obat</h2>
-                                        <button type="button" class="btn-close"
-                                            onclick="closeEditModal({{ $obt->id }})"></button>
                                         <form action="{{ route('obat.update', $obt->id) }}" method="POST">
                                             @csrf
                                             @method('put')
@@ -144,10 +142,10 @@
                                                     </script>
                                                 @enderror
                                             </div>
-                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                            <button type="button" class="btn-close red-hover"
                                                 onclick="closeEditModal({{ $obt->id }})">Batal</button>
                                             <button type="submit"
-                                                class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                                class="btn-add main-color-hover">Simpan</button>
                                         </form>
                                     </div>
                                 </div>
@@ -160,7 +158,6 @@
         <div class="modal animate__animated" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 <h2 class="h2 f-bolder">Tambah Obat</h2>
-                <button type="button" class="btn-close"></button>
                 <form action="{{ route('obat.store') }}" method="POST">
                     @csrf
                     <div class="my-2">
@@ -200,9 +197,9 @@
                         @enderror
                     </div>
 
-                    <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
+                    <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
                     <button type="submit" id="btnCloseAddModal"
-                        class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>
