@@ -170,10 +170,10 @@
                         </a>
                     </li>
                 @endif
-                @if (auth()->user()->hasRole('dokter'))
+                @if (auth()->user()->hasRole('admin'))
                     <li>
-                        <a href="{{ route('riwayat') }}"
-                            class="{{ request()->routeIs('riwayat') ? 'active' : '' }}">
+                        <a href="{{ route('history.index') }}"
+                            class="{{ request()->routeIs('history') ? 'active' : '' }}">
                             <i class="fa-solid fa-clock-rotate-left"></i>
                             <span>riwayat</span>
                         </a>
