@@ -441,8 +441,13 @@
             </p>
         </div>
         <div class="container">
+            <div class="text-end mt-4 mb-4">
+                <a href="{{ route('detail') }}" class="cta-btn">Lihat semua</a>
+            </div>
             @if ($kunjunganhistory->isEmpty())
-                <span>Tidak Ada Data</span>
+                <div class="container mb-5 mt-5">
+                    <h2 class="text-center">Tidak ada data</h2>
+                </div>
             @else
                 <div class="row gy-4">
                     @foreach ($kunjunganhistory->take(3) as $kunj)
@@ -466,6 +471,21 @@
                                     <i class="fas fa-calendar-alt"></i>
                                     <span class="label">Tanggal Kunjungan :</span>
                                     <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-user"></i>
+                                    <span class="label">Status :</span>
+                                    <span class="value">
+                                        @if ($kunj->status == 'DONE')
+                                            Selesai
+                                        @elseif($kunj->status == 'PENDING')
+                                            Menunggu Pembayaran
+                                        @elseif($kunj->status == 'UNDONE')
+                                            Belum Direspon Dokter
+                                        @else
+                                            Status Tidak Dikenal
+                                        @endif
+                                    </span>
                                 </p>
                                 @if ($kunj->rekamMedis->isNotEmpty())
                                     <div class="text-start mt-4">
@@ -557,12 +577,9 @@
                     @endforeach
                 </div>
             @endif
-            <div class="text-end mt-4">
-                <a href="{{ route('detail') }}" class="cta-btn">Lihat semua</a>
-            </div>
         </div>
     </section>
-        <section id="page-doctor" class="doctors section">
+    <section id="page-doctor" class="doctors section">
         <div id="section-title" class="section-title">
             <h2>
                 Tim Dokter Spesialis Kami

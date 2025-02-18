@@ -48,8 +48,9 @@ class HomeController extends Controller
             ->groupBy('kunjungan_id')
             ->get();
 
-        $kunjunganhistory = Kunjungan::with(['dokter', 'pasien', 'rekamMedis.obats', 'rekamMedis.peralatans', 'rekamMedis.images'])
+        $kunjunganhistory = Kunjungan::with(['dokter', 'pasien', 'rekamMedis.obats', 'rekamMedis.peralatans', 'rekamMedis.images', 'rekamMedis'])
             ->where('user_id', $user->id)
+            ->whereIn('status', ['UNDONE', 'PENDING'])
             ->get();
 
         $dokter = Dokter::all();
@@ -58,5 +59,19 @@ class HomeController extends Controller
         $jumlah = Kunjungan::where('user_id', $user->id)->count();
 
         return view('home', compact('jumlahPasien', 'diagnosaCount', 'pasien', 'kunjungan', 'jumlah', 'dokter', 'kunjunganhistory'));
+    }
+
+    public function details($id)
+    {
+        $user = auth()->user();
+        $kunjungan = Kunjungan::with(['pasien', 'dokter', 'rekamMedis' => function ($query) {
+            $query->with(['obats', 'images']);
+        }])->findOrFail($id);
+        // $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'peralatans'])->findOrFail($id);
+        // $totalHarga = $rekamMedis->obats->sum(function ($obat) {
+        //     return $obat->pivot->jumlah * $obat->harga;
+        // }) + $rekamMedis->peralatans->sum('harga');
+
+        return view('homedetails', compact('kunjungan', 'user'));
     }
 }

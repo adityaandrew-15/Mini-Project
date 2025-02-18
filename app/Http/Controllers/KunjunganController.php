@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dokter;
+use App\Models\History;
 use App\Models\Kunjungan;
 use App\Models\Obat;
 use App\Models\Pasien;
 use App\Models\Peralatan;
 use App\Models\RekamMedis;
 use App\Models\Resep;
-use App\Models\History;
 use App\Notifications\DokterAssignedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -420,44 +420,43 @@ class KunjunganController extends Controller
     }
 
     public function updateStatus($id)
-{
-    $kunjungan = Kunjungan::with(['rekamMedis.obats', 'rekamMedis.peralatans', 'pasien'])->find($id);
+    {
+        $kunjungan = Kunjungan::with(['rekamMedis.obats', 'rekamMedis.peralatans', 'pasien'])->find($id);
 
-    if (!$kunjungan || $kunjungan->status != 'PENDING') {
-        return back()->with('error', 'Kunjungan tidak valid atau sudah selesai');
+        if (!$kunjungan || $kunjungan->status != 'PENDING') {
+            return back()->with('error', 'Kunjungan tidak valid atau sudah selesai');
+        }
+
+        // Pastikan hanya mengambil satu rekam medis
+        $rekamMedis = $kunjungan->rekamMedis()->first();
+
+        if (!$rekamMedis) {
+            return back()->with('error', 'Rekam medis tidak ditemukan.');
+        }
+
+        // Hitung total pembayaran
+        $totalHargaObat = $rekamMedis->obats->sum(function ($obat) {
+            return $obat->pivot->jumlah * $obat->harga;
+        });
+
+        $totalHargaPeralatan = $rekamMedis->peralatans->sum('harga');
+        $totalPembayaran = $totalHargaObat + $totalHargaPeralatan;
+
+        // Simpan riwayat pembayaran ke tabel histories
+        History::create([
+            'type' => 'payment',
+            'action' => 'paid',
+            'reference_id' => $rekamMedis->id,
+            'details' => [
+                'patient_name' => $kunjungan->pasien->nama,
+                'total' => $totalPembayaran
+            ],
+        ]);
+
+        // Update status kunjungan menjadi DONE
+        $kunjungan->status = 'DONE';
+        $kunjungan->save();
+
+        return back()->with('success', 'Status kunjungan berhasil diperbarui dan riwayat pembayaran tersimpan.');
     }
-
-    // Pastikan hanya mengambil satu rekam medis
-    $rekamMedis = $kunjungan->rekamMedis()->first();
-
-    if (!$rekamMedis) {
-        return back()->with('error', 'Rekam medis tidak ditemukan.');
-    }
-
-    // Hitung total pembayaran
-    $totalHargaObat = $rekamMedis->obats->sum(function ($obat) {
-        return $obat->pivot->jumlah * $obat->harga;
-    });
-
-    $totalHargaPeralatan = $rekamMedis->peralatans->sum('harga');
-    $totalPembayaran = $totalHargaObat + $totalHargaPeralatan;
-
-    // Simpan riwayat pembayaran ke tabel histories
-    History::create([
-        'type' => 'payment',
-        'action' => 'paid',
-        'reference_id' => $rekamMedis->id,
-        'details' => [
-            'patient_name' => $kunjungan->pasien->nama,
-            'total' => $totalPembayaran
-        ],
-    ]);
-
-    // Update status kunjungan menjadi DONE
-    $kunjungan->status = 'DONE';
-    $kunjungan->save();
-
-    return back()->with('success', 'Status kunjungan berhasil diperbarui dan riwayat pembayaran tersimpan.');
-}
-
 }
