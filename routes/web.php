@@ -101,6 +101,7 @@ Route::get('/kunj-historyshow/{id}', [KunjunganController::class, 'kunjhistorysh
 Route::post('/kunjungan/update-status/{id}', [KunjunganController::class, 'updateStatus'])->name('kunjungan.updateStatus');
 Route::get('/pendingdetails/{id}' , [KunjunganController::class, 'pendingdetails'])->name('pendingdetails');
 Route::get('/pendingnota/{id}',[RekamMedisController::class, 'pendingnota'])->name('pendingnota');
+Route::get('/homedetails/{id}',[HomeController::class, 'details'])->name('homedetails');
 
 Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 // Halaman kedua (page2)

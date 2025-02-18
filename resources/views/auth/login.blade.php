@@ -1,604 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In & Sign Up</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Multi Background</title>
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome untuk Icon -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <style>
-        body {
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: white;
-            background-image: url('/asset/img/vector_bg.png');
-            background-repeat: no-repeat;
-            background-position: right top;
-            background-size: 400px;
+        * {
+            font-family: 'Open Sans', sans-serif;
+            box-sizing: border-box;
         }
 
-        .outer-container {
-            background-color: #ffffff;
-            /* Dark blue */
+        body {
+            margin: 0;
+            height: 100vh;
+            position: relative;
+            background-color: #f4f4f4;
+        }
 
+        body::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 20%;
+            height: 50vh;
+            background-image: url('/images/bg2left.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100vh;
+            background-image: url('/images/vector_bg.png');
+            background-size: cover;
+            background-position: center;
         }
 
         .container {
-            background-color: #ffffff;
-            /* Medium blue */
-            width: auto;
-            height: auto;
-            border-radius: 10px;
-            position: absolute;
-            display: flex;
-            top: 120px;
-            left: 400px;
-        }
-
-        /* Fade-in animation */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        */ .wrapper {
-            width: 400px;
-            background: #fff;
-            padding: 30px;
-            border-radius: px;
-            box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .wrapper .title-text {
-            display: flex;
-            width: 200%;
-        }
-
-        .wrapper .title {
-            width: 50%;
-            font-size: 35px;
-            font-weight: 600;
-            text-align: center;
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .wrapper .slide-controls {
             position: relative;
-            display: flex;
-            height: 50px;
-            width: 100%;
-            margin: 15px 0 10px 0;
-            justify-content: space-between;
-            border-radius: 5px;
-            right: 30px;
-        }
-
-        .slide-controls .slide {
-            height: 100%;
-            width: 100%;
-            color: #000000;
-            font-size: 18px;
-            text-align: center;
-            line-height: 48px;
-            cursor: pointer;
             z-index: 1;
-            transition: all 0.6s ease;
-            font-size: 25px;
+            text-align: center;
+            padding: 50px;
+            color: white;
         }
 
-        .slide-controls label.signup {
-
-            color: #000;
+        .header {
+            color: #103F91;
+            font-size: 3rem;
+            font-weight: 900;
         }
 
-        .slide-controls .slider-tab {
-            position: absolute;
-            height: 100%;
-            width: 50%;
-            left: 0;
-            z-index: 0;
-            border-radius: 5px;
-
+        .slider {
+            color: #333333;
+            display: flex;
+            justify-content: space-evenly;
+            width: 50%
         }
 
-        input[type="radio"] {
-            display: none;
-        }
-
-        #signup:checked~.slider-tab {
-            left: 50%;
-        }
-
-        #signup:checked~label.signup {
-            cursor: default;
-            user-select: none;
-        }
-
-        #signup:checked~label.login {
-            color: #000;
-
-        }
-
-        #login:checked~label.signup {
-            color: #000;
-        }
-
-        #login:checked~label.login {
+        .slider .active {
+            color: #103F91;
             margin-bottom: 10px;
-            cursor: default;
-            user-select: none;
-        }
-
-        .signup:hover {
-            text-decoration: underline;
-            text-underline-offset: 10px;
-            color: #c689cf;
-
-        }
-
-        .login:hover {
-            text-decoration: underline;
-            text-underline-offset: 10px;
-            color: #c689cf;
+            border-bottom: 2px solid #103F91;
         }
 
         .form-container {
-            position: relative;
-            overflow: hidden;
-            transition: height 0.5s ease-in-out;
+            display: flex;
         }
 
-        .form-inner {
+        .content-left,
+        .content-right {
+            width: 50%;
             display: flex;
+            justify-content: center;
+            align-items: center;
             flex-direction: column;
         }
 
-        form {
-            display: none;
+        .login-form,
+        .reg-form,
+        .input-login,
+        .input-reg {
+            display: flex;
+            flex-direction: column;
+            width: 70%;
+            align-items: center;
+            justify-content: center;
         }
 
-        form.active {
-            display: block;
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin: 10px 0 10px 0;
         }
 
-        .form-container .form-inner form {
-            width: 50%;
-
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        .input-group input {
+            height: 50px;
+            width: 100%;
+            border-radius: 1rem;
+            outline: none;
+            border: 1px solid #333333;
+            padding-left: 40px;
+            font-size: 16px;
+            transition: border 0.3s ease-in-out;
         }
 
-        .form-inner form .field {
-            height: 40px;
-            width: 75%;
+        .input-group input:focus {
+            border: 2px solid #103F91;
+        }
+
+        /* Label animasi */
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 40px;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 16px;
+            transition: 0.3s;
+            pointer-events: none;
+        }
+
+        .input-group input:focus+label,
+        .input-group input:not(:placeholder-shown)+label {
+            top: 10px;
+            font-size: 12px;
+            color: #103F91;
+            background: white;
+            padding: 0 5px;
+        }
+
+        /* Icon dalam input */
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #666;
+        }
+
+        .footer-login,
+        .footer-reg {
+            display: flex;
+            width: 70%;
+            margin-top: 20px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-login a,
+        .footer-reg a {
+            font-size: 20px;
+            text-decoration: none;
+            color: #103F91;
+            font-weight: 600;
+        }
+
+        .button-login,
+        .button-reg {
+            background-color: #103F91;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.2em;
+            cursor: pointer;
+            border-radius: 30px;
+            font-weight: 900;
             margin-top: 10px;
         }
 
-        .form-inner form .field input {
-            height: 100%;
-            width: 300px;
-            outline: none;
-            padding-left: 15px;
-            border-radius: 15px;
-            border: 1px solid lightgrey;
-            border-bottom-width: 2px;
-            font-size: 17px;
-            transition: all 0.3s ease;
+        /* reg */
+
+        /* Sembunyikan form register secara default */
+        .reg-form {
+            display: none;
         }
 
-        .form-inner form .field input:focus {
-            border-color: #fc83bb;
-            /* box-shadow: inset 0 0 3px #fb6aae; */
-        }
-
-        .form-inner form .field input::placeholder {
-            color: #000000;
-            transition: all 0.3s ease;
-        }
-
-        form .field input:focus::placeholder {
-            color: #000000;
-        }
-
-        .form-inner form .pass-link {
-            margin-top: 5px;
-        }
-
-        .form-inner form .signup-link {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .form-inner form .pass-link a,
-        .form-inner form .signup-link a {
-            color: rgb(160, 160, 229);
-            text-decoration: none;
-        }
-
-        .form-inner form .pass-link a:hover,
-        .form-inner form .signup-link a:hover {
-            text-decoration: underline;
-        }
-
-        form .btn {
-            height: 50px;
-            width: 100%;
-            border-radius: 20px;
-
-        }
-
-        .slide-btn {
-            margin-left: 70px;
-
-        }
-
-        form .btn .btn-layer {
-            height: 100%;
-            width: 300%;
-            position: absolute;
-            left: -100%;
-            background-color: rgb(160, 160, 229);
-            border-radius: 5px;
-            transition: all 0.4s ease;
-            ;
-        }
-
-        form .btn:hover .btn-layer {
-            left: 0;
-        }
-
-        .field.btn input[type="submit"] {
-            margin-left: -10px;
-            background: #4e73df;
-            color: #fff;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        /* Lottie animation at the top */
-        dotlottie-player {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 200px;
-        }
-
-        .header-text {
-            color: rgb(100, 100, 192);
-            display: flex;
-            justify-self: center;
-
-        }
-
-        .lotie {
-            position: absolute;
-            top: 25%;
-            left: 75%;
-            z-index: 4;
-        }
-
-
-        .btn-no-color {
-            background-color: transparent !important;
-            border-color: transparent !important;
-            color: inherit !important;
-            transition: background-color 0.5s ease, border-color 0.5s ease, color 0.5s ease;
-
-        }
-
-        #specialty-field.hidden {
-            height: 0;
-            margin: 0;
-            overflow: hidden;
-            opacity: 0;
-        }
-
-        #nohp-field.hidden {
-            height: 0;
-            margin: 0;
-            overflow: hidden;
-            opacity: 0;
-        }
-
-        .gambar img {
+        /* Tambahkan animasi transisi */
+        .form-container {
             position: relative;
-            z-index: 10;
-            top: 240px;
+            overflow: hidden;
+            width: 100%;
         }
 
-        .field select {
-            width: 300px;
-            border-radius: 15px;
-            /* Atur radius sesuai keinginan */
-            padding: 8px;
-            /* Tambahkan padding agar lebih rapi */
-            border: 1px solid #ccc;
-            /* Tambahkan border */
-            outline: none;
-            /* Hilangkan outline saat focus */
-            appearance: none;
-            /* Menghilangkan gaya default browser */
+        .login-form,
+        .reg-form {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        /* Style untuk slider aktif */
+        .slider h2 {
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .slider h2.active {
+            color: #103F91;
+            border-bottom: 2px solid #103F91;
         }
     </style>
-    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
 </head>
 
 <body>
-    <div class="header-text">
-        <h1 style="font-family: open sans; font-weight: bold">KLINIK</h1>
-    </div>
-    <div class="login-body">
-        <div class="gambar">
-            <img src="{{ asset('asset/img/titik.png') }}" alt="">
-        </div>
-        <div class="container">
-            <div class="wrapper">
-                <div class="form-container">
-                    <div class="slide-controls">
-                        <input type="radio" name="slide" id="login" checked>
-                        <input type="radio" name="slide" id="signup">
-                        <label for="login" class="slide login">Login</label>
-                        <label for="signup" class="slide signup">Register</label>
-                        <div class="slider-tab"></div>
-                    </div>
+    <div class="container">
+        <h2 class="header">ALLCARE</h2>
 
-                    <div class="form-inner">
-                        <!-- Form Login -->
-                        <form action="{{ route('login') }}" class="login active" method="POST">
-                            @csrf
-                            <div class="field">
-                                <input type="text" placeholder="Email Address" name="email" required>
-                            </div>
-                            <div class="field">
-                                <input type="password" placeholder="Password" name="password" required>
-                            </div>
-                            <div class="field btn">
-                                <input type="submit" value="Login">
-                            </div>
-                            <div class="signup-link" style="position: relative; left: 50%;">
-                                Not a member? <a href="/register">Signup now</a>
-                            </div>
-                        </form>
-
-                        <!-- Form Register -->
-                        <form action="{{ route('register') }}" method="POST"
-                            class="{{ $errors->any() ? 'active' : '' }}">
-                            @csrf
-                            @if ($errors->any())
-                                <div class="alert alert-danger" style="display: none;">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                            <div class="field">
-                                <input type="text" placeholder="Name" name="name" required
-                                    value="{{ old('name') }}">
-                            </div>
-                            <div class="field">
-                                <input type="email" placeholder="Email Address" name="email" required
-                                    value="{{ old('email') }}">
-                            </div>
-
-                            <div class="field" id="nohp-field">
-                                <input type="text" id="nohp" placeholder="Phone Number" name="phone" required
-                                    value="{{ old('phone') }}">
-                                @error('phone')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="field">
-                                <input type="password" placeholder="Password" name="password" required
-                                    value="{{ old('password') }}">
-                            </div>
-                            <div class="field">
-                                <input type="password" placeholder="Confirm Password" name="password_confirmation"
-                                    required value="{{ old('spesialis') }}">
-                            </div>
-                            <div class="field btn">
-                                <input type="submit" value="Register">
-                            </div>
-                        </form>
-                    </div>
+        <div class="form-container">
+            <div class="content-left">
+                <div class="slider">
+                    <h2 class="active">Login</h2>
+                    <h2>Register</h2>
                 </div>
+
+                <form action="{{ route('login') }}" class="login-form" method="POST">
+                    @csrf
+                    <div class="input-login">
+                        <!-- Input Email -->
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input name="email" type="email" id="email" placeholder=" " required>
+                            <label for="email">Email</label>
+                        </div>
+
+                        <!-- Input Password -->
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input name="password" type="password" id="password" placeholder=" " required>
+                            <label for="password">Password</label>
+                        </div>
+                    </div>
+
+                    <div class="footer-login">
+                        <a href="">Don't have an account?</a>
+                        <button type="submit" class="button-login">Login</button>
+                    </div>
+                </form>
+
+                <form action="{{ route('register') }}" method="POST" class="reg-form">
+                    @csrf
+                    <div class="input-reg">
+                        <!-- Input Email -->
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input name="name" type="text" id="name" placeholder=" " required>
+                            <label for="name">Nama Lengkap</label>
+                        </div>
+
+                        <!-- Input Password -->
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input name="email" type="email" id="email" placeholder=" " required>
+                            <label for="email">Email</label>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input name="phone" type="number" id="phone" placeholder=" " required>
+                            <label for="phone">Nomor Telepon</label>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input name="password" type="password" id="password" placeholder=" " required>
+                            <label for="password">Password</label>
+                        </div>
+
+                        <!-- Input Password -->
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input name="password_confirmation" type="password" id="confirmpassword" placeholder=" " required>
+                            <label for="confirmpassword">Confirm Password</label>
+                        </div>
+                    </div>
+
+                    <div class="footer-reg">
+                        <a href="#">have an account?</a>
+                        <button type="submit" class="button-reg">Register</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="content-right">
+                <img src="{{ asset('images/img_vector.png') }}" alt="">
             </div>
         </div>
     </div>
-
-    <div class="lotie">
-        <dotlottie-player src="https://lottie.host/621f36a4-85ad-48cc-aa5f-acbae0c13265/iO2nGuesOg.lottie"
-            background="transparent" speed="1" style="width: 300px; height: 300px" loop
-            autoplay></dotlottie-player>
-    </div>
-
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        let currentlyVisible = ".form-log-in";
-        let currentlyHidden = ".form-sign-up";
-
-        $(".info-item .btn").click(function() {
-            $(".form-container").toggleClass("active");
-            $(currentlyVisible).fadeToggle(750, function() {
-                $(currentlyHidden).fadeToggle();
-                let temp = currentlyVisible;
-                currentlyVisible = currentlyHidden;
-                currentlyHidden = temp;
-            });
-        });
-    </script>
-    <script>
-        @if (session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Registration Failed',
-                text: "{{ session('error') }}",
-                confirmButtonText: 'OK'
-            });
-        @endif
-
-        @if ($errors->any())
-            Swal.fire({
-                icon: 'error',
-                title: 'Validation Errors',
-                html: "<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>",
-                confirmButtonText: 'OK'
-            });
-        @endif
-
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: "{{ session('success') }}",
-                confirmButtonText: 'OK'
-            });
-        @endif
-    </script>
-    <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const errorMessages = @json($errors->all());
-            const formContainer = document.querySelector("container");
-            const loginForm = document.querySelector(".form-inner .login");
-            const signupForm = document.querySelector(".form-inner form:nth-child(2)");
-            const loginRadio = document.getElementById("login");
-            const signupRadio = document.getElementById("signup");
+            const loginForm = document.querySelector(".login-form");
+            const regForm = document.querySelector(".reg-form");
+            const sliderOptions = document.querySelectorAll(".slider h2");
 
-            // Fungsi untuk menyesuaikan tinggi container
-            function adjustHeight(form) {
-                formContainer.style.height = `${form.offsetHeight}px`;
-            }
+            sliderOptions.forEach((option, index) => {
+                option.addEventListener("click", function() {
+                    sliderOptions.forEach((item) => item.classList.remove("active"));
+                    this.classList.add("active");
 
-            if (errorMessages.length > 0) {
-                // Tampilkan SweetAlert dengan pesan kesalahan
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Kesalahan',
-                    html: `<ul>${errorMessages.map(error => `<li>${error}</li>`).join('')}</ul>`,
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    // Setelah pengguna menekan OK, sembunyikan formulir login dan tampilkan formulir pendaftaran
-                    const loginForm = document.querySelector(".form-inner .login");
-                    const signupForm = document.querySelector(".form-inner form:nth-child(2)");
-
-                    loginForm.classList.remove("active"); // Sembunyikan formulir login
-                    signupForm.classList.add("active"); // Tampilkan formulir pendaftaran
+                    if (index === 0) {
+                        loginForm.style.display = "flex";
+                        regForm.style.display = "none";
+                    } else {
+                        loginForm.style.display = "none";
+                        regForm.style.display = "flex";
+                    }
                 });
-            }
-
-
-            // Event listener untuk mengubah form saat radio button diklik
-            loginRadio.addEventListener("change", function() {
-                loginForm.classList.add("active");
-                signupForm.classList.remove("active");
-                adjustHeight(loginForm);
             });
-
-            signupRadio.addEventListener("change", function() {
-                signupForm.classList.add("active");
-                loginForm.classList.remove("active");
-                adjustHeight(signupForm);
-            });
-
-            // Set tinggi awal sesuai form login
-            adjustHeight(loginForm);
         });
     </script>
-    @if ($errors->any())
-        <script>
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: '{{ $errors->first() }}',
-                confirmButtonText: 'Tutup'
-            });
-        </script>
-    @endif
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const roleSelect = document.getElementById("role-select"); // Dropdown select
-            const specialtyField = document.getElementById("specialty-field"); // Div Specialty
-            const phoneField = document.getElementById("phone-field"); // Div Specialty
-
-
-            // Tambahkan event listener untuk mendeteksi perubahan di select
-            roleSelect.addEventListener("change", function() {
-                if (roleSelect.value === "2") { // Jika "Dokter" dipilih
-                    specialtyField.style.display = "block"; // Tampilkan input Specialty
-                    phoneField.style.display = "block"; // Tampilkan input phone
-                    specialtyField.querySelector("input").setAttribute("required", "true");
-                } else { // Jika "Pasien" dipilih
-                    specialtyField.style.display = "none"; // Sembunyikan input Specialty
-                    specialtyField.querySelector("input").removeAttribute("required");
-                    specialtyField.querySelector("input").value = ""; // Bersihkan nilai input
-                }
-            });
-
-            // Default: Sembunyikan input Specialty saat halaman dimuat
-            specialtyField.style.display = "none";
-        });
-    </script>
-    <script>
-        @if (session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Registration Failed',
-                text: "{{ session('error') }}",
-                confirmButtonText: 'OK'
-            }).then(() => {
-                // Tampilkan form login dan sembunyikan form register
-                document.querySelector('.form-inner .login').classList.add('active');
-                document.querySelector('.form-inner form:nth-child(2)').classList.remove('active');
-            });
-        @endif
-
-        @if ($errors->any())
-            Swal.fire({
-                icon: 'error',
-                title: 'Validation Errors',
-                html: "<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>",
-                confirmButtonText: 'OK'
-            }).then(() => {
-                // Tampilkan form login dan sembunyikan form register
-                document.querySelector('.form-inner .login').classList.add('active');
-                document.querySelector('.form-inner form:nth-child(2)').classList.remove('active');
-            });
-        @endif
-
-        @if (session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: "{{ session('success') }}",
-                confirmButtonText: 'OK'
-            });
-        @endif
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

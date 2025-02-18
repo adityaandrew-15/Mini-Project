@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\History;
 use App\Models\Kunjungan;
 use App\Models\Obat;
 use App\Models\Pasien;
@@ -75,66 +76,109 @@ class RekamMedisController extends Controller
             'obat_id.*' => 'exists:obats,id',
             'jumlah_obat.*' => 'required|integer|min:1',
             'peralatan_id.*' => 'exists:peralatans,id',
-            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:10240',  // Validasi gambar (maks 10MB)
+            'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:10240',
         ]);
 
-        $id_dokter = auth()->user()->id;  // Misalnya menggunakan Auth untuk mendapatkan user yang login
+        $id_dokter = auth()->user()->id;  // Mendapatkan ID dokter yang login
 
-        // Get the kunjungan record
+        // Ambil data kunjungan
         $kunjungan = Kunjungan::findOrFail($validated['kunjungan_id']);
 
-        // Create the medical record
+        // Buat rekam medis
         $rekamMedis = RekamMedis::create([
             'kunjungan_id' => $validated['kunjungan_id'],
-            'pasien_id' => $kunjungan->pasien_id,  // Menambahkan pasien_id
+            'pasien_id' => $kunjungan->pasien_id,
             'diagnosa' => $validated['diagnosa'],
             'tindakan' => $validated['tindakan'],
         ]);
 
-        // Save the prescription
+        // Simpan resep
         Resep::create([
             'kunjungan_id' => $validated['kunjungan_id'],
             'rekam_medis_id' => $rekamMedis->id,
             'deskripsi' => $validated['deskripsi'],
         ]);
 
-        // Handle the medication and quantities
+        // Simpan informasi obat yang berkurang untuk riwayat
+        $obatHistory = [];
+
         foreach ($validated['obat_id'] as $index => $obatId) {
             $obat = Obat::findOrFail($obatId);
             $jumlah = $validated['jumlah_obat'][$index];
 
             if ($obat->jumlah >= $jumlah) {
-                $obat->decrement('jumlah', $jumlah);  // Reduce stock
-                $rekamMedis->obats()->attach($obat->id, ['jumlah' => $jumlah]);  // Save to pivot table
+                $obat->decrement('jumlah', $jumlah);
+                $rekamMedis->obats()->attach($obat->id, ['jumlah' => $jumlah]);
+
+                // Simpan data obat yang berkurang untuk history
+                $obatHistory[] = [
+                    'nama_obat' => $obat->nama,
+                    'jumlah' => $jumlah,
+                    'stok_tersisa' => $obat->jumlah
+                ];
             } else {
-                return back()->with('error', 'Stok obat tidak mencukupi untuk ' . $obat->obat);
+                return back()->with('error', 'Stok obat tidak mencukupi untuk ' . $obat->nama);
             }
         }
 
-        // Update kunjungan status
+        // Update status kunjungan menjadi PENDING
         $kunjungan->status = 'PENDING';
         $kunjungan->save();
 
-        // Handle equipment if any
+        // Simpan informasi peralatan yang digunakan untuk riwayat
+        $peralatanHistory = [];
+
         if (!empty($validated['peralatan_id'])) {
+            foreach ($validated['peralatan_id'] as $peralatanId) {
+                $peralatan = Peralatan::findOrFail($peralatanId);
+
+                // Simpan data peralatan yang digunakan untuk history
+                $peralatanHistory[] = [
+                    'nama_peralatan' => $peralatan->nama,
+                    'harga' => $peralatan->harga
+                ];
+            }
+
+            // Simpan peralatan ke rekam medis
             $rekamMedis->peralatans()->sync($validated['peralatan_id']);
         }
 
-        // Handle the image uploads
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                // Store the image in the 'public/rekam_medis' directory
-                $path = $image->store('rekam_medis', 'public');
+        // Simpan riwayat perubahan status ke PENDING, pengurangan obat, dan penggunaan peralatan
+        History::create([
+            'type' => 'medication',
+            'action' => 'prescribed',
+            'reference_id' => $rekamMedis->id,
+            'details' => [
+                'patient_name' => $kunjungan->pasien->nama,
+                'status' => 'PENDING',
+                'obats' => $obatHistory,
+                'peralatans' => $peralatanHistory,  // Tambahkan peralatan ke dalam history
+            ],
+        ]);
 
-                // Save the image path to the RekamMedisImages table
+        // Simpan riwayat perubahan status ke PENDING dan pengurangan obat
+        History::create([
+            'type' => 'medication',
+            'action' => 'prescribed',
+            'reference_id' => $rekamMedis->id,
+            'details' => [
+                'patient_name' => $kunjungan->pasien->nama,
+                'status' => 'PENDING',
+                'obats' => $obatHistory,  // Simpan list obat yang dikurangi
+            ],
+        ]);
+
+        // Simpan gambar jika ada
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('rekam_medis', 'public');
                 $rekamMedis->images()->create([
-                    'image_path' => $path  // Save the path to the image_path column
+                    'image_path' => $path
                 ]);
             }
         }
 
-        return redirect()->route('kunjungan.index')->with('success', 'Rekam medis berhasil ditambahkan.');
+        return redirect()->route('kunjungan.index')->with('success', 'Rekam medis berhasil ditambahkan dan status diperbarui.');
     }
 
     public function edit(RekamMedis $rekamMedis)

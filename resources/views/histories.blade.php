@@ -42,27 +42,50 @@
                                         @if ($history->type == 'medicine')
                                             @if ($history->action == 'added')
                                                 <strong>{{ $history->details['name'] }}</strong><br>
-                                                Quantity: {{ $history->details['quantity'] }}<br>
-                                                Price: {{ number_format($history->details['price'], 2) }}
+                                                Quantity : + {{ $history->details['quantity'] }}<br>
+                                                Price : {{ number_format($history->details['price'], 2) }}
                                             @elseif($history->action == 'removed')
                                                 <strong>{{ $history->details['name'] }}</strong><br>
-                                                Quantity: {{ $history->details['quantity'] }}<br>
-                                                Remaining Stock: {{ $history->details['remaining_stock'] }}
+                                                Quantity : {{ $history->details['quantity'] }}<br>
+                                                Remaining Stock : {{ $history->details['remaining_stock'] }}
                                             @endif
                                         @elseif($history->type == 'equipment')
                                             @if ($history->action == 'added')
                                                 <strong>{{ $history->details['name'] }}</strong><br>
-                                                Price: {{ number_format($history->details['price'], 2) }}
+                                                Price : {{ number_format($history->details['price'], 2) }}
                                             @elseif($history->action == 'removed')
                                                 <strong>{{ $history->details['name'] }}</strong><br>
-                                                Price: {{ number_format($history->details['price'], 2) }}
+                                                Price : {{ number_format($history->details['price'], 2) }}
                                             @elseif($history->action == 'used')
                                                 <strong>{{ $history->details['name'] }}</strong><br>
-                                                Price: {{ number_format($history->details['price'], 2) }}
+                                                Price : {{ number_format($history->details['price'], 2) }}
                                             @endif
                                         @elseif($history->type == 'payment')
                                             <strong>{{ $history->details['patient_name'] }}</strong><br>
-                                            Total Transaction: {{ number_format($history->details['total'], 2) }}
+                                            Total Transaction : Rp.{{ number_format($history->details['total'], 2) }}
+                                        @elseif($history->type == 'medication')
+                                            @if ($history->action == 'prescribed')
+                                                <strong>Medication Prescribed</strong><br>
+                                                <strong>Patient:</strong> {{ $history->details['patient_name'] }}<br>
+                                                <strong>Status:</strong> {{ $history->details['status'] }}<br><br>
+
+                                                <!-- Loop untuk obat yang berkurang -->
+                                                <strong>Medicines Used:</strong><br>
+                                                @foreach ($history->details['obats'] as $obat)
+                                                    <strong>{{ $obat['nama_obat'] }}</strong><br>
+                                                    Quantity: -{{ $obat['jumlah'] }}<br>
+                                                    Remaining Stock: {{ $obat['stok_tersisa'] }}<br><br>
+                                                @endforeach
+
+                                                <!-- Loop untuk peralatan yang digunakan -->
+                                                @if (!empty($history->details['peralatans']))
+                                                    <strong>Equipment Used:</strong><br>
+                                                    @foreach ($history->details['peralatans'] as $peralatan)
+                                                        <strong>{{ $peralatan['nama_peralatan'] }}</strong><br>
+                                                        Price: {{ number_format($peralatan['harga'], 2) }}<br><br>
+                                                    @endforeach
+                                                @endif
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

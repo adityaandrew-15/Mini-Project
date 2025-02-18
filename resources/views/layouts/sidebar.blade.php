@@ -11,6 +11,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+    {{-- font awesome --}}
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-solid.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-regular.css">
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css">
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/duotone.css" />
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/brands.css" />
+
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -22,7 +35,7 @@
     <link rel="stylesheet" href="{{ asset('css/globaladmin.css') }}">
     {{-- <link href="Medicio/assets/css/main.css" rel="stylesheet"> --}}
 
-    {{-- bootrapp additional--}}
+    {{-- bootrapp additional --}}
     {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
 
     <!-- Vendor CSS Files -->
@@ -67,74 +80,79 @@
         });
     </script>
     <div class="app-container">
-        <div class="sidebar" id="sidebar">
-            <div onclick="toggleSidebar()" class="btn-toggle-sidebar">
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
-            <ul>
-                <li>
+        @if (auth()->user()->hasRole(['admin', 'dokter']))
+            <div class="sidebar" id="sidebar">
+                <div onclick="toggleSidebar()" class="btn-toggle-sidebar">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
+                <ul>
+                    <li>
+                        @if (auth()->user()->hasRole('admin'))
+                            <a href="{{ route('admin-home') }}">
+                            @elseif (auth()->user()->hasRole('dokter'))
+                                <a href="{{ route('home-dokter') }}">
+                        @endif
+                        <img src="{{ asset('asset/img/Logo.png') }}" alt="">
+                        <span style="font-size: 20px;">ALLCARE</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <div class="gap-li"></div>
+                    </li>
                     @if (auth()->user()->hasRole('admin'))
-                        <a href="{{ route('admin-home') }}">
-                        @elseif (auth()->user()->hasRole('dokter'))
-                            <a href="{{ route('home-dokter') }}">
+                        <li>
+                            <a href="{{ route('admin-home') }}"
+                                class="{{ request()->routeIs('admin-home') ? 'active' : '' }}">
+                                <i class="fa-brands fa-squarespace"></i>
+                                {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
+                                <span>Dashboard</span>
+                            </a>
                     @endif
-                    <img src="{{ asset('asset/img/Logo.png') }}" alt="">
-                    <span style="font-size: 20px;">ALLCARE</span>
-                    </a>
-
-                </li>
-                <li>
-                    <div class="gap-li"></div>
-                </li>
-                @if (auth()->user()->hasRole('admin'))
+                    </li>
                     <li>
-                        <a href="{{ route('admin-home') }}"
-                            class="{{ request()->routeIs('admin-home') ? 'active' : '' }}">
-                            <i class="fa-brands fa-squarespace"></i>
-                            {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
-                            <span>Dashboard</span>
-                        </a>
-                @endif
-                </li>
-                <li>
-                    @if (auth()->user()->hasRole('dokter'))
-                        <a href="{{ route('home-dokter') }}"
-                            class="{{ request()->routeIs('home-dokter') ? 'active' : '' }}">
-                            <i class="fa-brands fa-squarespace"></i>
-                            {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
-                            <span>Dashboard</span>
-                        </a>
+                        @if (auth()->user()->hasRole('dokter'))
+                            <a href="{{ route('home-dokter') }}"
+                                class="{{ request()->routeIs('home-dokter') ? 'active' : '' }}">
+                                <i class="fa-brands fa-squarespace"></i>
+                                {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
+                                <span>Dashboard</span>
+                            </a>
+                        @endif
+                    </li>
+
+
+                    @if (auth()->user()->hasRole('admin'))
+                        <li>
+                            <a href="{{ route('dokter.index') }}"
+                                class="{{ request()->routeIs('dokter.index') ? 'active' : '' }}">
+                                {{-- <i class="fa fa-user-md"></i> --}}
+                                <i class="fa-regular fa-user-doctor"></i>
+                                <span>Dokter</span>
+                            </a>
+                        </li>
                     @endif
-                </li>
+                    @if (auth()->user()->hasRole('admin'))
+                        <li>
+                            <a href="{{ route('obat.index') }}"
+                                class="{{ request()->routeIs('obat.index') ? 'active' : '' }}">
+                                {{-- <i class="fa fa-pills"></i> --}}
+                                {{-- <i class="fa-light fa-capsules"></i> --}}
+                                <i class="fa-regular fa-capsules"></i>
+                                <span>Obat</span>
+                            </a>
+                        </li>
+                    @endif
 
-
-                @if (auth()->user()->hasRole('admin'))
                     <li>
-                        <a href="{{ route('dokter.index') }}"
-                            class="{{ request()->routeIs('dokter.index') ? 'active' : '' }}">
-                            <i class="fa fa-user-md"></i>
-                            <span>Dokter</span>
+                        <a href="{{ route('pasien.index') }}"
+                            class="{{ request()->routeIs('pasien.index') ? 'active' : '' }}">
+                            {{-- <i class="fa fa-users"></i> --}}
+                            <i class="fa-regular fa-users-medical"></i>
+                            <span>Pasien</span>
                         </a>
                     </li>
-                @endif
-                @if (auth()->user()->hasRole('admin'))
-                    <li>
-                        <a href="{{ route('obat.index') }}"
-                            class="{{ request()->routeIs('obat.index') ? 'active' : '' }}">
-                            <i class="fa fa-pills"></i>
-                            <span>Obat</span>
-                        </a>
-                    </li>
-                @endif
-
-                <li>
-                    <a href="{{ route('pasien.index') }}"
-                        class="{{ request()->routeIs('pasien.index') ? 'active' : '' }}">
-                        <i class="fa fa-users"></i>
-                        <span>Pasien</span>
-                    </a>
-                </li>
-                {{-- <li>
+                    {{-- <li>
                     <a href="{{ route('resep.index') }}"
                         class="{{ request()->routeIs('resep.index') ? 'active' : '' }}">
                         <i class="fa fa-notes-medical"></i>
@@ -142,93 +160,98 @@
                     </a>
                 </li> --}}
 
-                <li>
-                    <a href="{{ route('kunjungan.index') }}"
-                        class="{{ request()->routeIs('kunjungan.index') ? 'active' : '' }}">
-                        <i class="fa fa-calendar-check"></i>
-                        <span>Kunjungan</span>
-                    </a>
-                </li>
-
-                <li class="sparepart" style="margin-top: 2rem; margin-bottom: 2rem;">
-                </li>
-
-                <li>
-                    <a href="{{ route('jadwal_praktek.index') }}"
-                        class="{{ request()->routeIs('jadwal_praktek.index') ? 'active' : '' }}">
-                        <i class="fa fa-calendar-day"></i>
-                        <span>Jadwal Praktek</span>
-                    </a>
-                </li>
-
-                @if (auth()->user()->hasRole('admin'))
                     <li>
-                        <a href="{{ route('peralatan.index') }}"
-                            class="{{ request()->routeIs('peralatan.index') ? 'active' : '' }}">
-                            <i class="bi bi-tools"></i>
-                            <span>peralatan</span>
+                        <a href="{{ route('kunjungan.index') }}"
+                            class="{{ request()->routeIs('kunjungan.index') ? 'active' : '' }}">
+                            {{-- <i class="fa fa-calendar-check"></i> --}}
+                            <i class="fa-regular fa-notes-medical"></i>
+                            <span>Kunjungan</span>
                         </a>
                     </li>
-                @endif
-                @if (auth()->user()->hasRole('admin'))
+
+                    <li class="sparepart" style="margin-top: 2rem; margin-bottom: 2rem;">
+                    </li>
+
                     <li>
-                        <a href="{{ route('history.index') }}"
-                            class="{{ request()->routeIs('history') ? 'active' : '' }}">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                            <span>riwayat</span>
+                        <a href="{{ route('jadwal_praktek.index') }}"
+                            class="{{ request()->routeIs('jadwal_praktek.index') ? 'active' : '' }}">
+                            {{-- <i class="fa fa-calendar-day"></i> --}}
+                            <i class="fa-regular fa-calendars"></i>
+                            <span>Jadwal Praktek</span>
                         </a>
                     </li>
-                @endif
-                <li>
-                    <a href="#" class="q-btn" 
-                        onclick="confirmLogout(event)">
-                        <i class="fa fa-sign-out-alt"></i>
-                        <span>Keluar</span>
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </li>
 
-                <script>
-                    function confirmLogout(event) {
-                        event.preventDefault();
+                    @if (auth()->user()->hasRole('admin'))
+                        <li>
+                            <a href="{{ route('peralatan.index') }}"
+                                class="{{ request()->routeIs('peralatan.index') ? 'active' : '' }}">
+                                {{-- <i class="bi bi-tools"></i> --}}
+                                <i class="fa-regular fa-screwdriver-wrench"></i>
+                                <span>peralatan</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->hasRole('admin'))
+                        <li>
+                            <a href="{{ route('history.index') }}"
+                                class="{{ request()->routeIs('history') ? 'active' : '' }}">
+                                {{-- <i class="fa-solid fa-clock-rotate-left"></i> --}}
+                                {{-- <i class="fa-regular fa-clock-rotate-left"></i> --}}
+                                <i class="fa-regular fa-clock-rotate-left"></i>
+                                <span>riwayat</span>
+                            </a>
+                        </li>
+                    @endif
+                    <li>
+                        <a href="#" class="q-btn" onclick="confirmLogout(event)">
+                            <i class="fa fa-sign-out-alt"></i>
+                            <span>Keluar</span>
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </li>
 
-                        Swal.fire({
-                            title: 'Apakah Anda yakin?',
-                            text: "Anda akan keluar dari akun ini.",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Ya, keluar!',
-                            cancelButtonText: 'Batal'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                document.getElementById('logout-form').submit();
-                            }
-                        });
-                    }
-                </script>
+                    <script>
+                        function confirmLogout(event) {
+                            event.preventDefault();
 
-            </ul>
-            <ul class="profile-sidebar">
-                <li>
-                    <a href="#">
-                        <img class="photo-profile-sidebar" src="{{ asset('asset/img/dokter.png') }}" alt="">
-                        <span>
-                            <h4>Welcome</h4>
+                            Swal.fire({
+                                title: 'Apakah Anda yakin?',
+                                text: "Anda akan keluar dari akun ini.",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Ya, keluar!',
+                                cancelButtonText: 'Batal'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById('logout-form').submit();
+                                }
+                            });
+                        }
+                    </script>
+
+                </ul>
+                <ul class="profile-sidebar">
+                    <li>
+                        <a href="#">
+                            <img class="photo-profile-sidebar" src="{{ asset('asset/img/dokter.png') }}"
+                                alt="">
+                            <span>
+                                <h4>Welcome</h4>
                                 @if (auth()->user()->hasRole('admin'))
                                     <p>admin</p>
                                 @elseif (auth()->user()->hasRole('dokter'))
                                     <p>{{ Auth::user()->name }}</p>
                                 @endif
-                        </span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        @endif
         <div class="wrapper-container" id="wrapper-container">
             @yield('side')
         </div>
@@ -310,7 +333,7 @@
         }
     </script>
 
-    {{-- bootsrapp additional--}}
+    {{-- bootsrapp additional --}}
     {{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}

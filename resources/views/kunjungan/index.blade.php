@@ -419,32 +419,33 @@
                                             style="display: none;">
                                             @csrf
                                         </form>
-                                        <button type="submit"
-                                            style="background: transparent; outline: none; border: none"
-                                            onclick="confirmDelete({{ $kunjungan->id }})">
-                                            {{-- <i class="fa-solid fa-check-double"></i> --}}
-                                            <i class="fa-solid fa-check-double h3 mr-1 red pointer"></i>
-                                        </button>
-                                        <script>
-                                            function confirmDelete(id) {
-                                                Swal.fire({
-                                                    title: 'Apakah Anda yakin?',
-                                                    text: "Tandai pembayaran selesai?",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Ya, Selesaikan!',
-                                                    cancelButtonText: 'Batal'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        // Submit form hapus
-                                                        document.getElementById('delete-form-' + id).submit();
-                                                    }
-                                                });
-                                            }
-                                        </script>
-
+                                        @if (auth()->user()->hasRole('admin'))
+                                            <button type="submit"
+                                                style="background: transparent; outline: none; border: none"
+                                                onclick="confirmDelete({{ $kunjungan->id }})">
+                                                {{-- <i class="fa-solid fa-check-double"></i> --}}
+                                                <i class="fa-solid fa-check-double h3 mr-1 red pointer"></i>
+                                            </button>
+                                            <script>
+                                                function confirmDelete(id) {
+                                                    Swal.fire({
+                                                        title: 'Apakah Anda yakin?',
+                                                        text: "Tandai pembayaran selesai?",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Ya, Selesaikan!',
+                                                        cancelButtonText: 'Batal'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            // Submit form hapus
+                                                            document.getElementById('delete-form-' + id).submit();
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                        @endif
                                     </td>
                                     {{-- @endif --}}
                                 </tr>
