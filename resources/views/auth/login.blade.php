@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi Background</title>
+    <title>AllCare Login</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,8 @@
 
     <!-- Font Awesome untuk Icon -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         * {
@@ -217,27 +219,44 @@
 </head>
 
 <body>
+    @php
+        $hasLoginError = session()->has('errors') && old('email') && !old('name');
+        $hasRegisterError = session()->has('errors') && old('name');
+    @endphp
+
+    @if ($errors->any())
+        <script>
+            let errorMessages = {!! json_encode($errors->all()) !!};
+            let formattedErrors = errorMessages.map((err, index) => `${index + 1}. ${err}`).join('<br>');
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops, terjadi kesalahan!',
+                html: formattedErrors,
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
+
     <div class="container">
         <h2 class="header">ALLCARE</h2>
 
         <div class="form-container">
             <div class="content-left">
                 <div class="slider">
-                    <h2 class="active">Login</h2>
-                    <h2>Register</h2>
+                    <h2 class="{{ $hasLoginError ? 'active' : '' }}">Login</h2>
+                    <h2 class="{{ $hasRegisterError ? 'active' : '' }}">Register</h2>
                 </div>
 
-                <form action="{{ route('login') }}" class="login-form" method="POST">
+                <form action="{{ route('login') }}" class="login-form" method="POST" style="display: {{ $hasRegisterError ? 'none' : 'flex' }}">
                     @csrf
                     <div class="input-login">
-                        <!-- Input Email -->
                         <div class="input-group">
                             <i class="fas fa-envelope"></i>
-                            <input name="email" type="email" id="email" placeholder=" " required>
+                            <input name="email" type="email" id="email" placeholder=" " required value="{{ old('email') }}">
                             <label for="email">Email</label>
                         </div>
 
-                        <!-- Input Password -->
                         <div class="input-group">
                             <i class="fas fa-lock"></i>
                             <input name="password" type="password" id="password" placeholder=" " required>
@@ -251,36 +270,33 @@
                     </div>
                 </form>
 
-                <form action="{{ route('register') }}" method="POST" class="reg-form">
+                <form action="{{ route('register') }}" method="POST" class="reg-form" style="display: {{ $hasLoginError ? 'none' : 'flex' }}">
                     @csrf
                     <div class="input-reg">
-                        <!-- Input Email -->
                         <div class="input-group">
-                            <i class="fas fa-envelope"></i>
-                            <input name="name" type="text" id="name" placeholder=" " required>
+                            <i class="fas fa-user"></i>
+                            <input name="name" type="text" id="name" placeholder=" " required value="{{ old('name') }}">
                             <label for="name">Nama Lengkap</label>
                         </div>
 
-                        <!-- Input Password -->
                         <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input name="email" type="email" id="email" placeholder=" " required>
-                            <label for="email">Email</label>
+                            <i class="fas fa-envelope"></i>
+                            <input name="email" type="email" id="email_reg" placeholder=" " required value="{{ old('email') }}">
+                            <label for="email_reg">Email</label>
                         </div>
 
                         <div class="input-group">
-                            <i class="fas fa-envelope"></i>
-                            <input name="phone" type="number" id="phone" placeholder=" " required>
+                            <i class="fas fa-phone"></i>
+                            <input name="phone" type="number" id="phone" placeholder=" " required value="{{ old('phone') }}">
                             <label for="phone">Nomor Telepon</label>
                         </div>
 
                         <div class="input-group">
-                            <i class="fas fa-envelope"></i>
-                            <input name="password" type="password" id="password" placeholder=" " required>
-                            <label for="password">Password</label>
+                            <i class="fas fa-lock"></i>
+                            <input name="password" type="password" id="password_reg" placeholder=" " required>
+                            <label for="password_reg">Password</label>
                         </div>
 
-                        <!-- Input Password -->
                         <div class="input-group">
                             <i class="fas fa-lock"></i>
                             <input name="password_confirmation" type="password" id="confirmpassword" placeholder=" " required>
@@ -300,28 +316,44 @@
             </div>
         </div>
     </div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const loginForm = document.querySelector(".login-form");
             const regForm = document.querySelector(".reg-form");
             const sliderOptions = document.querySelectorAll(".slider h2");
 
+            function showForm(index) {
+                sliderOptions.forEach((item) => item.classList.remove("active"));
+                sliderOptions[index].classList.add("active");
+
+                if (index === 0) {
+                    loginForm.style.display = "flex";
+                    regForm.style.display = "none";
+                } else {
+                    loginForm.style.display = "none";
+                    regForm.style.display = "flex";
+                }
+            }
+
             sliderOptions.forEach((option, index) => {
                 option.addEventListener("click", function() {
-                    sliderOptions.forEach((item) => item.classList.remove("active"));
-                    this.classList.add("active");
-
-                    if (index === 0) {
-                        loginForm.style.display = "flex";
-                        regForm.style.display = "none";
-                    } else {
-                        loginForm.style.display = "none";
-                        regForm.style.display = "flex";
-                    }
+                    showForm(index);
                 });
             });
+
+            // Cek apakah ada error di login atau register
+            const hasLoginError = @json($hasLoginError);
+            const hasRegisterError = @json($hasRegisterError);
+
+            if (hasRegisterError) {
+                showForm(1); // Tampilkan form register
+            } else {
+                showForm(0); // Default tampilkan login
+            }
         });
     </script>
 </body>
+ 
 
 </html>

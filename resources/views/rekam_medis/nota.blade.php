@@ -26,15 +26,18 @@
         display: flex;
         justify-content: flex-end;
     }
-    @media print {
-    @page {
-        margin: 2rem; /* Hapus margin halaman */
-    }
-    body {
-        margin: 2rem; /* Hapus margin body */
-    }
-}
 
+    @media print {
+        @page {
+            margin: 2rem;
+            /* Hapus margin halaman */
+        }
+
+        body {
+            margin: 2rem;
+            /* Hapus margin body */
+        }
+    }
 </style>
 @section('side')
     <div class="container">
@@ -114,19 +117,7 @@
                     style="margin-right: 5px;">Kembali</a>
                 {{-- <a onclick="window.print()" class="btn-add">
                         Cetak Nota</a> --}}
-                <a onclick="cetakNota()" class="btn-add">Cetak Nota</a>
 
-                <script>
-                    function cetakNota() {
-                        let originalContent = document.body.innerHTML;
-                        let printContent = document.querySelector('.nota').innerHTML;
-
-                        document.body.innerHTML = printContent;
-                        window.print();
-                        document.body.innerHTML = originalContent;
-                        location.reload(); // Refresh untuk mengembalikan tampilan awal
-                    }
-                </script>
 
                 {{-- <svg width="20" height="18" viewBox="0 0 20 18" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -141,7 +132,19 @@
                 Kembali ke Beranda
             </a>
         @endif
+        <a onclick="cetakNota()" class="btn-add">Cetak Nota</a>
 
+        <script>
+            function cetakNota() {
+                let originalContent = document.body.innerHTML;
+                let printContent = document.querySelector('.nota').innerHTML;
+
+                document.body.innerHTML = printContent;
+                window.print();
+                document.body.innerHTML = originalContent;
+                location.reload(); // Refresh untuk mengembalikan tampilan awal
+            }
+        </script>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">

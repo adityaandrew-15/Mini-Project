@@ -27,7 +27,7 @@ class PasienController extends Controller
         $search = $request->input('search');
 
         // Ambil data pasien dengan pencarian dan pagination
-        $pasiens = Pasien::query()
+        $pasiens = $pasiens
             ->when($search, function ($query, $search) {
                 $query
                     ->where('nama', 'like', "%$search%")
@@ -77,7 +77,7 @@ class PasienController extends Controller
 
         // Redirect dengan pesan sukses
         return redirect()
-            ->route(auth()->user()->hasRole('user') ? 'home' : 'pasien.index')
+            ->route(auth()->user()->hasRole('admin') || auth()->user()->hasRole('dokter') ? 'pasien.index' : 'home')
             ->with('success', 'Data pasien berhasil ditambahkan.');
     }
 
@@ -123,7 +123,11 @@ class PasienController extends Controller
     {
         $pasien->delete();
 
-        return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil diperbarui.');
+        if (auth()->user()->hasRole('user')) {
+            return redirect()->route('home')->with('success', 'Data pasien berhasil dihapus.');
+        } else {
+            return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil diperbarui.');
+        }
     }
 
     public function adminHome()

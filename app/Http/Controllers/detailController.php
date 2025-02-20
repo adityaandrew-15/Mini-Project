@@ -30,9 +30,12 @@ class detailController extends Controller
             ->groupBy('kunjungan_id')
             ->get();
 
-        $kunjunganhistory = Kunjungan::with(['dokter', 'pasien', 'rekamMedis'])->get();
+        $kunjunganhistory = Kunjungan::with(['dokter', 'pasien', 'rekamMedis'])
+            ->where('user_id', $user->id)
+            // ->get()
+            ->paginate(10);
         $dokter = Dokter::all();
-        $pasien = Pasien::where('user_id', auth()->id())->get();
+        $pasien = Pasien::where('user_id', $user->id)->get();
         $kunjungan = Kunjungan::where('user_id', auth()->id())->get();
         $jumlah = Kunjungan::count();
         return view('detail', compact('jumlahPasien', 'diagnosaCount', 'pasien', 'kunjungan', 'jumlah', 'dokter', 'kunjunganhistory'));

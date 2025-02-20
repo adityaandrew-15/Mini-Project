@@ -282,11 +282,13 @@
                     <div class="modaldetail-content p-2 shadow-none animate__animated animate__zoomIn">
                         <!-- Hapus shadow -->
                         <div class="modal-header d-flex t-center a-center">
-                            <span class="square" style="width: 50px; height: 50px; background: #ccc; margin-right: 10px;"></span>
+                            <span class="square"
+                                style="width: 50px; height: 50px; background: #ccc; margin-right: 10px;"></span>
                             <h2 class="modal-title h2 f-bolder" id="detailModalLabel{{ $kunjungan->id }}">
                                 Detail Kunjungan dan Rekam Medis
                             </h2>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p class="h4 my-2"><strong>Pasien:</strong><br>
@@ -341,7 +343,7 @@
                     </div>
                 </div>
             </div>
-            
+
             {{-- iki modal edit kunjungan --}}
             <div class="modal animate__fadeIn" id="myModalEdit{{ $kunjungan->id }}">
                 <div class="modal-content animate__animated animate__zoomIn">

@@ -21,6 +21,7 @@ class LoginController extends Controller
      */
 
     use AuthenticatesUsers;
+
     /**
      * Where to redirect users after login.
      *
@@ -60,6 +61,12 @@ class LoginController extends Controller
 
     protected function sendFailedLoginResponse(Request $request)
     {
-        return redirect()->back()->with('error', 'Akun tidak ditemukan atau password salah.');
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return redirect()->back()->withErrors(['email' => 'Email tidak ditemukan.']);
+        }
+
+        return redirect()->back()->withErrors(['password' => 'Password salah.']);
     }
 }

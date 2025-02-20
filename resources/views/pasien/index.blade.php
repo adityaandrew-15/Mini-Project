@@ -1,9 +1,9 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
+    <div class="ml-3 mr-3">
         <div class="d-flex m-2 a-center">
-            <div class="d-flex j-between w-100 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Pasien</h2>
                 <div class="btn"></div>
                 <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
@@ -11,7 +11,7 @@
                 </button>
             </div>
         </div>
-
+        <hr class="mr-3 ml-3">
         <div class="modal animate__animated" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 <h2 class="h2 f-bolder">Tambah Pasien</h2>
@@ -68,17 +68,19 @@
         </div>
 
         <div class="content-table m-2 d-flex col">
-            <form action="{{ route('pasien.index') }}" method="GET">
-                <div class="filter-form d-flex">
-                    <input type="text" name="search" class="search-container w-100 h4" placeholder="Cari pasien"
-                        value="{{ request('search') }}">
-                    @if (request('search'))
-                        <a href="{{ route('pasien.index') }}" class="clear-btn">Clear</a>
-                    @endif
-
-                    <button type="submit" class="btn-filter">Cari</button>
+            <div class="filter-form d-flex">
+                <div class="d-flex col mr-1 w-100">
+                    <label for="searchPasien"
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        class="label-text">Nama Pasien</label>
+                    <input type="text" id="searchPasien" class="search-container w-100 h4" placeholder="Cari pasien...">
                 </div>
-            </form>
+                <div class="filter-form d-flex  col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for=""></label>
+                    <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                </div>
+            </div>
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>
@@ -225,8 +227,7 @@
 
                                             <button type="button" class="btn-close red-hover"
                                                 onclick="closeEditModal({{ $pasien->id }})">Batal</button>
-                                            <button type="submit"
-                                                class="btn-add main-color-hover">Simpan</button>
+                                            <button type="submit" class="btn-add main-color-hover">Simpan</button>
                                         </form>
                                     </div>
                                 </div>
@@ -252,10 +253,11 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination-container">
+                    {{ $pasiens->links('vendor.pagination.custom') }}
+                </div>
             </div>
         </div>
-
-        {{ $pasiens->links() }}
     </div>
 
     <script>
@@ -346,5 +348,27 @@
                 }
             });
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let searchInput = document.getElementById("searchPasien");
+            let clearButton = document.getElementById("clearSearch");
+            let tableBody = document.querySelector("tbody");
+
+            searchInput.addEventListener("input", filterTable);
+            clearButton.addEventListener("click", function() {
+                searchInput.value = "";
+                filterTable();
+            });
+
+            function filterTable() {
+                let query = searchInput.value.toLowerCase();
+                let rows = tableBody.querySelectorAll("tr");
+
+                rows.forEach(row => {
+                    let pasienName = row.children[0].textContent.toLowerCase();
+                    row.style.display = pasienName.includes(query) ? "" : "none";
+                });
+            }
+        });
     </script>
 @endsection

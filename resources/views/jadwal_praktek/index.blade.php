@@ -1,54 +1,68 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
-        {{-- <div class="row">
-            <div class="col">
-                <label for="start_time" class="form-label">Jam Mulai</label>
-                <input type="time" name="start_time" id="start_time" class="form-control"
-                    value="{{ request('start_time') }}">
-            </div>
-            <div class="col">
-                <label for="end_time" class="form-label">Jam Selesai</label>
-                <input type="time" name="end_time" id="end_time" class="form-control" value="{{ request('end_time') }}">
-            </div>
-        </div> --}}
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+    <div class="ml-3 mr-3">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Jadwal Praktik</h2>
-                <div class="btn"></div>
+                {{-- <div class="btn"></div> --}}
                 <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                     Tambah Jadwal Praktik
                 </button>
             </div>
         </div>
-
+        <hr class="mr-3 ml-3">
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('jadwal_praktek.index') }}" class="d-flex w-100 gap-2">
-                <!-- Search Nama Dokter -->
-                <input type="text" class="search-container h4" style="width: 40%" name="search"
-                    placeholder="Cari Nama Dokter" value="{{ request('search') }}" class="">
-                <div class="filter-form d-flex">
-                    <!-- Search Hari -->
-                    <input type="text" class="search-container w-50 h4" name="search_hari" placeholder="Cari Hari"
-                        value="{{ request('search_hari') }}" class="form-control">
-
-                    <!-- Search Jam Mulai -->
-                    <input type="time" class="search-container w-40 h4" name="start_time" placeholder="Jam Mulai"
-                        value="{{ request('start_time') }}" class="form-control" onchange="this.form.submit()">
-
-                    <!-- Search Jam Selesai -->
-                    <input type="time" class="search-container w-40 h4" name="end_time" placeholder="Jam Selesai"
-                        value="{{ request('end_time') }}" class="form-control" onchange="this.form.submit()">
-
-                    <button type="submit" class="btn-filter">Cari</button>
-
-                    {{-- ini aslinya butuh soalnya waktu kita input waktu itu udah ke search secara otomatis nah biasnaya kita kan butuh clear atau mau clear time tadi bisa lewat sini atau button ini, be e ada saran bisa di ubah biar lebih mudah dan rapi tampilan e --}}
-                    {{-- hyfunii reply: iyahh --}}
-                    <div class="btn-filter">
-                        <a href="{{ route('jadwal_praktek.index') }}" class="">Clear</a>
-                    </div>
+            <form method="GET" style="align-items: center;" action="{{ route('jadwal_praktek.index') }}"
+                class="d-flex w-100 gap-2">
+                <div class="d-flex w-100 col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Cari Nama Dokter</label>
+                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama Dokter"
+                        value="{{ request('search') }}">
                 </div>
+
+                <div class="d-flex w-100 col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Cari Hari</label>
+                    <select class="search-container w-100 h4" name="search_hari" onchange="this.form.submit()">
+                        <option value="">Pilih Hari</option>
+                        <option value="Senin" {{ request('search_hari') == 'Senin' ? 'selected' : '' }}>Senin</option>
+                        <option value="Selasa" {{ request('search_hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
+                        <option value="Rabu" {{ request('search_hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
+                        <option value="Kamis" {{ request('search_hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
+                        <option value="Jumat" {{ request('search_hari') == 'Jumat' ? 'selected' : '' }}>Jumat</option>
+                        <option value="Sabtu" {{ request('search_hari') == 'Sabtu' ? 'selected' : '' }}>Sabtu</option>
+                        <option value="Minggu" {{ request('search_hari') == 'Minggu' ? 'selected' : '' }}>Minggu</option>
+                    </select>
+                </div>
+
+                <div class="d-flex col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Jam Mulai</label>
+                    <input type="time" class="search-container w-100 h4" name="start_time"
+                        value="{{ request('start_time') }}" onchange="this.form.submit()">
+                </div>
+
+                <div class="d-flex col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Jam Selesai</label>
+                    <input type="time" class="search-container w-100 h4" name="end_time"
+                        value="{{ request('end_time') }}" onchange="this.form.submit()">
+                </div>
+
+                <button type="submit" class="invisible-btn">Cari</button>
+
+                <a href="{{ route('jadwal_praktek.index') }}" style="height: 50%; align-items: center;"
+                    class="btn-add">Clear</a>
+
+                <style>
+                    .invisible-btn {
+                        opacity: 0;
+                        position: absolute;
+                        pointer-events: none;
+                    }
+                </style>
             </form>
 
             <style>
@@ -179,8 +193,7 @@
                             </div>
                         </div>
 
-                        <button type="button" class="btn-close red-hover"
-                            onclick="closeEditModal()">Batal</button>
+                        <button type="button" class="btn-close red-hover" onclick="closeEditModal()">Batal</button>
                         <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>

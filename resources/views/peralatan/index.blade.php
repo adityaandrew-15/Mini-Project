@@ -1,22 +1,21 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <!DOCTYPE html>
-    <html lang="en">
+    {{-- <!DOCTYPE html> --}}
+    {{-- <html lang="en"> --}}
 
-    <head>
+    {{-- <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Pasien</title>
-    </head>
+    </head> --}}
 
     <body>
-
-        <div class="m-3">
+        <div class="ml-3 mr-3">
             <div class="d-flex m-2 a-center">
-                <div class="d-flex j-between w-100 a-center">
+                <div class="d-flex j-between w-100 a-center mx-2">
                     <h2 class="h2 f-bolder mr-4">Peralatan Medis</h2>
                     <div class="btn"></div>
                     <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
@@ -24,13 +23,11 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Add Modal -->
+            <hr class="mr-3 ml-3">
             <div class="modal animate__animated" id="myModalAdd" tabindex="-1" aria-labelledby="addModalLabel"
                 aria-hidden="true">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Tambah Peralatan</h2>
-                    {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
                     <form action="{{ route('peralatan.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="my-2">
@@ -67,35 +64,47 @@
                     </form>
                 </div>
             </div>
-
-
-            <!-- Table -->
             <div class="content-table m-2 d-flex col">
                 <form action="{{ route('peralatan.index') }}" method="GET" class="d-flex w-100 gap-2">
-                    <!-- Search Nama Peralatan -->
-                    <input type="text" class="search-container w-75 h4" name="search" placeholder="Cari Nama Peralatan"
-                        value="{{ request('search') }}" class="form-control">
+                    <div class="d-flex col mr-1 w-100">
+                        <label for=""
+                            style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Cari
+                            Nama
+                            Peralatan</label>
+                        <input type="text" class="search-container h4" name="search" placeholder="Cari Nama Peralatan"
+                            value="{{ request('search') }}" class="form-control">
+                    </div>
 
-                    <div class="filter-form d-flex">
-                        <!-- Search Harga Minimal -->
-                        <input type="number" class="search-container h4" style="width: 200px" name="min_price" placeholder="Harga Minimal"
+                    <div class="d-flex col mr-1">
+                        <label for=""
+                            style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                            Minimal</label>
+                        <input type="number" class="search-container h4" name="min_price" placeholder="Harga Minimal"
                             value="{{ request('min_price') }}" class="form-control">
+                    </div>
 
-                        <!-- Search Harga Maksimal -->
-                        <input type="number" class="search-container h4" style="width: 200px" name="max_price" placeholder="Harga Maksimal"
+                    <div class="d-flex col mr-1">
+                        <label for=""
+                            style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                            Maksimal</label>
+                        <input type="number" class="search-container h4" name="max_price" placeholder="Harga Maksimal"
                             value="{{ request('max_price') }}" class="form-control">
                     </div>
 
-                    <!-- Tombol Cari -->
-                    <button type="submit" class="btn-filter">Cari</button>
+                    <div class="d-flex col mr-1">
+                        <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                            for=""></label>
+                        <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
 
-                    <style>
-                        .invisible-btn {
-                            opacity: 0;
-                            position: absolute;
-                            pointer-events: none;
-                        }
-                    </style>
+                <style>
+                    .invisible-btn {
+                        opacity: 0;
+                        position: absolute;
+                        pointer-events: none;
+                    }
+                </style>
                 </form>
 
                 <div class="outer-table">
@@ -215,8 +224,7 @@
 
                                                 <button type="button" class="btn-close red-hover"
                                                     onclick="closeEditModal({{ $per->id }})">Batal</button>
-                                                <button type="submit"
-                                                    class="btn-add main-color-hover">Simpan</button>
+                                                <button type="submit" class="btn-add main-color-hover">Simpan</button>
                                             </form>
                                         </div>
                                     </div>

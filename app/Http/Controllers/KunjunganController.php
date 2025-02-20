@@ -30,7 +30,8 @@ class KunjunganController extends Controller
 
         $searchPasien = $request->get('search_pasien');
         $searchDokter = $request->get('search_dokter');
-        $searchTanggal = $request->get('search_tanggal');
+        $searchTanggalStart = $request->get('search_tanggal_start');
+        $searchTanggalEnd = $request->get('search_tanggal_end');
 
         $kunjungans = Kunjungan::query();
         $donekunjungans = Kunjungan::query();
@@ -54,8 +55,14 @@ class KunjunganController extends Controller
                     $query->where('nama', 'like', '%' . $searchDokter . '%');
                 });
             })
-            ->when($searchTanggal, function ($query, $searchTanggal) {
-                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            ->when($searchTanggalStart && $searchTanggalEnd, function ($query) use ($searchTanggalStart, $searchTanggalEnd) {
+                return $query->whereBetween('tanggal_kunjungan', [$searchTanggalStart, $searchTanggalEnd]);
+            })
+            ->when($searchTanggalStart && !$searchTanggalEnd, function ($query) use ($searchTanggalStart) {
+                return $query->whereDate('tanggal_kunjungan', '>=', $searchTanggalStart);
+            })
+            ->when(!$searchTanggalStart && $searchTanggalEnd, function ($query) use ($searchTanggalEnd) {
+                return $query->whereDate('tanggal_kunjungan', '<=', $searchTanggalEnd);
             })
             ->where('status', 'UNDONE')
             ->with(['pasien', 'dokter', 'rekamMedis'])
@@ -72,8 +79,14 @@ class KunjunganController extends Controller
                     $query->where('nama', 'like', '%' . $searchDokter . '%');
                 });
             })
-            ->when($searchTanggal, function ($query, $searchTanggal) {
-                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            ->when($searchTanggalStart && $searchTanggalEnd, function ($query) use ($searchTanggalStart, $searchTanggalEnd) {
+                return $query->whereBetween('tanggal_kunjungan', [$searchTanggalStart, $searchTanggalEnd]);
+            })
+            ->when($searchTanggalStart && !$searchTanggalEnd, function ($query) use ($searchTanggalStart) {
+                return $query->whereDate('tanggal_kunjungan', '>=', $searchTanggalStart);
+            })
+            ->when(!$searchTanggalStart && $searchTanggalEnd, function ($query) use ($searchTanggalEnd) {
+                return $query->whereDate('tanggal_kunjungan', '<=', $searchTanggalEnd);
             })
             ->where('status', 'DONE')
             ->with(['pasien', 'dokter', 'rekamMedis'])
@@ -90,8 +103,14 @@ class KunjunganController extends Controller
                     $query->where('nama', 'like', '%' . $searchDokter . '%');
                 });
             })
-            ->when($searchTanggal, function ($query, $searchTanggal) {
-                return $query->whereDate('tanggal_kunjungan', $searchTanggal);
+            ->when($searchTanggalStart && $searchTanggalEnd, function ($query) use ($searchTanggalStart, $searchTanggalEnd) {
+                return $query->whereBetween('tanggal_kunjungan', [$searchTanggalStart, $searchTanggalEnd]);
+            })
+            ->when($searchTanggalStart && !$searchTanggalEnd, function ($query) use ($searchTanggalStart) {
+                return $query->whereDate('tanggal_kunjungan', '>=', $searchTanggalStart);
+            })
+            ->when(!$searchTanggalStart && $searchTanggalEnd, function ($query) use ($searchTanggalEnd) {
+                return $query->whereDate('tanggal_kunjungan', '<=', $searchTanggalEnd);
             })
             ->where('status', 'PENDING')
             ->with(['pasien', 'dokter', 'rekamMedis'])
@@ -273,6 +292,20 @@ class KunjunganController extends Controller
         }
     }
 
+    public function reject(Kunjungan $kunjungan)
+    {
+        // Update status kunjungan menjadi 'REJECT'
+        $kunjungan->status = 'REJECT';
+        $kunjungan->save();
+
+        // Mengembalikan respon berdasarkan role pengguna
+        if (Auth()->user()->hasRole('admin')) {
+            return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan berhasil ditolak.');
+        } else {
+            return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan berhasil ditolak.');
+        }
+    }
+
     public function dashboard(Request $request)
     {
         $doctor = auth()->user();
@@ -411,6 +444,7 @@ class KunjunganController extends Controller
         $kunjungan = Kunjungan::with(['pasien', 'dokter', 'rekamMedis' => function ($query) {
             $query->with(['obats', 'images']);
         }])->findOrFail($id);
+        
         // $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'peralatans'])->findOrFail($id);
         // $totalHarga = $rekamMedis->obats->sum(function ($obat) {
         //     return $obat->pivot->jumlah * $obat->harga;
@@ -419,44 +453,56 @@ class KunjunganController extends Controller
         return view('kunjungan.pendingdetail', compact('kunjungan'));
     }
 
-    public function updateStatus($id)
+    public function updateStatus(Request $request, $id)
+{
+    $kunjungan = Kunjungan::with(['rekamMedis.obats', 'rekamMedis.peralatans', 'pasien'])->find($id);
+
+    if (!$kunjungan || $kunjungan->status != 'PENDING') {
+        return response()->json(['error' => 'Kunjungan tidak valid atau sudah selesai'], 400);
+    }
+
+    $rekamMedis = $kunjungan->rekamMedis()->first();
+
+    if (!$rekamMedis) {
+        return response()->json(['error' => 'Rekam medis tidak ditemukan.'], 400);
+    }
+
+    $totalHargaObat = $rekamMedis->obats->sum(function ($obat) {
+        return $obat->pivot->jumlah * $obat->harga;
+    });
+
+    $totalHargaPeralatan = $rekamMedis->peralatans->sum('harga');
+    $totalPembayaran = $totalHargaObat + $totalHargaPeralatan;
+
+    $metodePembayaran = $request->input('method', 'cash');
+
+    // Simpan riwayat pembayaran
+    History::create([
+        'type' => 'payment',
+        'action' => 'paid',
+        'reference_id' => $rekamMedis->id,
+        'details' => [
+            'patient_name' => $kunjungan->pasien->nama,
+            'total' => $totalPembayaran,
+            'payment_method' => $metodePembayaran
+        ],
+    ]);
+
+    // Update status kunjungan menjadi DONE
+    $kunjungan->status = 'DONE';
+    $kunjungan->save();
+
+    return response()->json(['success' => 'Pembayaran berhasil diselesaikan.']);
+}
+
+    public function konfirmasiPembayaran($id)
     {
-        $kunjungan = Kunjungan::with(['rekamMedis.obats', 'rekamMedis.peralatans', 'pasien'])->find($id);
+        $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'peralatans'])->findOrFail($id);
 
-        if (!$kunjungan || $kunjungan->status != 'PENDING') {
-            return back()->with('error', 'Kunjungan tidak valid atau sudah selesai');
-        }
-
-        // Pastikan hanya mengambil satu rekam medis
-        $rekamMedis = $kunjungan->rekamMedis()->first();
-
-        if (!$rekamMedis) {
-            return back()->with('error', 'Rekam medis tidak ditemukan.');
-        }
-
-        // Hitung total pembayaran
-        $totalHargaObat = $rekamMedis->obats->sum(function ($obat) {
+        $totalHarga = $rekamMedis->obats->sum(function ($obat) {
             return $obat->pivot->jumlah * $obat->harga;
-        });
+        }) + $rekamMedis->peralatans->sum('harga');
 
-        $totalHargaPeralatan = $rekamMedis->peralatans->sum('harga');
-        $totalPembayaran = $totalHargaObat + $totalHargaPeralatan;
-
-        // Simpan riwayat pembayaran ke tabel histories
-        History::create([
-            'type' => 'payment',
-            'action' => 'paid',
-            'reference_id' => $rekamMedis->id,
-            'details' => [
-                'patient_name' => $kunjungan->pasien->nama,
-                'total' => $totalPembayaran
-            ],
-        ]);
-
-        // Update status kunjungan menjadi DONE
-        $kunjungan->status = 'DONE';
-        $kunjungan->save();
-
-        return back()->with('success', 'Status kunjungan berhasil diperbarui dan riwayat pembayaran tersimpan.');
+        return view('kunjungan.konfirmasi', compact('rekamMedis', 'totalHarga'));
     }
 }

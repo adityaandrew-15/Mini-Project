@@ -1,9 +1,9 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
+    <div class="ml-3 mr-3">
         <div class="d-flex m-2 a-center">
-            <div class="d-flex j-between w-100 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Obat</h2>
                 <div class="btn"></div>
                 @if (auth()->user()->hasRole('admin'))
@@ -13,35 +13,70 @@
                 @endif
             </div>
         </div>
+        <hr class="mr-3 ml-3">
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('obat.index') }}" class="d-flex w-100 gap-2">
-                {{-- <div class="filter-search-container"> --}}
-                    <input type="text" class="search-container h4" style="width: 75%" name="search" placeholder="Cari Obat"
-                        value="{{ request('search') }}" class="">
+            <div class="d-flex">
+                <div class="d-flex col mr-1 w-100">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Nama
+                        Obat</label>
+                    <input class="search-container w-100 h4" type="text" id="searchInput"
+                        class="search-container w-100
+                        h4"" class="h4" placeholder="Cari obat..."
+                        class="form-control h4">
+                </div>
+                <div class="d-flex col mr-1 w-100">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                        Minimal</label>
+                    <input class="search-container w-100 h4" type="number" id="priceMin" class="h4"
+                        placeholder="Harga minimum" class="form-control">
+                </div>
+                <div class="d-flex col mr-1 w-100">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                        Maksimal</label>
+                    <input type="number" class="search-container w-100 h4" id="priceMax" class="h4"
+                        placeholder="Harga maksimum" class="form-control">
+                </div>
+                <div class="filter-form d-flex  col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for=""></label>
+                    <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    let searchInput = document.getElementById("searchInput");
+                    let priceMin = document.getElementById("priceMin");
+                    let priceMax = document.getElementById("priceMax");
+                    let tableRows = document.querySelectorAll("tbody tr");
 
-                    <div class="filter-form d-flex">
-                        <input type="number" searname="min_price" placeholder="Minimal Harga" value="{{ request('min_price') }}"
-                            class=" search-container h4" style="width: 200px;">
-                        <input type="number" name="max_price" placeholder="Maximal Harga" value="{{ request('max_price') }}"
-                            class=" search-container h4" style="width: 200px;">
-                        <button type="submit" class="btn-filter">Cari</button>
-                    </div>
-                {{-- </div> --}}
+                    function filterTable() {
+                        let query = searchInput.value.toLowerCase();
+                        let minPrice = parseFloat(priceMin.value) || 0;
+                        let maxPrice = parseFloat(priceMax.value) || Infinity;
 
-                <!-- Tombol disembunyikan tetapi tetap berfungsi -->
-                <button type="submit" class="btn btn-primary invisible-btn">Cari</button>
-                <style>
-                    .invisible-btn {
-                        opacity: 0;
-                        /* Tombol tidak terlihat */
-                        position: absolute;
-                        /* Menghindari layout bergeser */
-                        pointer-events: none;
-                        /* Mencegah klik langsung */
+                        tableRows.forEach(row => {
+                            let obatName = row.children[0].textContent.toLowerCase();
+                            let price = parseFloat(row.children[2].textContent.replace("Rp.", "")) || 0;
+
+                            let matchesSearch = obatName.includes(query);
+                            let matchesPrice = price >= minPrice && price <= maxPrice;
+
+                            if (matchesSearch && matchesPrice) {
+                                row.style.display = "";
+                            } else {
+                                row.style.display = "none";
+                            }
+                        });
                     }
-                </style>
 
-            </form>
+                    searchInput.addEventListener("input", filterTable);
+                    priceMin.addEventListener("input", filterTable);
+                    priceMax.addEventListener("input", filterTable);
+                });
+            </script>
 
             <div class="outer-table">
                 <div class="content-table-table">
@@ -112,7 +147,7 @@
                                                 </div>
                                                 @error('obat')
                                                     <script>
-                                                        <p style="color: red">{{ $message }}</p>
+                                                        < p style = "color: red" > {{ $message }} < /p>
                                                     </script>
                                                 @enderror
                                             </div>
@@ -125,7 +160,7 @@
                                                 </div>
                                                 @error('jumlah')
                                                     <script>
-                                                        <p style="color: red">{{ $message }}</p>
+                                                        < p style = "color: red" > {{ $message }} < /p>
                                                     </script>
                                                 @enderror
                                             </div>
@@ -138,20 +173,22 @@
                                                 </div>
                                                 @error('harga')
                                                     <script>
-                                                        <p style="color: red">{{ $message }}</p>
+                                                        < p style = "color: red" > {{ $message }} < /p>
                                                     </script>
                                                 @enderror
                                             </div>
                                             <button type="button" class="btn-close red-hover"
                                                 onclick="closeEditModal({{ $obt->id }})">Batal</button>
-                                            <button type="submit"
-                                                class="btn-add main-color-hover">Simpan</button>
+                                            <button type="submit" class="btn-add main-color-hover">Simpan</button>
                                         </form>
                                     </div>
                                 </div>
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div class="pagination-container">
+                    {{ $obats->links('vendor.pagination.custom') }}
                 </div>
             </div>
         </div>
@@ -168,7 +205,7 @@
                         </div>
                         @error('obat')
                             <script>
-                                <p style="color: red">{{ $message }}</p>
+                                < p style = "color: red" > {{ $message }} < /p>
                             </script>
                         @enderror
                     </div>
@@ -180,7 +217,7 @@
                         </div>
                         @error('jumlah')
                             <script>
-                                <p style="color: red">{{ $message }}</p>
+                                < p style = "color: red" > {{ $message }} < /p>
                             </script>
                         @enderror
                     </div>
@@ -192,14 +229,13 @@
                         </div>
                         @error('harga')
                             <script>
-                                <p style="color: red">{{ $message }}</p>
+                                < p style = "color: red" > {{ $message }} < /p>
                             </script>
                         @enderror
                     </div>
 
                     <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
-                    <button type="submit" id="btnCloseAddModal"
-                        class="btn-add main-color-hover">Simpan</button>
+                    <button type="submit" id="btnCloseAddModal" class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>
@@ -244,6 +280,36 @@
                     }
                 });
             }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                let searchInput = document.getElementById("searchInput");
+                let priceMin = document.getElementById("priceMin");
+                let priceMax = document.getElementById("priceMax");
+                let tableBody = document.querySelector("tbody");
+
+                searchInput.addEventListener("input", filterTable);
+                priceMin.addEventListener("input", filterTable);
+                priceMax.addEventListener("input", filterTable);
+
+                function filterTable() {
+                    let query = searchInput.value.toLowerCase();
+                    let minPrice = parseFloat(priceMin.value) || 0;
+                    let maxPrice = parseFloat(priceMax.value) || Infinity;
+
+                    let rows = tableBody.querySelectorAll("tr");
+
+                    rows.forEach(row => {
+                        let obatName = row.children[0].textContent.toLowerCase();
+                        let price = parseFloat(row.children[2].textContent.replace("Rp.", "").replace(",",
+                            "")) || 0;
+
+                        let matchesSearch = obatName.includes(query);
+                        let matchesPrice = price >= minPrice && price <= maxPrice;
+
+                        row.style.display = (matchesSearch && matchesPrice) ? "" : "none";
+                    });
+                }
+            });
         </script>
     </div>
 @endsection
