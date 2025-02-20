@@ -1,9 +1,9 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
+    <div class="ml-3 mr-3">
         <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex j-between w-100 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Dokter</h2>
                 <div class="btn"></div>
                 @if (auth()->user()->hasRole('admin'))
@@ -12,30 +12,59 @@
                     </button>
                 @endif
             </div>
-            {{-- <h2>Dokter aktif: {{ DB::table('dokters')->count() }}</h2> --}}
         </div>
+        <hr class="mr-3 ml-3">
         <div class="content-table m-2 d-flex col">
             <form method="GET" action="{{ route('dokter.index') }}" class="d-flex w-100 gap-2">
-                <input type="text" class="search-container w-75 h4" name="search" placeholder="Cari Nama atau No HP"
-                    value="{{ request('search') }}" class="form-control">
-
-                <input type="text" class="search-container w-25 h4" name="spesialis" placeholder="Cari Spesialis"
-                    value="{{ request('spesialis') }}" class="form-control">
-
-                <button type="submit" class="btn-filter">Cari</button>
-
-                <style>
-                    .invisible-btn {
-                        opacity: 0;
-                        /* Tombol tidak terlihat */
-                        position: absolute;
-                        /* Menghindari layout bergeser */
-                        pointer-events: none;
-                        /* Mencegah klik langsung */
-                    }
-                </style>
-
+                <div class="d-flex w-100 col mr-1">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Nama
+                        Dokter</label>
+                    <input type="text" class="search-container w-100 h4" name="search"
+                        placeholder="Cari Nama atau No HP" value="{{ request('search') }}" class="form-control">
+                </div>
+                <div class="d-flex w-100 col mr-1">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Spesialis</label>
+                    <input type="text" class="search-container w-100 h4" name="spesialis" placeholder="Cari Spesialis"
+                        value="{{ request('spesialis') }}" class="form-control">
+                </div>
+                <div class="filter-form d-flex col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for=""></label>
+                    <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                </div>
             </form>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const searchInput = document.querySelector("input[name='search']");
+                    const spesialisInput = document.querySelector("input[name='spesialis']");
+                    const tableRows = document.querySelectorAll("tbody tr");
+
+                    function filterTable() {
+                        const searchText = searchInput.value.toLowerCase();
+                        const spesialisText = spesialisInput.value.toLowerCase();
+
+                        tableRows.forEach(row => {
+                            const nama = row.children[1].textContent.toLowerCase();
+                            const spesialis = row.children[2].textContent.toLowerCase();
+                            const noHp = row.children[3].textContent.toLowerCase();
+
+                            const matchSearch = nama.includes(searchText) || noHp.includes(searchText);
+                            const matchSpesialis = spesialis.includes(spesialisText);
+
+                            if (matchSearch && matchSpesialis) {
+                                row.style.display = "table-row";
+                            } else {
+                                row.style.display = "none";
+                            }
+                        });
+                    }
+
+                    searchInput.addEventListener("keyup", filterTable);
+                    spesialisInput.addEventListener("keyup", filterTable);
+                });
+            </script>
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>
@@ -108,6 +137,9 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination-container">
+                    {{ $dokters->links('vendor.pagination.custom') }}
+                </div>
             </div>
         </div>
 
@@ -142,8 +174,8 @@
                         <div class="my-2">
                             <label for="image" class="h4 f-bolder">Image</label>
                             <div class="my-1">
-                                <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="imageEdit{{ $dokter->id }}"
-                                    name="image">
+                                <input type="file" class="h4 f-bolder px-2 w-100 h-3"
+                                    id="imageEdit{{ $dokter->id }}" name="image">
                             </div>
                             @if ($dokter->image)
                                 <img src="{{ asset('storage/' . $dokter->image) }}" class="mt-2" width="100">
@@ -223,8 +255,7 @@
                     </div>
 
                     <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
-                    <button type="submit" id="btnCloseAddModal"
-                        class="btn-add main-color-hover">Simpan</button>
+                    <button type="submit" id="btnCloseAddModal" class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>

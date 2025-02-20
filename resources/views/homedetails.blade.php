@@ -74,7 +74,7 @@
             <div class="footer">
                 {{-- <button type="button" class="px-2 py-1 btn-close red-hover">Tutup</button> --}}
                 <a href="{{ route('detail') }}" class="btn-close">Kembali</a>
-                <a href="{{ route('pendingnota', $rekamMedis->id) }}" class="btn-cek-nota">
+                <a href="{{ route('pendingnota', $kunjungans->rekamMedis->id) }}" class="btn-cek-nota">
                     Detail Pembayaran
                     <i class="fa-solid fa-print"></i>
                 </a>

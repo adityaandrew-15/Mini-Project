@@ -13,6 +13,7 @@ use App\Http\Controllers\RekamMedisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PeralatanController;
 use App\Http\Controllers\detailController;
+use App\Http\Controllers\PembayaranController;
 use App\Models\Kunjungan;
 
 // Home Route
@@ -104,4 +105,11 @@ Route::get('/pendingnota/{id}',[RekamMedisController::class, 'pendingnota'])->na
 Route::get('/homedetails/{id}',[HomeController::class, 'details'])->name('homedetails');
 
 Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+Route::get('/listpasien', [HomeController::class, 'listpasien'])->name('listpasien');
+
+Route::get('/konfirmasi/{id}', [KunjunganController::class, 'konfirmasiPembayaran'])->name('kunjungan.konfirmasi');
+Route::post('/update-status/{id}', [KunjunganController::class, 'updateStatus'])->name('kunjungan.updateStatus');
+
+Route::patch('/kunjungan/{kunjungan}/reject', [KunjunganController::class, 'reject'])->name('kunjungan.reject');
+
 // Halaman kedua (page2)

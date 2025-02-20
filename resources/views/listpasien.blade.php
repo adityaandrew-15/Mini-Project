@@ -183,7 +183,6 @@
     </script>
 
     <header id="header" class="header sticky-top">
-
         <div class="topbar d-flex align-items-center">
             <div class="container d-flex justify-content-center justify-content-md-between">
                 <div class="d-none d-md-flex align-items-center ms-auto">
@@ -202,16 +201,16 @@
 
                 <nav id="navmenu" class="navmenu">
                     <ul>
-                        <li><a href="#page-doctor">
+                        <li><a href="{{ url('/home#page-doctor') }}">
                                 Dokter
                             </a></li>
-                        <li><a href="#form-section">
+                        <li><a href="{{ url('/home#form-section') }}">
                                 Pasien
                             </a></li>
-                        <li><a href="#form-section-kunjungan">
+                        <li><a href="{{ url('/home#form-section-kunjungan') }}">
                                 Buat Kunjungan
                             </a></li>
-                        <li><a href="#patient-info">
+                        <li><a href="{{ url('/home#patient-info') }}">
                                 Riwayat kunjungan
                             </a></li>
                     </ul>
@@ -248,127 +247,75 @@
                         });
                     }
                 </script>
-
-
             </div>
-
         </div>
-
     </header>
-    <section id="hero" class="hero section">
-        <div id="hero-carousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-            <div class="carousel-item active">
-                <img src="Medicio/assets/img/hero-carousel/hero-carousel-1.jpg" alt="">
-                <div class="container">
-
-                    <h2>Selamat Datang di AllCare</h2>
-                    <p>Jangan ragu untuk membuat janji temu dengan dokter melalui website ini.</p>
-                    <a href="#" id="scrollToForm" class="btn-get-started">lanjut -></a>
-                </div>
-            </div>
-            <ol class="carousel-indicators"></ol>
-        </div>
-    </section>
-    <section id="form-section" class="appointment section light-background">
-        <div class="container">
-            <div class="row gy-4">
-                <div class="col-lg-6 content aos-init aos-animate" style="position: relative; top: 80px;">
-                    <div class="container section-title aos-init aos-animate">
-                        <h2>
-                            Lengkapi Data <br> Diri Anda
-                        </h2>
-                        <p>
-                            Masukkan informasi Anda untuk <br> membuat janji atau mengakses layanan <br> kami.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-lg-6 content aos-init aos-animate">
-                    <div class="container aos-init aos-animate text-center" id="form-pasien">
-                        <form action="{{ route('pasien.store') }}" method="POST" class="php-email-form">
-                            @csrf
-                            <div class="row">
-                                <div class="form-group mt-4">
-                                    <div class="form-group">
-                                        <input class="form-control" id="namaLengkap" placeholder=" " type="text"
-                                            name="nama" value="{{ old('nama') }}" />
-                                        <label for="namaLengkap">Nama Lengkap</label>
-                                        @error('nama')
-                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group mt-4">
-                                    <div class=" form-group">
-                                        <input class="form-control" placeholder=" " type="text" name="alamat"
-                                            id="alamat" value="{{ old('alamat') }}" />
-                                        <label for="alamat">Alamat</label>
-                                        @error('alamat')
-                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group mt-4">
-                                    <div class=" form-group">
-                                        <input class="form-control" placeholder=" " type="number" name="no_hp"
-                                            id="no_hp" value="{{ old('no_hp') }}" />
-                                        <label for="no_hp">Nomor Handphone</label>
-                                        @error('no_hp')
-                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group mt-4">
-                                    <div class=" form-group">
-                                        <input class="form-control" placeholder=" " type="date"
-                                            name="tanggal_lahir" id="tgl_lahir"
-                                            value="{{ old('tanggal_lahir') }}" />
-                                        <label for="tgl_lahir">Tanggal Lahir</label>
-                                        @error('tanggal_lahir')
-                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="mt-3">
-                                <div class="text-center">
-                                    <button type="submit">
-                                        Kirim
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
     <section id="patien-info" class="featured-services section">
         <div class="container section-title aos-init aos-animate">
             <h2>
-                Informasi Pasien
+                Data Pasien
             </h2>
-            <p>
-                Data yang Anda isi akan digunakan untuk <br> kebutuhan pelayanan kesehatan.
-            </p>
         </div>
-        <div class="container">
+        <div class="container" style="min-height: 100vh;">
+            <div class="row mb-4">
+                <div class="col-4 form-group">
+                    <input type="text" id="searchNamaAlamat" class="form-control mt-2"
+                        placeholder="Cari berdasarkan nama atau alamat pasien...">
+                    <label for="searchNamaAlamat">Cari Nama atau Alamat Pasien</label>
+                </div>
+                <div class="col-2 form-group">
+                    <button id="clearFilter" class="btn btn-danger mt-2">Clear Filter</button>
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const searchNamaAlamat = document.getElementById("searchNamaAlamat");
+                    const clearButton = document.getElementById("clearFilter");
+                    const kunjunganItems = document.querySelectorAll(".kunjungan-item");
+
+                    // Fungsi untuk filter data
+                    function filterData() {
+                        const searchText = searchNamaAlamat.value.toLowerCase();
+
+                        kunjunganItems.forEach(item => {
+                            const nama = item.getAttribute("data-nama");
+                            const alamat = item.getAttribute("data-alamat");
+
+                            // Cek apakah nama atau alamat mencocokkan dengan input pencarian
+                            const matchesNama = nama.includes(searchText);
+                            const matchesAlamat = alamat.includes(searchText);
+
+                            if (matchesNama || matchesAlamat) {
+                                item.style.display = "block"; // Tampilkan item
+                            } else {
+                                item.style.display = "none"; // Sembunyikan item
+                            }
+                        });
+                    }
+
+                    // Event listener untuk pencarian
+                    searchNamaAlamat.addEventListener("input", filterData);
+
+                    // Fungsi untuk mereset filter dan menampilkan semua data
+                    clearButton.addEventListener("click", function() {
+                        searchNamaAlamat.value = "";
+                        filterData();
+                    });
+                });
+            </script>
+
             <div class="text-end mt-4 mb-4">
-                <a href="{{ route('listpasien') }}" class="cta-btn">Lihat semua</a>
+                <a href="{{ route('home') }}" class="cta-btn">Kembali</a>
             </div>
             @if ($pasien->isEmpty())
                 <span>Tidak Ada Data</span>
             @else
                 <div class="row">
-                    @foreach ($pasien->take(3) as $pas)
-                        <div class="col-md-4 aos-init aos-animate">
+                    @foreach ($pasien as $pas)
+                        <div class="col-md-4 mb-4 aos-init aos-animate kunjungan-item"
+                            data-nama="{{ strtolower($pas->nama) }}" data-alamat="{{ strtolower($pas->alamat) }}">
                             <div class="service-item position-relative">
-                                {{-- <h2>Data Pasien Anda: {{ $loop->iteration }}</h2> --}}
                                 <h4>Data Pasien : <span class="value">{{ $pas->nama }}</span></h4>
-                                {{-- <p>
-                                <i class="fas fa-user"></i>
-                                <span class="label">Nama :</span>
-                                <span class="value">{{ $pas->nama }}</span>
-                            </p> --}}
                                 <p>
                                     <i class="fas fa-map-marker-alt"></i>
                                     <span class="label">Alamat :</span>
@@ -396,7 +343,7 @@
                                     function confirmDelete(id) {
                                         Swal.fire({
                                             title: 'Apakah Anda yakin?',
-                                            text: "Data pasien ini akan dihapus secara permanen!",
+                                            text: "Data ini akan dihapus secara permanen!",
                                             icon: 'warning',
                                             showCancelButton: true,
                                             confirmButtonColor: '#3085d6',
@@ -416,190 +363,8 @@
                 </div>
             @endif
         </div>
-    </section>
-    <section id="form-section-kunjungan" class="appointment section light-background">
-        <div class="container">
-            <div class="row gy-4">
-                <div class="col-lg-6 content aos-init aos-animate">
-                    <div class="container section-title aos-init aos-animate" id="form-pasien">
-                        <form action="{{ route('kunjungan.store') }}" method="POST" class="php-email-form">
-                            @csrf
-                            <div class="row">
-                                <div class="form-group mt-4">
-                                    <div class="form-group mt-4">
-                                        <select name="pasien_id" class="form-select">
-                                            <option disabled selected>Cari pasien</option>
-                                            @foreach ($pasien as $pas)
-                                                <option value="{{ $pas->id }}">{{ $pas->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                        <label for="nama_pasien">Nama Pasien</label>
-                                    </div>
-                                    @error('pasien_id')
-                                        <p style="color: red">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group mt-4">
-                                    <div class="form-group">
-                                        <input placeholder=" " class="form-control" type="text" name="keluhan"
-                                            value="{{ old('keluhan') }}" />
-                                        <label for="keluhan">Keluhan</label>
-                                    </div>
-                                    @error('keluhan')
-                                        <p style="color: red">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-group mt-4">
-                                    <div class="form-group">
-                                        <input placeholder="Tanggal Kunjungan" class="form-control datepicker"
-                                            name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan') }}"
-                                            type="date">
-                                        <label for="tgl_kunjungan">Tanggal Kunjungan</label>
-                                    </div>
-                                    @error('tanggal_kunjungan')
-                                        <p style="color: red">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="mt-4">
-                                <div class="text-center">
-                                    <button type="submit">
-                                        Kirim
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-lg-6 content aos-init aos-animate" style="position: relative; top: 80px;">
-                    <div class="container section-title aos-init aos-animate">
-                        <h2>
-                            Formulir Kunjungan Pasien
-                        </h2>
-                        <script>
-                            document.getElementById('scrollToForm').addEventListener('click', function(e) {
-                                e.preventDefault(); // Prevent the default anchor behavior
-                                document.getElementById('form-section-kunjungan').scrollIntoView({
-                                    behavior: 'smooth' // Smooth scroll
-                                });
-                            });
-                        </script>
-                        <p>
-                            Isi detail kunjungan untuk membuat janji <br> temu dengan dokter
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="patient-info" class="featured-services section">
-        <div class="container section-title aos-init aos-animate">
-            <h2>
-                Riwayat Kunjungan Anda
-            </h2>
-            <p>
-                Berikut adalah daftar kunjungan yang <br> telah Anda buat.
-            </p>
-        </div>
-        <div class="container">
-            <div class="text-end mt-4 mb-4">
-                <a href="{{ route('detail') }}" class="cta-btn">Lihat semua</a>
-            </div>
-            @if ($kunjunganhistory->isEmpty())
-                <div class="container mb-5 mt-5">
-                    <h2 class="text-center">Tidak ada data</h2>
-                </div>
-            @else
-                <div class="row">
-                    @foreach ($kunjunganhistory->take(3) as $kunj)
-                        <div class="col-md-4">
-                            <div class="service-item position-relative">
-                                {{-- <h2>Data Anda</h2> --}}
-                                <h4 class="mb-3"><strong>Data Kunjungan : </strong><span
-                                        class="value">{{ $kunj->pasien->nama }}</span></h4>
-                                {{-- <p>
-                                    <i class="fas fa-user"></i>
-                                    <span class="label">Nama :</span>
-                                    <span class="value">{{ $kunj->pasien->nama }}</span>
-                                </p> --}}
-                                <p class="mb-2">
-                                    <i class="fas fa-phone"></i>
-                                    <span class="label">Keluhan :</span>
-                                    <span
-                                        class="value">{{ \Illuminate\Support\Str::limit($kunj->keluhan, 50, '...') }}</span>
-                                </p>
-                                <p class="mb-2">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span class="label">Tanggal Kunjungan :</span>
-                                    <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
-                                </p>
-                                <p class="mb-2">
-                                    <i class="fas fa-user"></i>
-                                    <span class="label">Status :</span>
-                                    <span class="value">
-                                        @if ($kunj->status == 'DONE')
-                                            Selesai
-                                        @elseif($kunj->status == 'PENDING')
-                                            Menunggu Pembayaran
-                                        @elseif($kunj->status == 'UNDONE')
-                                            Belum Direspon Dokter
-                                        @else
-                                            Status Tidak Dikenal
-                                        @endif
-                                    </span>
-                                </p>
-                                {{-- @if ($kunj->rekamMedis->isNotEmpty()) --}}
-                                <div class="text-start mt-4">
-                                    <a href="{{ route('pendingdetails', $kunj->id) }}" class="btn btn-nota-check"
-                                        {{-- id="detailBtn{{ $kunj->rekamMedis->first()->id }}" --}}>
-                                        <p>Detail</p>
-                                    </a>
-                                </div>
-
-                                {{-- @else --}}
-                                {{-- <p>Tidak ada rekam medis untuk kunjungan ini.</p> --}}
-                                {{-- @endif --}}
-
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-    </section>
-    <section id="page-doctor" class="doctors section">
-        <div id="section-title" class="section-title">
-            <h2>
-                Tim Dokter Spesialis Kami
-            </h2>
-            <p>
-                Kami menghadirkan layanan kesehatan terbaik dengan <br> dukungan dokter berpengalaman di bidangnya.
-            </p>
-        </div>
-        <div id="doctors" class="container">
-            <div class="row">
-                @foreach ($dokter as $dok)
-                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch aos-init aos-animate">
-                        <div class="team-member">
-                            <div class="member-img">`
-                                <img src="{{ asset('storage/' . $dok->image) }}" class="img-fluid"" alt="gambar">
-                            </div>
-                            <div class="member-info">
-                                <h4>
-                                    {{ $dok->nama }}
-                                </h4>
-                                <span>
-                                    {{ $dok->spesialis }}
-                                </span>
-                                <span>
-                                    {{ $dok->no_hp }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
+        <div class="pagination-container">
+            {{ $pasien->links('vendor.pagination.custom') }}
         </div>
     </section>
     <footer id="contact" class="footer light-background">

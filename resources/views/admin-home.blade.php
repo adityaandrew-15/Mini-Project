@@ -16,11 +16,11 @@
             justify-content: space-between;
             overflow: hidden;
             width: 100%;
-            height: 300px;
+            height: 280px;
             margin: 1.5rem 0;
             background: url('/asset/img/hero2.png') no-repeat left bottom;
             background-size: cover;
-            border-radius: 1.2rem;
+            border-radius: 2rem;
             color: rgb(255, 255, 255);
             text-align: left;
         }
@@ -475,7 +475,7 @@
                 nov: 0,
                 dec: 0
             };
-    
+
             // Mengisi data kunjungan dari backend
             @if (isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
                 @foreach ($kunjunganPerBulan as $kunjungan)
@@ -519,28 +519,28 @@
                     }
                 @endforeach
             @endif
-    
+
             // Fungsi untuk mengupdate tinggi batang sesuai dengan data kunjungan
             function updateChart() {
                 for (let month in visitsData) {
                     let bar = document.getElementById(month);
                     let height = visitsData[month] * 2; // Mengalikan dengan 2 untuk memperbesar tinggi batang
-    
+
                     // Atur tinggi batang berdasarkan data kunjungan
                     bar.style.height = height + 'px';
                 }
             }
-    
+
             // Panggil fungsi updateChart setelah halaman dimuat
             window.onload = updateChart;
         </script>
         <script>
             const ctx = document.getElementById('dokterChart').getContext('2d');
             const dokterKunjungan = @json($dokterKunjungan);
-    
+
             const labels = dokterKunjungan.map(d => d.dokter.nama); // Ambil nama dokter
             const data = dokterKunjungan.map(d => d.total); // Ambil total kunjungan
-    
+
             const chart = new Chart(ctx, {
                 type: 'pie', // Tipe chart lingkaran
                 data: {

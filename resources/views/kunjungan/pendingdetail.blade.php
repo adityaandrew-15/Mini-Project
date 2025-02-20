@@ -58,7 +58,7 @@
                             @endif
                             <p class="h4 my-1"><strong>Gambar:</strong></p>
                             @foreach ($rekamMedis->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_path) }}" height="150" width="120"
+                                <img src="{{ asset('storage/' . $image->image_path) }}" height="300" width="auto"
                                     class="mb-2" alt="Gambar">
                             @endforeach
                         </div>
@@ -72,13 +72,17 @@
             {{-- footer --}}
 
             <div class="footer">
-                {{-- <button type="button" class="px-2 py-1 btn-close red-hover">Tutup</button> --}}
-                <a href="{{ route('kunjungan.index') }}" class="btn-close">Kembali</a>
-                <a href="{{ route('pendingnota', $rekamMedis->id) }}" class="btn-cek-nota">
+                {{-- Tombol Kembali dengan kondisi berdasarkan peran --}}
+                <a href="{{ auth()->user()->hasRole('admin') || auth()->user()->hasRole('dokter') ? route('kunjungan.index') : route('home') }}" class="btn-close">
+                    Kembali
+                </a>
+                
+                <a href="{{ route('pendingnota', $kunjungan->rekamMedis->id) }}" class="btn-cek-nota">
                     Detail Pembayaran
                     <i class="fa-solid fa-print"></i>
                 </a>
             </div>
+            
         </div>
     </div>
 @endsection
