@@ -249,8 +249,8 @@
                                                             <div class="my-2">
                                                                 <label for="deskripsi" class="h4 f-bolder">Resep</label>
                                                                 <div class="my-1">
-                                                                    <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi" rows="6"
-                                                                        cols="50" required></textarea>
+                                                                    <textarea class="form h4 f-normal px-2 w-100 border-radius-1" id="deskripsi" name="deskripsi" rows="4"
+                                                                        required></textarea>
                                                                 </div>
                                                             </div>
 
@@ -302,10 +302,9 @@
                                                                 </div>
                                                             </div>
 
-                                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                                            <button type="button" class=" btn-close red-hover"
                                                                 onclick="closeAddRekamMedisModal()">Batal</button>
-                                                            <button type="submit"
-                                                                class="px-2 py-1 btn-add">Simpan</button>
+                                                            <button type="submit" class=" btn-add">Simpan</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -476,6 +475,7 @@
                     </div>
                 </div>
 
+                {{-- acc atau tambah dokter --}}
                 @foreach ($kunjungans as $kunjungan)
                     <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
                         aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
@@ -526,37 +526,62 @@
                                         <input type="hidden" name="pasien_id" value="{{ $kunjungan->pasien_id }}">
                                         {{-- </div> --}}
                                         {{-- </div> --}}
-
                                         @if (auth()->user()->hasRole('admin'))
-                                            <div class="my-2">
-                                                <label for="dokter" class="h4 f-bolder">Dokter</label>
-                                                <div class="my-1">
-                                                    <select name="dokter_id" id="dokter_id"
-                                                        class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
-                                                        <option value="{{ $kunjungan->dokter_id ?? '' }}" selected>
-                                                            {{ $kunjungan->dokter->nama ?? 'Pilih Dokter' }}
+                                        <div class="my-2">
+                                            <label for="dokter" class="h4 f-bolder">Dokter</label>
+                                            <div class="my-1">
+                                                <select name="dokter_id" id="dokter_id" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                                                    <!-- Opsi default Pilih Dokter -->
+                                                    <option value="" {{ empty($kunjungan->dokter_id) ? 'selected' : '' }}>Pilih Dokter</option>
+                                    
+                                                    <!-- Looping daftar dokter, memisahkan yang memiliki jadwal dan tidak -->
+                                                    @php
+                                                        // Pisahkan dokter yang memiliki jadwal dan yang tidak
+                                                        $doktersWithSchedule = [];
+                                                        $doktersWithoutSchedule = [];
+                                                        
+                                                        foreach ($dokters as $dok) {
+                                                            $hariKunjungan = \Carbon\Carbon::parse($kunjungan->tanggal)->format('l'); // Format hari
+                                    
+                                                            // Mengecek apakah dokter memiliki jadwal pada hari tersebut
+                                                            $hasSchedule = $dok->jadwals->where('hari', $hariKunjungan)->isNotEmpty();
+                                                            
+                                                            if ($hasSchedule) {
+                                                                $doktersWithSchedule[] = $dok;
+                                                            } else {
+                                                                $doktersWithoutSchedule[] = $dok;
+                                                            }
+                                                        }
+                                                    @endphp
+                                    
+                                                    <!-- Tampilkan dokter yang memiliki jadwal terlebih dahulu -->
+                                                    @foreach ($doktersWithSchedule as $dok)
+                                                        <option value="{{ $dok->id }}"
+                                                            {{ isset($kunjungan->dokter_id) && $kunjungan->dokter_id == $dok->id ? 'selected' : '' }}>
+                                                            {{ $dok->nama }} - {{ $dok->spesialis }}
                                                         </option>
-                                                        @foreach ($dokters as $dok)
-                                                            @if ($dok->id !== $kunjungan->dokter_id)
-                                                                <option value="{{ $dok->id }}"
-                                                                    {{ $kunjungan->dokter_id == $dok->id ? 'selected' : '' }}>
-                                                                    {{ $dok->nama }}
-                                                                </option>
-                                                            @endif
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+                                                    @endforeach
+                                    
+                                                    <!-- Tampilkan dokter yang tidak memiliki jadwal di bawah -->
+                                                    @foreach ($doktersWithoutSchedule as $dok)
+                                                        <option value="{{ $dok->id }}"
+                                                            {{ isset($kunjungan->dokter_id) && $kunjungan->dokter_id == $dok->id ? 'selected' : '' }} disabled>
+                                                            {{ $dok->nama }} - {{ $dok->spesialis }} (Tidak Ada Jadwal)
+                                                        </option>
+                                                    @endforeach
+                                    
+                                                </select>
                                             </div>
-                                        @else
-                                            {{-- Jika pengguna bukan admin, dokter_id otomatis mengikuti dokter yang sedang login --}}
-                                            <input type="hidden" name="dokter_id"
-                                                value="{{ auth()->user()->dokter->id }}">
-                                            <div class="my-2">
-                                                <label class="h4 f-bolder">Dokter</label>
-                                                <p class="h4 f-normal mt-1">{{ auth()->user()->dokter->nama }}</p>
-                                            </div>
-                                        @endif
-
+                                        </div>
+                                    @else
+                                        {{-- Jika pengguna bukan admin, dokter_id otomatis mengikuti dokter yang sedang login --}}
+                                        <input type="hidden" name="dokter_id" value="{{ auth()->user()->dokter->id }}">
+                                        <div class="my-2">
+                                            <label class="h4 f-bolder">Dokter</label>
+                                            <p class="h4 f-normal mt-1">{{ auth()->user()->dokter->nama }}</p>
+                                        </div>
+                                    @endif
+                                    
 
                                         <div class="my-2">
                                             {{-- <label for="keluhan" class="h4 f-bolder">Keluhan</label> --}}
@@ -581,10 +606,12 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                                        <button type="button" class=" btn-close red-hover"
                                             data-bs-dismiss="modal">Tutup</button>
                                         @if (auth()->user()->hasRole('admin'))
-                                            <button type="submit" class="px-2 py-1 btn-add">Terima</button>
+                                            <button type="submit" class="btn-add">
+                                                {{ isset($kunjungan->dokter_id) ? 'Update' : 'Terima' }}
+                                            </button>
                                         @endif
                                     </div>
                                 </form>
@@ -618,7 +645,7 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                                    <button type="button" class=" btn-close red-hover"
                                         data-bs-dismiss="modal">Tutup</button>
                                 </div>
                             </div>
@@ -795,9 +822,9 @@
                         @enderror
                     </div>
 
-                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                    <button type="button" class=" btn-close red-hover"
                         onclick="btnCloseAddKunjunganModal()">Batal</button>
-                    <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
+                    <button type="submit" class=" btn-add">Simpan</button>
                 </form>
             </div>
         </div>
@@ -859,8 +886,7 @@
                             @endif
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="px-2 py-1 btn-close red-hover"
-                                data-bs-dismiss="modal">Tutup</button>
+                            <button type="button" class=" btn-close red-hover" data-bs-dismiss="modal">Tutup</button>
                             @if ($kunjungan->rekamMedis()->exists())
                                 <a href="{{ route('rekam_medis.nota', $rekamMedis->id) }}" class="btn-cek-nota">
                                     Cek Nota
@@ -951,9 +977,9 @@
                             </div>
                         </div>
 
-                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                        <button type="button" class=" btn-close red-hover"
                             onclick="closeEditModal({{ $kunjungan->id }})">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
+                        <button type="submit" class=" btn-add">Simpan</button>
                     </form>
                 </div>
             </div>

@@ -58,7 +58,7 @@
                             @endif
                             <p class="h4 my-1"><strong>Gambar:</strong></p>
                             @foreach ($rekamMedis->images as $image)
-                                <img src="{{ asset('storage/' . $image->image_path) }}" height="150" width="120"
+                                <img src="{{ asset('storage/' . $image->image_path) }}" height="300" width="auto"
                                     class="mb-2" alt="Gambar">
                             @endforeach
                         </div>

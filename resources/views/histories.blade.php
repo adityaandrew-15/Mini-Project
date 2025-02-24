@@ -24,7 +24,8 @@
                         <option value="">Semua Jenis</option>
                         <option value="medicine">Obat</option>
                         <option value="equipment">Peralatan</option>
-                        <option value="medication">Pembayaran</option>
+                        <option value="medication">Rekam Medis</option>
+                        <option value="payment">Pembayaran</option>
                     </select>
                 </div>
                 <div class="d-flex col">

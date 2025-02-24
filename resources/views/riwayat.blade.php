@@ -171,7 +171,7 @@
                                                 <img src="{{ asset('storage/' . $image->image_path) }}" height="150"
                                                     width="120" class="mb-2" alt="Gambar"><br>
                                             @endforeach
-                                        @else
+                                         @else
                                             Tidak ada gambar yang terkait <br>
                                         @endif
                                     </div>

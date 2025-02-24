@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Kunjungan extends Model
@@ -14,6 +15,13 @@ class Kunjungan extends Model
     protected $casts = [
         'is_assigned' => 'boolean',
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope('latest', function (Builder $builder) {
+            $builder->orderBy('created_at', 'desc');  // Mengurutkan berdasarkan created_at
+        });
+    }
 
     public function pasien()
     {
@@ -38,6 +46,11 @@ class Kunjungan extends Model
     public function rekamMedis()
     {
         return $this->hasMany(RekamMedis::class, 'kunjungan_id');
+    }
+
+    public function rekamMedisSelect()
+    {
+        return $this->hasOne(RekamMedis::class, 'kunjungan_id');
     }
 
     public function resep()

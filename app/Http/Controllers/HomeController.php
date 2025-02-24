@@ -50,7 +50,7 @@ class HomeController extends Controller
 
         $kunjunganhistory = Kunjungan::with(['dokter', 'pasien', 'rekamMedis.obats', 'rekamMedis.peralatans', 'rekamMedis.images', 'rekamMedis'])
             ->where('user_id', $user->id)
-            ->whereIn('status', ['UNDONE', 'PENDING'])
+            // ->whereIn('status', ['UNDONE', 'PENDING'])
             ->get();
 
         $dokter = Dokter::all();

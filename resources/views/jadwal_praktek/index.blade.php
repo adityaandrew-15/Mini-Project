@@ -6,9 +6,11 @@
             <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Jadwal Praktik</h2>
                 {{-- <div class="btn"></div> --}}
-                <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
-                    Tambah Jadwal Praktik
-                </button>
+                @if (auth()->user()->hasRole('admin'))
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
+                        Tambah Jadwal Praktik
+                    </button>
+                @endif
             </div>
         </div>
         <hr class="mr-3 ml-3">
@@ -27,13 +29,13 @@
                         for="">Cari Hari</label>
                     <select class="search-container w-100 h4" name="search_hari" onchange="this.form.submit()">
                         <option value="">Pilih Hari</option>
-                        <option value="Senin" {{ request('search_hari') == 'Senin' ? 'selected' : '' }}>Senin</option>
-                        <option value="Selasa" {{ request('search_hari') == 'Selasa' ? 'selected' : '' }}>Selasa</option>
-                        <option value="Rabu" {{ request('search_hari') == 'Rabu' ? 'selected' : '' }}>Rabu</option>
-                        <option value="Kamis" {{ request('search_hari') == 'Kamis' ? 'selected' : '' }}>Kamis</option>
-                        <option value="Jumat" {{ request('search_hari') == 'Jumat' ? 'selected' : '' }}>Jumat</option>
-                        <option value="Sabtu" {{ request('search_hari') == 'Sabtu' ? 'selected' : '' }}>Sabtu</option>
-                        <option value="Minggu" {{ request('search_hari') == 'Minggu' ? 'selected' : '' }}>Minggu</option>
+                        <option value="Senin" {{ request('search_hari') == 'Monday' ? 'selected' : '' }}>Senin</option>
+                        <option value="Selasa" {{ request('search_hari') == 'Tuesday' ? 'selected' : '' }}>Selasa</option>
+                        <option value="Rabu" {{ request('search_hari') == 'Wednesday' ? 'selected' : '' }}>Rabu</option>
+                        <option value="Kamis" {{ request('search_hari') == 'Thursday' ? 'selected' : '' }}>Kamis</option>
+                        <option value="Jumat" {{ request('search_hari') == 'Friday' ? 'selected' : '' }}>Jumat</option>
+                        <option value="Sabtu" {{ request('search_hari') == 'Saturday' ? 'selected' : '' }}>Sabtu</option>
+                        <option value="Minggu" {{ request('search_hari') == 'Sunday' ? 'selected' : '' }}>Minggu</option>
                     </select>
                 </div>
 
@@ -91,7 +93,21 @@
                             @foreach ($jadwalPrakteks as $jadwal)
                                 <tr>
                                     <td>{{ $jadwal->dokter->nama }}</td>
-                                    <td>{{ $jadwal->hari }}</td>
+                                    @php
+                                        $days = [
+                                            'Monday' => 'Senin',
+                                            'Tuesday' => 'Selasa',
+                                            'Wednesday' => 'Rabu',
+                                            'Thursday' => 'Kamis',
+                                            'Friday' => 'Jumat',
+                                            'Saturday' => 'Sabtu',
+                                            'Sunday' => 'Minggu',
+                                        ];
+                                        $hariIndo = $days[$jadwal->hari] ?? $jadwal->hari; // Default to English if not found
+                                    @endphp
+
+                                    <td>{{ $hariIndo }}</td>
+
                                     <td>{{ $jadwal->jam_mulai }}</td>
                                     <td>{{ $jadwal->jam_selesai }}</td>
 
@@ -223,12 +239,12 @@
                             <select name="hari" id="hari" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
                                 required>
                                 <option value="">Pilih Hari</option>
-                                <option value="Senin">Senin</option>
-                                <option value="Selasa">Selasa</option>
-                                <option value="Rabu">Rabu</option>
-                                <option value="Kamis">Kamis</option>
-                                <option value="Jumat">Jumat</option>
-                                <option value="Sabtu">Sabtu</option>
+                                <option value="Monday">Senin</option>
+                                <option value="Tuesday">Selasa</option>
+                                <option value="Wednesday">Rabu</option>
+                                <option value="Thursday">Kamis</option>
+                                <option value="Friday">Jumat</option>
+                                <option value="Saturday">Sabtu</option>
                             </select>
                         </div>
                     </div>

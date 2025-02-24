@@ -425,8 +425,21 @@
                         <form action="{{ route('kunjungan.store') }}" method="POST" class="php-email-form">
                             @csrf
                             <div class="row">
+
                                 <div class="form-group mt-4">
-                                    <div class="form-group mt-4">
+                                    <div class="form-group">
+                                        <input placeholder="Tanggal Kunjungan" class="form-control datepicker"
+                                            name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan') }}"
+                                            type="date">
+                                        <label for="tgl_kunjungan">Tanggal Kunjungan</label>
+                                    </div>
+                                    @error('tanggal_kunjungan')
+                                        <p style="color: red">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <div class="form-group">
                                         <select name="pasien_id" class="form-select">
                                             <option disabled selected>Cari pasien</option>
                                             @foreach ($pasien as $pas)
@@ -442,25 +455,16 @@
 
                                 <div class="form-group mt-4">
                                     <div class="form-group">
-                                        <input placeholder=" " class="form-control" type="text" name="keluhan"
-                                            value="{{ old('keluhan') }}" />
+                                        <textarea name="keluhan" id="" class="forn-control" rows="4"></textarea>
+                                        {{-- <input placeholder=" " class="form-control" type="text" name="keluhan"
+                                            value="{{ old('keluhan') }}" /> --}}
                                         <label for="keluhan">Keluhan</label>
                                     </div>
                                     @error('keluhan')
                                         <p style="color: red">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="form-group mt-4">
-                                    <div class="form-group">
-                                        <input placeholder="Tanggal Kunjungan" class="form-control datepicker"
-                                            name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan') }}"
-                                            type="date">
-                                        <label for="tgl_kunjungan">Tanggal Kunjungan</label>
-                                    </div>
-                                    @error('tanggal_kunjungan')
-                                        <p style="color: red">{{ $message }}</p>
-                                    @enderror
-                                </div>
+
                             </div>
                             <div class="mt-4">
                                 <div class="text-center">
@@ -538,22 +542,28 @@
                                     <i class="fas fa-user"></i>
                                     <span class="label">Status :</span>
                                     <span class="value">
-                                        @if ($kunj->status == 'DONE')
-                                            Selesai
-                                        @elseif($kunj->status == 'PENDING')
-                                            Menunggu Pembayaran
-                                        @elseif($kunj->status == 'UNDONE')
-                                            Belum Direspon Dokter
+                                        @if ($kunj->status == 'REJECT')
+                                            <span class="value">Kunjungan di tolak oleh dokter</span>
                                         @else
-                                            Status Tidak Dikenal
+                                            <span class="value">
+                                                @if ($kunj->status == 'DONE')
+                                                    Selesai
+                                                @elseif($kunj->status == 'PENDING')
+                                                    Menunggu Pembayaran
+                                                @elseif($kunj->status == 'UNDONE')
+                                                    Belum Direspon Dokter
+                                                @else
+                                                    Status Tidak Dikenal
+                                                @endif
+                                            </span>
                                         @endif
                                     </span>
                                 </p>
                                 {{-- @if ($kunj->rekamMedis->isNotEmpty()) --}}
                                 <div class="text-start mt-4">
-                                    <a href="{{ route('pendingdetails', $kunj->id) }}" class="btn btn-nota-check"
+                                    <a href="{{ route('pendingdetails', $kunj->id) }}" class="btn-custom"
                                         {{-- id="detailBtn{{ $kunj->rekamMedis->first()->id }}" --}}>
-                                        <p>Detail</p>
+                                        Detail
                                     </a>
                                 </div>
 
@@ -582,8 +592,9 @@
                 @foreach ($dokter as $dok)
                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch aos-init aos-animate">
                         <div class="team-member">
-                            <div class="member-img">`
-                                <img src="{{ asset('storage/' . $dok->image) }}" class="img-fluid"" alt="gambar">
+                            <div class="member-img">
+                                <img src="{{ Storage::exists('public/' . $dok->image) ? asset('storage/' . $dok->image) : asset('asset/img/dokter.png') }}"
+                                    class="img-fluid" alt="">
                             </div>
                             <div class="member-info">
                                 <h4>

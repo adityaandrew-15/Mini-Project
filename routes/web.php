@@ -1,20 +1,20 @@
 <?php
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\detailController;
 use App\Http\Controllers\DokterController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JadwalPraktekController;
+use App\Http\Controllers\KunjunganController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PasienController;
-use App\Http\Controllers\ResepController;
-use App\Http\Controllers\KunjunganController;
-use App\Http\Controllers\JadwalPraktekController;
-use App\Http\Controllers\RekamMedisController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PeralatanController;
-use App\Http\Controllers\detailController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\PeralatanController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RekamMedisController;
+use App\Http\Controllers\ResepController;
 use App\Models\Kunjungan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 // Home Route
 Route::get('/', function () {
@@ -35,21 +35,29 @@ Route::get('/admin', function () {
         ->select(DB::raw('MONTH(tanggal_kunjungan) as bulan'), DB::raw('COUNT(*) as jumlah'))
         ->groupBy('bulan')
         ->get();
-    $dokterKunjungan = kunjungan::select('dokter_id', DB::raw('count(*) as total'))
+    
+    // Filter out kunjungan without a dokter_id
+    $dokterKunjungan = \App\Models\Kunjungan::select('dokter_id', DB::raw('count(*) as total'))
+        ->whereNotNull('dokter_id')  // Exclude records where dokter_id is null
         ->groupBy('dokter_id')
-        ->with('dokter') // Mengambil data dokter
+        ->with('dokter')  // Load related dokter data
         ->get();
 
-    return view('admin-home', compact('kunjunganPerBulan','dokterKunjungan'));
+    // Prepare data for the chart
+    $dokterNames = $dokterKunjungan->map(function ($item) {
+        return $item->dokter ? $item->dokter->nama : 'Unknown Doctor';  // Safely access the doctor's name
+    });
+    $kunjunganCounts = $dokterKunjungan->pluck('total');
+
+    return view('admin-home', compact('kunjunganPerBulan', 'dokterKunjungan', 'dokterNames', 'kunjunganCounts'));
 })->middleware(['auth', 'role:admin'])->name('admin-home');
+
 
 Route::get('/notifikasi', function () {
     $notifications = auth()->user()->notifications;
     return view('notifikasi.index', compact('notifications'));
 })->name('notifikasi.index');
-Route::get('/notifications/{id}', function() {
-
-});
+Route::get('/notifications/{id}', function () {});
 
 Route::get('/home-dokter', [KunjunganController::class, 'dashboard'])->middleware(['auth', 'role:dokter'])->name('home-dokter');
 
@@ -74,7 +82,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth', 'role:dokter|admin'])->group(function () {
     Route::resource('dokter', DokterController::class);
     Route::resource('jadwal_praktek', JadwalPraktekController::class);
-
 });
 
 // Dokter-only routes (accessible only by users with the 'dokter' role)
@@ -100,9 +107,9 @@ Route::get('/riwayat', [App\Http\Controllers\riwayatController::class, 'index'])
 Route::get('/kunj-history', [KunjunganController::class, 'kunjhistory'])->name('kunjhistory');
 Route::get('/kunj-historyshow/{id}', [KunjunganController::class, 'kunjhistoryshow'])->name('kunjhistoryshow');
 Route::post('/kunjungan/update-status/{id}', [KunjunganController::class, 'updateStatus'])->name('kunjungan.updateStatus');
-Route::get('/pendingdetails/{id}' , [KunjunganController::class, 'pendingdetails'])->name('pendingdetails');
-Route::get('/pendingnota/{id}',[RekamMedisController::class, 'pendingnota'])->name('pendingnota');
-Route::get('/homedetails/{id}',[HomeController::class, 'details'])->name('homedetails');
+Route::get('/pendingdetails/{id}', [KunjunganController::class, 'pendingdetails'])->name('pendingdetails');
+Route::get('/pendingnota/{id}', [RekamMedisController::class, 'pendingnota'])->name('pendingnota');
+Route::get('/homedetails/{id}', [HomeController::class, 'details'])->name('homedetails');
 
 Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
 Route::get('/listpasien', [HomeController::class, 'listpasien'])->name('listpasien');

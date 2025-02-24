@@ -52,7 +52,7 @@
                         icon: 'success',
                         title: '{{ session('success') }}',
                         showConfirmButton: false,
-                        timer: 7000
+                        timer: 4000
                     });
                 @endif
             });
@@ -74,7 +74,7 @@
                         </ul>
                     `,
                     showConfirmButton: false,
-                    timer: 10000
+                    timer: 4000
                 });
             @endif
         });

@@ -250,7 +250,7 @@ body {
     all: unset;
 }
 
-.btn-add {
+a.btn-add {
     border: none;
     background: var(--main-color);
     color: white;
@@ -259,6 +259,45 @@ body {
     font-size: 1.2rem;
     font-weight: 800;
     padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+button.btn-add {
+    border: none;
+    background: var(--main-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 12px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+a.btn-close {
+    border: none;
+    background: #FF3C5F;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+button.btn-close {
+    border: none;
+    background: #FF3C5F;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 12px;
     transition: background-color 0.2s ease;
     text-decoration: none;
 }
@@ -490,6 +529,10 @@ textarea {
 .form,
 form:focus {
     border: 1px solid #aaa;
+}
+
+textarea {
+    height: 300px;
 }
 
 .modal-add {
@@ -1212,8 +1255,8 @@ form:focus {
 .content-table-table {
     margin: 1rem;
     width: auto;
-    height: 800px;
-    max-height: 800px;
+    height: 700px;
+    max-height: 700px;
     /* overflow: hidden; */
     overflow-y: auto;
 }

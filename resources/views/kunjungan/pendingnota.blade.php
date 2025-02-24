@@ -114,18 +114,32 @@
         </div>
         <hr class="my-2">
         @if (auth()->user()->hasRole('admin|dokter'))
-            <div class="warp-total" style="display: flex;">
+            <div class="warp-total">
                 <a href="{{ route('pendingdetails', $rekamMedis->kunjungan->id) }}" class="btn-close"
                     style="margin-right: 5px;">Kembali</a>
-                <button class="btn-add" onclick="confirmPayment()">Konfirmasi Pembayaran</button>
+                @if (auth()->user()->hasRole('admin'))
+                    <button class="btn-add" onclick="confirmPayment()">Konfirmasi Pembayaran</button>
+                @endif
             </div>
         @else
-            <a href="{{ route('home') }}" class="btn-add">
-                <i class="bi bi-arrow-left"></i>
-                Kembali ke Beranda
+            <a href="{{ route('home') }}" class="btn-close">
+                {{-- <i class="bi bi-arrow-left"></i> --}}
+                Kembali
             </a>
+            <a onclick="cetakNota()" class="btn-add">Cetak Nota</a>
         @endif
     </div>
+    <script>
+        function cetakNota() {
+            let originalContent = document.body.innerHTML;
+            let printContent = document.querySelector('.nota').innerHTML;
+
+            document.body.innerHTML = printContent;
+            window.print();
+            document.body.innerHTML = originalContent;
+            location.reload(); // Refresh untuk mengembalikan tampilan awal
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function confirmPayment() {
@@ -209,7 +223,7 @@
                             confirmButtonText: 'Lihat Nota'
                         }).then(() => {
                             window.location.href =
-                                "{{ route('rekam_medis.nota', $rekamMedis->kunjungan->id) }}";
+                                "{{ route('rekam_medis.nota', $rekamMedis->id) }}";
                         });
                     } else {
                         Swal.fire('Error', data.error, 'error');

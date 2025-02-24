@@ -99,6 +99,21 @@ h6 {
 
 /* Pulsating Play Button
 ------------------------------*/
+
+.btn-custom {
+  background: var(--accent-color);
+  border: 0;
+  padding: 10px 35px;
+  color: #fff;
+  transition: 0.4s;
+  border-radius: 4px;
+}
+
+.btn-custom:hover {
+  color: white;
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
 .pulsating-play-btn {
   width: 94px;
   height: 94px;
@@ -1344,6 +1359,7 @@ section,
   box-shadow: none;
   font-size: 14px;
   padding: 10px !important;
+  width: 100%;
 }
 
 .appointment .php-email-form input:focus,

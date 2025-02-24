@@ -158,6 +158,7 @@
                         <option value="UNDONE">UNDONE</option>
                         <option value="DONE">DONE</option>
                         <option value="PENDING">PENDING</option>
+                        <option value="REJECT">REJECT</option>
                     </select>
                     <label for="statusFilter">Status</label>
                 </div>
@@ -211,7 +212,17 @@
                                     @if ($kunj->status == 'REJECT')
                                         <span class="value">Kunjungan di tolak oleh dokter</span>
                                     @else
-                                        <span class="value">{{ $kunj->status }}</span>
+                                        <span class="value">
+                                            @if ($kunj->status == 'DONE')
+                                            Selesai
+                                        @elseif($kunj->status == 'PENDING')
+                                            Menunggu Pembayaran
+                                        @elseif($kunj->status == 'UNDONE')
+                                            Belum Direspon Dokter
+                                        @else
+                                            Status Tidak Dikenal
+                                        @endif
+                                        </span>
                                     @endif
                                 </p>
                                 {{-- @if ($kunj->rekamMedis->isNotEmpty()) --}}

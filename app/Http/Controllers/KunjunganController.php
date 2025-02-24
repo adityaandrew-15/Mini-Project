@@ -288,7 +288,7 @@ class KunjunganController extends Controller
         if (Auth()->user()->hasRole('admin')) {
             return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan dan rekam medis berhasil dihapus.');
         } else {
-            return redirect()->route('kunjungan.index')->with('success', 'Data kunjungan dan rekam medis berhasil dihapus.');
+            return redirect()->route('home')->with('success', 'Data kunjungan dan rekam medis berhasil dihapus.');
         }
     }
 
@@ -444,7 +444,7 @@ class KunjunganController extends Controller
         $kunjungan = Kunjungan::with(['pasien', 'dokter', 'rekamMedis' => function ($query) {
             $query->with(['obats', 'images']);
         }])->findOrFail($id);
-        
+
         // $rekamMedis = RekamMedis::with(['kunjungan.pasien', 'obats', 'peralatans'])->findOrFail($id);
         // $totalHarga = $rekamMedis->obats->sum(function ($obat) {
         //     return $obat->pivot->jumlah * $obat->harga;
@@ -454,46 +454,54 @@ class KunjunganController extends Controller
     }
 
     public function updateStatus(Request $request, $id)
-{
-    $kunjungan = Kunjungan::with(['rekamMedis.obats', 'rekamMedis.peralatans', 'pasien'])->find($id);
+    {
+        $kunjungan = Kunjungan::with(['rekamMedis.obats', 'rekamMedis.peralatans', 'pasien'])->find($id);
 
-    if (!$kunjungan || $kunjungan->status != 'PENDING') {
-        return response()->json(['error' => 'Kunjungan tidak valid atau sudah selesai'], 400);
+        // Log the kunjungan and its status for debugging
+        \Log::info('Kunjungan found: ', ['kunjungan' => $kunjungan]);
+
+        if (!$kunjungan || $kunjungan->status != 'PENDING') {
+            \Log::error('Kunjungan error', ['status' => $kunjungan ? $kunjungan->status : 'null']);
+            return response()->json(['error' => 'Kunjungan tidak valid atau sudah selesai'], 400);
+        }
+
+        $rekamMedis = $kunjungan->rekamMedis()->first();
+
+        // Log the rekamMedis for debugging
+        \Log::info('Rekam Medis found: ', ['rekamMedis' => $rekamMedis]);
+
+        if (!$rekamMedis) {
+            \Log::error('Rekam Medis not found for Kunjungan ID', ['kunjungan_id' => $id]);
+            return response()->json(['error' => 'Rekam medis tidak ditemukan.'], 400);
+        }
+
+        $totalHargaObat = $rekamMedis->obats->sum(function ($obat) {
+            return $obat->pivot->jumlah * $obat->harga;
+        });
+
+        $totalHargaPeralatan = $rekamMedis->peralatans->sum('harga');
+        $totalPembayaran = $totalHargaObat + $totalHargaPeralatan;
+
+        $metodePembayaran = $request->input('method', 'cash');
+
+        // Simpan riwayat pembayaran
+        History::create([
+            'type' => 'payment',
+            'action' => 'paid',
+            'reference_id' => $rekamMedis->id,
+            'details' => [
+                'patient_name' => $kunjungan->pasien->nama,
+                'total' => $totalPembayaran,
+                'payment_method' => $metodePembayaran
+            ],
+        ]);
+
+        // Update status kunjungan menjadi DONE
+        $kunjungan->status = 'DONE';
+        $kunjungan->save();
+
+        return response()->json(['success' => 'Pembayaran berhasil diselesaikan.']);
     }
-
-    $rekamMedis = $kunjungan->rekamMedis()->first();
-
-    if (!$rekamMedis) {
-        return response()->json(['error' => 'Rekam medis tidak ditemukan.'], 400);
-    }
-
-    $totalHargaObat = $rekamMedis->obats->sum(function ($obat) {
-        return $obat->pivot->jumlah * $obat->harga;
-    });
-
-    $totalHargaPeralatan = $rekamMedis->peralatans->sum('harga');
-    $totalPembayaran = $totalHargaObat + $totalHargaPeralatan;
-
-    $metodePembayaran = $request->input('method', 'cash');
-
-    // Simpan riwayat pembayaran
-    History::create([
-        'type' => 'payment',
-        'action' => 'paid',
-        'reference_id' => $rekamMedis->id,
-        'details' => [
-            'patient_name' => $kunjungan->pasien->nama,
-            'total' => $totalPembayaran,
-            'payment_method' => $metodePembayaran
-        ],
-    ]);
-
-    // Update status kunjungan menjadi DONE
-    $kunjungan->status = 'DONE';
-    $kunjungan->save();
-
-    return response()->json(['success' => 'Pembayaran berhasil diselesaikan.']);
-}
 
     public function konfirmasiPembayaran($id)
     {

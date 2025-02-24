@@ -1,15 +1,14 @@
 @extends('layouts.sidebar')
-
 <style>
     .welcome {
         display: flex;
         justify-content: space-between;
         overflow: hidden;
         width: 100%;
-        height: 300px;
+        height: 280px;
         background: url('/asset/img/hero2.png') no-repeat left bottom;
         background-size: cover;
-        border-radius: 1.2rem;
+        border-radius: 2rem;
         color: rgb(255, 255, 255);
         text-align: left;
     }
@@ -48,6 +47,7 @@
         font-weight: 600;
         color: #fff;
         z-index: 2;
+        padding: 0 10px 0 10px;
     }
 
     .profile-header i {
@@ -364,7 +364,7 @@
                 <img src="{{ asset('asset/img/dokter.png') }}" alt="">
             </div>
             <div class="profile m-2">
-                <div class="profile-header p-1">
+                <div class="profile-header">
                     <h1>Profile Saya</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         style="background: transparent; outline: none; border: none;" id="openModal"><i
@@ -617,14 +617,10 @@
                 @endphp
                 <div class="legend">
                     <div class="legend-left">
-
                         <div class="selesai"><span></span>Selesai: <span id="selesai-count"
-                                style="margin-top:-10px">{{ $selesai }}</span> (<span id="selesai-percent"
-                                style="margin-top: -10px">{{ $selesaiPercent }}</span>%)</div>
+                                style="margin-top:-10px">{{ $selesai }}</span></div>
                         <div class="menunggu"><span></span>Menunggu: <span id="menunggu-count"
-                                style="margin-top: -10px">{{ $count }}</span> (<span id="menunggu-percent"
-                                style="margin-top: -10px">{{ $menungguPercent }}</span>%)</div>
-
+                                style="margin-top: -10px">{{ $count }}</span></div>
                     </div>
                 </div>
             </div>
