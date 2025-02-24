@@ -90,6 +90,10 @@ body {
     background: #d3304e;
 }
 
+.success {
+    color: #38ff1e;
+}
+
 .bg-red {
     color: #FF3C5F;
 }
@@ -246,7 +250,7 @@ body {
     all: unset;
 }
 
-.btn-add {
+a.btn-add {
     border: none;
     background: var(--main-color);
     color: white;
@@ -255,6 +259,45 @@ body {
     font-size: 1.2rem;
     font-weight: 800;
     padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+button.btn-add {
+    border: none;
+    background: var(--main-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 12px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+a.btn-close {
+    border: none;
+    background: #FF3C5F;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+button.btn-close {
+    border: none;
+    background: #FF3C5F;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 12px;
     transition: background-color 0.2s ease;
     text-decoration: none;
 }
@@ -274,6 +317,7 @@ body {
     padding: 10px;
     transition: background-color 0.2s ease;
     text-decoration: none;
+    margin: 5px;
 }
 
 .btn-close:hover {
@@ -328,6 +372,85 @@ body {
 .btn-filter:hover {
     background: var(--nav-hover-color);
 }
+
+.btn-search {
+    padding: 15px 20px;
+    position: relative;
+    top: 22px;
+    border: none;
+    background: var(--main-color);
+    color: white;
+    border-radius: 20px;
+}
+
+textarea {
+    width: 100%; /* Lebar penuh (100%) */
+    height: 450px; /* Tinggi 150px */
+    padding: 10px; /* Ruang di dalam textarea */
+    font-size: 16px; /* Ukuran font */
+    font-family: Arial, sans-serif; /* Jenis font */
+    border: 2px solid #ccc; /* Border abu-abu */
+    border-radius: 8px; /* Sudut membulat */
+    box-sizing: border-box; /* Menyesuaikan padding dengan lebar dan tinggi */
+    resize: vertical; /* Memungkinkan perubahan ukuran secara vertikal */
+    transition: all 0.3s ease; /* Transisi halus pada perubahan */
+}
+
+.pagination-wrapper {
+    text-align: end;
+    margin: 20px 20px;
+}
+
+.pagination {
+    display: inline-block;
+    height: 35px;
+    /* margin-top: 35px; */
+    padding: 0 12px;
+    border-radius: 18px;
+    background-color: #eee;
+
+    @media only screen and (max-width: 1199px) {
+        height: 25px;
+        margin-top: 25px;
+        padding: 0 5px;
+        border-radius: 12px;
+    }
+}
+
+.page-numbers {
+    display: inline-block;
+    padding: 0 12px;
+    transition: 400ms ease;
+    color: #595959;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    line-height: 35px;
+    text-decoration: none;
+
+    &.current,
+    &:hover {
+        background-color: var(--accent-color);
+        color: #fff;
+    }
+
+    &.prev:hover,
+    &.next:hover {
+        background-color: transparent;
+        color: var(--accent-color);
+    }
+
+    &.disabled {
+        color: #ccc;
+        pointer-events: none;
+    }
+
+    @media only screen and (max-width: 1199px) {
+        padding: 0 8px;
+        font-size: 10px;
+        line-height: 25px;
+    }
+}
+
 
 #fileInput {
     display: none;
@@ -406,6 +529,10 @@ body {
 .form,
 form:focus {
     border: 1px solid #aaa;
+}
+
+textarea {
+    height: 300px;
 }
 
 .modal-add {
@@ -951,6 +1078,15 @@ form:focus {
     border-radius: 2rem;
 }
 
+.sidebar ul li a.active {
+    background: white;
+    color: var(--nav-dropdown-hover-color);
+    border-radius: 2rem;
+    /* padding: 10px 15px; */
+    /* display: block; */
+}
+
+
 .sidebar ul li a i {
     font-size: 1.2rem;
 }
@@ -1020,7 +1156,7 @@ form:focus {
 
 .wrapper-container {
     flex: 1;
-    margin-left: 12rem;
+    margin-left: 14rem;
     transition: margin-left 0.3s;
 }
 
@@ -1072,9 +1208,9 @@ form:focus {
 .search-container {
     display: flex;
     align-items: center;
-    height: 50px;
+    height: 45px;
     border: 2px solid #ccc;
-    border-radius: 1rem;
+    border-radius: 14px;
     padding: 5px 10px;
     background-color: #fff;
     margin: 0 0.2rem 0 0.2rem;
@@ -1119,8 +1255,8 @@ form:focus {
 .content-table-table {
     margin: 1rem;
     width: auto;
-    height: 800px;
-    max-height: 800px;
+    height: 700px;
+    max-height: 700px;
     /* overflow: hidden; */
     overflow-y: auto;
 }

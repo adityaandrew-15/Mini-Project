@@ -111,6 +111,34 @@
             transition: 0.4s;
             border-radius: 4px;
         }
+
+        .form-group {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #aaa;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        label {
+            position: absolute;
+            left: 12px;
+            top: 45%;
+            transform: translateY(-50%);
+            /* background: white; */
+            padding: 0 5px;
+            font-size: 16px;
+            color: #999;
+            transition: 0.3s ease-in-out;
+            pointer-events: none;
+            top: -14px;
+
+        }
     </style>
 
 </head>
@@ -167,8 +195,6 @@
         </div>
 
         <div class="branding d-flex align-items-center">
-
-
             <div class="container position-relative d-flex align-items-center justify-content-end">
                 <a href="/dashboard" class="logo d-flex align-items-center me-auto">
                     <h1>AllCare</h1>
@@ -261,40 +287,44 @@
                         <form action="{{ route('pasien.store') }}" method="POST" class="php-email-form">
                             @csrf
                             <div class="row">
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-4">
                                     <div class="form-group">
-                                        <label for="namaLengkap" class="form-label text-start">Nama Lengkap</label>
-                                        <input class="form-control" id="namaLengkap" placeholder="Nama Lengkap"
-                                            type="text" name="nama" value="{{ old('nama') }}" />
+                                        <input class="form-control" id="namaLengkap" placeholder=" " type="text"
+                                            name="nama" value="{{ old('nama') }}" />
+                                        <label for="namaLengkap">Nama Lengkap</label>
                                         @error('nama')
-                                            <p style="color: red">{{ $message }}</p>
+                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-4">
                                     <div class=" form-group">
-                                        <input class="form-control" placeholder="Alamat" type="text"
-                                            name="alamat" value="{{ old('alamat') }}" />
+                                        <input class="form-control" placeholder=" " type="text" name="alamat"
+                                            id="alamat" value="{{ old('alamat') }}" />
+                                        <label for="alamat">Alamat</label>
                                         @error('alamat')
-                                            <p style="color: red">{{ $message }}</p>
+                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-4">
                                     <div class=" form-group">
-                                        <input class="form-control" placeholder="Nomor Handphone" type="number"
-                                            name="no_hp" value="{{ old('no_hp') }}" />
+                                        <input class="form-control" placeholder=" " type="number" name="no_hp"
+                                            id="no_hp" value="{{ old('no_hp') }}" />
+                                        <label for="no_hp">Nomor Handphone</label>
                                         @error('no_hp')
-                                            <p style="color: red">{{ $message }}</p>
+                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-4">
                                     <div class=" form-group">
-                                        <input class="form-control" placeholder="Tanggal Lahir" type="date"
-                                            name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" />
+                                        <input class="form-control" placeholder=" " type="date"
+                                            name="tanggal_lahir" id="tgl_lahir"
+                                            value="{{ old('tanggal_lahir') }}" />
+                                        <label for="tgl_lahir">Tanggal Lahir</label>
                                         @error('tanggal_lahir')
-                                            <p style="color: red">{{ $message }}</p>
+                                            <p style="color: red; position: absolute; right: 0;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
@@ -322,15 +352,18 @@
             </p>
         </div>
         <div class="container">
+            <div class="text-end mt-4 mb-4">
+                <a href="{{ route('listpasien') }}" class="cta-btn">Lihat semua</a>
+            </div>
             @if ($pasien->isEmpty())
                 <span>Tidak Ada Data</span>
             @else
-                <div class="row gy-4">
-                    @foreach ($pasien as $pas)
-                        <div class="col-md-6 aos-init aos-animate">
+                <div class="row">
+                    @foreach ($pasien->take(3) as $pas)
+                        <div class="col-md-4 aos-init aos-animate">
                             <div class="service-item position-relative">
                                 {{-- <h2>Data Pasien Anda: {{ $loop->iteration }}</h2> --}}
-                                <h2>Data Pasien : <span class="value">{{ $pas->nama }}</span></h2>
+                                <h4>Data Pasien : <span class="value">{{ $pas->nama }}</span></h4>
                                 {{-- <p>
                                 <i class="fas fa-user"></i>
                                 <span class="label">Nama :</span>
@@ -351,6 +384,32 @@
                                     <span class="label">Tgl Lahir :</span>
                                     <span class="value">{{ $pas->tanggal_lahir }}</span>
                                 </p>
+                                <form id="delete-form-{{ $pas->id }}"
+                                    action="{{ route('pasien.destroy', $pas->id) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                                <button type="submit" class="header cta-btn mt-4"
+                                    onclick="confirmDelete({{ $pas->id }})">Hapus</button>
+                                <script>
+                                    function confirmDelete(id) {
+                                        Swal.fire({
+                                            title: 'Apakah Anda yakin?',
+                                            text: "Data pasien ini akan dihapus secara permanen!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Ya, hapus!',
+                                            cancelButtonText: 'Batal'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                document.getElementById('delete-form-' + id).submit();
+                                            }
+                                        });
+                                    }
+                                </script>
                             </div>
                         </div>
                     @endforeach
@@ -366,39 +425,46 @@
                         <form action="{{ route('kunjungan.store') }}" method="POST" class="php-email-form">
                             @csrf
                             <div class="row">
-                                <div class="form-group mt-3">
-                                    <div class="form-group mt-3">
+
+                                <div class="form-group mt-4">
+                                    <div class="form-group">
+                                        <input placeholder="Tanggal Kunjungan" class="form-control datepicker"
+                                            name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan') }}"
+                                            type="date">
+                                        <label for="tgl_kunjungan">Tanggal Kunjungan</label>
+                                    </div>
+                                    @error('tanggal_kunjungan')
+                                        <p style="color: red">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group mt-4">
+                                    <div class="form-group">
                                         <select name="pasien_id" class="form-select">
                                             <option disabled selected>Cari pasien</option>
                                             @foreach ($pasien as $pas)
                                                 <option value="{{ $pas->id }}">{{ $pas->nama }}</option>
                                             @endforeach
                                         </select>
+                                        <label for="nama_pasien">Nama Pasien</label>
                                     </div>
                                     @error('pasien_id')
                                         <p style="color: red">{{ $message }}</p>
                                     @enderror
                                 </div>
 
-                                <div class="form-group mt-3">
+                                <div class="form-group mt-4">
                                     <div class="form-group">
-                                        <input placeholder="keluhan" class="form-control" type="text"
-                                            name="keluhan" value="{{ old('keluhan') }}" />
+                                        <textarea name="keluhan" id="" class="forn-control" rows="4"></textarea>
+                                        {{-- <input placeholder=" " class="form-control" type="text" name="keluhan"
+                                            value="{{ old('keluhan') }}" /> --}}
+                                        <label for="keluhan">Keluhan</label>
                                     </div>
                                     @error('keluhan')
                                         <p style="color: red">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="form-group mt-3">
-                                    <div class="form-group">
-                                        <input placeholder="Tanggal Kunjungan" class="form-control datepicker"
-                                            name="tanggal_kunjungan" value="{{ old('tanggal_kunjungan') }}"
-                                            type="date">
-                                    </div>
-                                    @error('tanggal_kunjungan')
-                                        <p style="color: red">{{ $message }}</p>
-                                    @enderror
-                                </div>
+
                             </div>
                             <div class="mt-4">
                                 <div class="text-center">
@@ -449,13 +515,13 @@
                     <h2 class="text-center">Tidak ada data</h2>
                 </div>
             @else
-                <div class="row gy-4">
+                <div class="row">
                     @foreach ($kunjunganhistory->take(3) as $kunj)
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="service-item position-relative">
                                 {{-- <h2>Data Anda</h2> --}}
-                                <h2 class="mb-3"><strong>Data Kunjungan : </strong><span
-                                        class="value">{{ $kunj->pasien->nama }}</span></h2>
+                                <h4 class="mb-3"><strong>Data Kunjungan : </strong><span
+                                        class="value">{{ $kunj->pasien->nama }}</span></h4>
                                 {{-- <p>
                                     <i class="fas fa-user"></i>
                                     <span class="label">Nama :</span>
@@ -476,101 +542,34 @@
                                     <i class="fas fa-user"></i>
                                     <span class="label">Status :</span>
                                     <span class="value">
-                                        @if ($kunj->status == 'DONE')
-                                            Selesai
-                                        @elseif($kunj->status == 'PENDING')
-                                            Menunggu Pembayaran
-                                        @elseif($kunj->status == 'UNDONE')
-                                            Belum Direspon Dokter
+                                        @if ($kunj->status == 'REJECT')
+                                            <span class="value">Kunjungan di tolak oleh dokter</span>
                                         @else
-                                            Status Tidak Dikenal
+                                            <span class="value">
+                                                @if ($kunj->status == 'DONE')
+                                                    Selesai
+                                                @elseif($kunj->status == 'PENDING')
+                                                    Menunggu Pembayaran
+                                                @elseif($kunj->status == 'UNDONE')
+                                                    Belum Direspon Dokter
+                                                @else
+                                                    Status Tidak Dikenal
+                                                @endif
+                                            </span>
                                         @endif
                                     </span>
                                 </p>
-                                @if ($kunj->rekamMedis->isNotEmpty())
-                                    <div class="text-start mt-4">
-                                        <a href="#" class="btn btn-nota-check"
-                                            id="detailBtn{{ $kunj->rekamMedis->first()->id }}">
-                                            <p>Detail</p>
-                                        </a>
-                                    </div>
+                                {{-- @if ($kunj->rekamMedis->isNotEmpty()) --}}
+                                <div class="text-start mt-4">
+                                    <a href="{{ route('pendingdetails', $kunj->id) }}" class="btn-custom"
+                                        {{-- id="detailBtn{{ $kunj->rekamMedis->first()->id }}" --}}>
+                                        Detail
+                                    </a>
+                                </div>
 
-                                    <script>
-                                        document.getElementById('detailBtn{{ $kunj->rekamMedis->first()->id }}').addEventListener('click', function(
-                                            event) {
-                                            event.preventDefault(); // Mencegah aksi default tombol
-
-                                            let content = `
-                                                <div style="display: flex; align-items: flex-start; gap: 20px;">
-                                                    <!-- Bagian Kiri (Teks) -->
-                                                    <div style="flex: 1; font-size: 16px;">
-                                                        <strong>Pasien:</strong> <br> {{ $kunj->rekamMedis->first()->kunjungan->pasien->nama }} <br><br>
-                                                        <strong>Diagnosa:</strong> <br> {{ $kunj->rekamMedis->first()->diagnosa }} <br><br>
-                                                        <strong>Tindakan:</strong> <br> {{ $kunj->rekamMedis->first()->tindakan }} <br><br>
-                                    
-                                                        <strong>Obat:</strong> <br>
-                                                        @if ($kunj->rekamMedis->first()->obats->isNotEmpty())
-                                                            @foreach ($kunj->rekamMedis->first()->obats as $obat)
-                                                                {{ $obat->obat }} - Jumlah: {{ $obat->pivot->jumlah }}<br>
-                                                            @endforeach
-                                                        @else
-                                                            Tidak ada obat yang terkait <br>
-                                                        @endif
-                                                        <br>
-                                    
-                                                        <strong>Peralatan:</strong> <br>
-                                                        @if ($kunj->rekamMedis->first()->peralatans->isNotEmpty())
-                                                            @foreach ($kunj->rekamMedis->first()->peralatans as $peralatan)
-                                                                {{ $peralatan->nama_peralatan }}<br>
-                                                            @endforeach
-                                                        @else
-                                                            Tidak ada peralatan yang terkait <br>
-                                                        @endif
-                                                    </div>
-                                    
-                                                    <!-- Bagian Kanan (Gambar) -->
-                                                    <div style="flex: 1; text-align: center;">
-                                                         <strong>Gambar:</strong> <br>
-                                                        @if ($kunj->rekamMedis->first()->images->isNotEmpty())
-                                                            @foreach ($kunj->rekamMedis->first()->images as $image)
-                                                                <img src="{{ asset('storage/' . $image->image_path) }}" 
-                                                                     style="max-width: 50%; height: auto; border-radius: 10px;" 
-                                                                     alt="Gambar">
-                                                            @endforeach
-                                                        @else
-                                                            <p>Tidak ada gambar yang terkait</p>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            `;
-
-                                            Swal.fire({
-                                                title: 'Detail Rekam Medis',
-                                                html: content,
-                                                showCloseButton: true,
-                                                confirmButtonText: 'Close',
-                                                showCancelButton: true,
-                                                cancelButtonText: '<i class="fa-solid fa-print"></i> Cek Nota',
-                                                cancelButtonAriaLabel: 'Cek Nota',
-                                                width: '70%',
-                                                padding: '20px',
-                                                didOpen: () => {
-                                                    document.body.style.overflow = 'hidden';
-                                                },
-                                                didClose: () => {
-                                                    document.body.style.overflow = 'auto';
-                                                }
-                                            }).then((result) => {
-                                                if (result.dismiss === Swal.DismissReason.cancel) {
-                                                    window.location.href =
-                                                        "{{ route('rekam_medis.nota', $kunj->rekamMedis->first()->id) }}";
-                                                }
-                                            });
-                                        });
-                                    </script>
-                                @else
-                                    <p>Tidak ada rekam medis untuk kunjungan ini.</p>
-                                @endif
+                                {{-- @else --}}
+                                {{-- <p>Tidak ada rekam medis untuk kunjungan ini.</p> --}}
+                                {{-- @endif --}}
 
                             </div>
                         </div>
@@ -593,8 +592,9 @@
                 @foreach ($dokter as $dok)
                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch aos-init aos-animate">
                         <div class="team-member">
-                            <div class="member-img">`
-                                <img src="{{ asset('storage/' . $dok->image) }}" class="img-fluid"" alt="gambar">
+                            <div class="member-img">
+                                <img src="{{ Storage::exists('public/' . $dok->image) ? asset('storage/' . $dok->image) : asset('asset/img/dokter.png') }}"
+                                    class="img-fluid" alt="">
                             </div>
                             <div class="member-info">
                                 <h4>

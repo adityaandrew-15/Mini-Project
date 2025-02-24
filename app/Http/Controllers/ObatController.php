@@ -35,9 +35,11 @@ class ObatController extends Controller
             ->when($maxPrice, function ($query) use ($maxPrice) {
                 return $query->where('harga', '<=', $maxPrice);
             })
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();  // Ini agar query tetap terbawa saat pagination
 
         $resep = Resep::all();
+
         return view('obat.index', compact('obats', 'resep', 'layout', 'content'));
     }
 

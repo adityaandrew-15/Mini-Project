@@ -99,6 +99,21 @@ h6 {
 
 /* Pulsating Play Button
 ------------------------------*/
+
+.btn-custom {
+  background: var(--accent-color);
+  border: 0;
+  padding: 10px 35px;
+  color: #fff;
+  transition: 0.4s;
+  border-radius: 4px;
+}
+
+.btn-custom:hover {
+  color: white;
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
 .pulsating-play-btn {
   width: 94px;
   height: 94px;
@@ -279,8 +294,25 @@ h6 {
   transition: 0.3s;
 }
 
+.cta-btn,
+.cta-btn:focus {
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  font-size: 14px;
+  padding: 8px 20px;
+  border-radius: 4px;
+  transition: 0.3s;
+  border: none;
+}
+
 .header .cta-btn:hover,
 .header .cta-btn:focus:hover {
+  color: var(--contrast-color);
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
+.cta-btn:hover,
+.cta-btn:focus:hover {
   color: var(--contrast-color);
   background: color-mix(in srgb, var(--accent-color), transparent 15%);
 }
@@ -989,7 +1021,8 @@ section,
 .featured-services .service-item {
   background-color: var(--surface-color);
   box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
-  padding: 50px 30px;
+  /* padding: 50px 30px; */
+  padding: 20px 15px;
   transition: all 0.3s ease-in-out;
   height: 100%;
   position: relative;
@@ -1326,6 +1359,7 @@ section,
   box-shadow: none;
   font-size: 14px;
   padding: 10px !important;
+  width: 100%;
 }
 
 .appointment .php-email-form input:focus,
@@ -1580,6 +1614,60 @@ section,
 .doctors .team-member:hover .social {
   opacity: 1;
   bottom: 15px;
+}
+
+.pagination-wrapper {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination {
+  display: inline-block;
+  height: 35px;
+  padding: 0 12px;
+  border-radius: 18px;
+  background-color: #eee;
+
+  @media only screen and (max-width: 1199px) {
+    height: 25px;
+    margin-top: 25px;
+    padding: 0 5px;
+    border-radius: 12px;
+  }
+}
+
+.page-numbers {
+  display: inline-block;
+  padding: 0 12px;
+  transition: 400ms ease;
+  color: #595959;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  line-height: 35px;
+  text-decoration: none;
+
+  &.current,
+  &:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }
+
+  &.prev:hover,
+  &.next:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+  }
+
+  &.disabled {
+    color: #ccc;
+    pointer-events: none;
+  }
+
+  @media only screen and (max-width: 1199px) {
+    padding: 0 8px;
+    font-size: 10px;
+    line-height: 25px;
+  }
 }
 
 /*--------------------------------------------------------------

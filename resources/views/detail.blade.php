@@ -55,47 +55,36 @@
             /* Menambahkan titik-titik jika teks melebihi batas */
         }
 
+        .form-group {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #aaa;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        label {
+            position: absolute;
+            left: 12px;
+            top: 45%;
+            transform: translateY(-50%);
+            /* background: white; */
+            padding: 0 5px;
+            font-size: 16px;
+            color: #727272;
+            transition: 0.3s ease-in-out;
+            pointer-events: none;
+            top: -8px;
         }
     </style>
 </head>
 
 <body>
-    {{-- <nav class="navbar">
-        <h1>
-            AllCare
-        </h1>
-        <ul>
-            <li><a href="{{ url('/home#page-doctor') }}">
-                    Dokter
-                </a></li>
-            <li><a href="{{ url('/home#form-section') }}">
-                    Pasien
-                </a></li>
-            <li><a href="{{ url('/home#form-section-kunjungan') }}">
-                    Buat Kunjungan
-                </a></li>
-            <li><a href="{{ url('/home#patient-info') }}">
-                    Riwayat Kunjungan
-                </a></li>
-
-
-        </ul>
-        <ul>
-
-            <li class="nav-item" style="margin-left: 20px; margin-top: 15px">
-                <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
-                                 document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <p>Logout</p>
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </li>
-        </ul>
-        <div class="gap"></div>
-    </nav> --}}
     <header id="header" class="header sticky-top">
 
         <div class="topbar d-flex align-items-center">
@@ -150,30 +139,62 @@
         </div>
 
     </header>
-    <section id="patien-info" class="featured-services section">
+    <section id="patien-info" style="min-height: 100vh;" class="featured-services section">
         <div class="container section-title aos-init aos-animate">
             <h2>
                 Riwayat Kunjungan Anda
             </h2>
         </div>
-        <div class="container">
+        <div class="container" style="min-height: 100vh;">
+            <div class="row mb-4">
+                <div class="col-4 form-group">
+                    <input type="text" id="searchNama" class="form-control mt-2"
+                        placeholder="Cari berdasarkan nama pasien...">
+                    <label for="searchNama">Cari Nama Pasien</label>
+                </div>
+                <div class="col-2 form-group">
+                    <select id="statusFilter" class="form-control mt-2">
+                        <option value="">Semua Status</option>
+                        <option value="UNDONE">UNDONE</option>
+                        <option value="DONE">DONE</option>
+                        <option value="PENDING">PENDING</option>
+                        <option value="REJECT">REJECT</option>
+                    </select>
+                    <label for="statusFilter">Status</label>
+                </div>
+                <div class="col-2 form-group">
+                    <input type="date" id="startDate" class="form-control mt-2">
+                    <label for="startDate">Dari Tanggal</label>
+                </div>
+                <div class="col-2 form-group">
+                    <input type="date" id="endDate" class="form-control mt-2">
+                    <label for="endDate">Sampai Tanggal</label>
+                </div>
+                <div class="col-2 form-group">
+                    <button id="clearFilter" class="btn btn-danger mt-2">Clear Filter</button>
+                </div>
+                {{-- <div class="text-end mt-4 mb-4"> --}}
+                {{-- <a href="{{ route('home') }}" class="cta-btn">Kembali</a> --}}
+                {{-- </div> --}}
+            </div>
             @if ($kunjunganhistory->isEmpty())
                 <span>Tidak Ada Data</span>
             @else
-                <div class="row gy-4">
+                <div class="row gy-4" id="kunjunganList">
                     @foreach ($kunjunganhistory as $kunj)
-                        <div class="col-md-6 aos-init aos-animate">
+                        <div class="col-md-6 kunjungan-item" data-nama="{{ strtolower($kunj->pasien->nama) }}"
+                            data-tanggal="{{ $kunj->tanggal_kunjungan }}" data-status="{{ $kunj->status }}">
                             <div class="service-item position-relative" style="overflow: hidden;">
-                                <h2>Data pasien: </h2>
-                                <p style="margin: 1rem 0;">
+                                <h4 style="margin: 1rem 0;">
                                     <i class="fas fa-user"></i>
                                     <span><strong>Nama :</strong></span>
                                     <span class="value">{{ $kunj->pasien->nama }}</span>
-                                </p>
+                                </h4>
                                 <p style="margin: 1rem 0;">
                                     <i class="fas fa-map-marker-alt"></i>
                                     <span><strong>Dokter :</strong></span>
-                                    <span class="value">{{ $kun->dokter->nama ?? 'tunggu beberapa saat lagi' }}</span>
+                                    <span
+                                        class="value">{{ $kunj->dokter->nama ?? 'tunggu beberapa saat lagi' }}</span>
                                 </p>
                                 <p style="margin: 1rem 0;">
                                     <i class="fas fa-phone"></i>
@@ -185,21 +206,88 @@
                                     <span><strong>Tanggal Kunjungan :</strong></span>
                                     <span class="value">{{ $kunj->tanggal_kunjungan }}</span>
                                 </p>
-
-                                @if ($kunj->rekamMedis->isNotEmpty())
-                                    <div class="mt-5">
-                                        <a href="{{ route('homedetails', $kunj->id) }}"
-                                            class="btn btn-nota-check">detail</a>
-                                    </div>
-                                @else
-                                    <p>Tidak ada rekam medis untuk kunjungan ini.</p>
-                                @endif
+                                <p style="margin: 1rem 0;">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span><strong>Status :</strong></span>
+                                    @if ($kunj->status == 'REJECT')
+                                        <span class="value">Kunjungan di tolak oleh dokter</span>
+                                    @else
+                                        <span class="value">
+                                            @if ($kunj->status == 'DONE')
+                                            Selesai
+                                        @elseif($kunj->status == 'PENDING')
+                                            Menunggu Pembayaran
+                                        @elseif($kunj->status == 'UNDONE')
+                                            Belum Direspon Dokter
+                                        @else
+                                            Status Tidak Dikenal
+                                        @endif
+                                        </span>
+                                    @endif
+                                </p>
+                                {{-- @if ($kunj->rekamMedis->isNotEmpty()) --}}
+                                <div class="mt-3">
+                                    <a href="{{ route('homedetails', $kunj->id) }}" class="cta-btn">detail</a>
+                                </div>
+                                {{-- @else --}}
+                                {{-- <p>Tidak ada rekam medis untuk kunjungan ini.</p> --}}
+                                {{-- @endif --}}
                             </div>
                         </div>
                     @endforeach
                 </div>
             @endif
         </div>
+        <div class="pagination-container">
+            {{ $kunjunganhistory->links('vendor.pagination.custom') }}
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const searchNama = document.getElementById("searchNama");
+                const startDate = document.getElementById("startDate");
+                const endDate = document.getElementById("endDate");
+                const statusFilter = document.getElementById("statusFilter");
+                const clearButton = document.getElementById("clearFilter");
+                const kunjunganItems = document.querySelectorAll(".kunjungan-item");
+
+                function filterData() {
+                    const searchText = searchNama.value.toLowerCase();
+                    const start = startDate.value;
+                    const end = endDate.value;
+                    const status = statusFilter.value;
+
+                    kunjunganItems.forEach(item => {
+                        const nama = item.getAttribute("data-nama");
+                        const tanggal = item.getAttribute("data-tanggal");
+                        const statusItem = item.getAttribute("data-status");
+
+                        const matchesNama = nama.includes(searchText);
+                        const matchesDate = (!start || tanggal >= start) && (!end || tanggal <= end);
+                        const matchesStatus = !status || statusItem === status;
+
+                        if (matchesNama && matchesDate && matchesStatus) {
+                            item.style.display = "block";
+                        } else {
+                            item.style.display = "none";
+                        }
+                    });
+                }
+
+                searchNama.addEventListener("input", filterData);
+                startDate.addEventListener("change", filterData);
+                endDate.addEventListener("change", filterData);
+                statusFilter.addEventListener("change", filterData);
+
+                // Fungsi untuk mereset filter dan menampilkan semua data kembali
+                clearButton.addEventListener("click", function() {
+                    searchNama.value = "";
+                    startDate.value = "";
+                    endDate.value = "";
+                    statusFilter.value = "";
+                    filterData();
+                });
+            });
+        </script>
     </section>
 
     {{-- footer template --}}

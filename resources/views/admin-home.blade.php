@@ -16,11 +16,11 @@
             justify-content: space-between;
             overflow: hidden;
             width: 100%;
-            height: 300px;
+            height: 280px;
             margin: 1.5rem 0;
             background: url('/asset/img/hero2.png') no-repeat left bottom;
             background-size: cover;
-            border-radius: 1.2rem;
+            border-radius: 2rem;
             color: rgb(255, 255, 255);
             text-align: left;
         }
@@ -123,7 +123,7 @@
         .bar {
             position: relative;
             width: 50px;
-            background-color: #4CAF50;
+            background-color: var(--main-color);
             transition: height 0.5s ease-in-out;
         }
 
@@ -136,9 +136,9 @@
             /* Pusatkan angka */
             font-size: 14px;
             /* Ukuran font untuk angka */
-            color: #fff;
+            color: #000;
             /* Warna font untuk angka */
-            background-color: rgba(0, 0, 0, 0.7);
+            /* background-color: rgba(0, 0, 0, 0.7); */
             /* Latar belakang semi-transparan untuk kontras */
             padding: 2px 5px;
             /* Padding untuk angka */
@@ -375,12 +375,12 @@
                     </div>
                 </div>
                 <div class="card-v bg-white col ml-2 mr-2 pl-2 pr-2 j-center d-flex drop-shadow">
-                    <h2>Janji Hari Ini</h2>
+                    <h2>Kunjungan Pasien</h2>
                     <div class="card-info d-flex p-1 row">
                         <i class="fa-solid fa-list-check i2 main-color "></i>
                         <div class="card-info ml-2">
                             <h2>{{ DB::table('kunjungans')->count() }}</h2>
-                            <p>Janji Hari Ini</p>
+                            <p>Total Semua Kunjungan</p>
                         </div>
                     </div>
                 </div>
@@ -475,7 +475,7 @@
                 nov: 0,
                 dec: 0
             };
-    
+
             // Mengisi data kunjungan dari backend
             @if (isset($kunjunganPerBulan) && $kunjunganPerBulan->isNotEmpty())
                 @foreach ($kunjunganPerBulan as $kunjungan)
@@ -519,28 +519,37 @@
                     }
                 @endforeach
             @endif
-    
+
             // Fungsi untuk mengupdate tinggi batang sesuai dengan data kunjungan
             function updateChart() {
                 for (let month in visitsData) {
                     let bar = document.getElementById(month);
                     let height = visitsData[month] * 2; // Mengalikan dengan 2 untuk memperbesar tinggi batang
-    
+
                     // Atur tinggi batang berdasarkan data kunjungan
                     bar.style.height = height + 'px';
                 }
             }
-    
+
             // Panggil fungsi updateChart setelah halaman dimuat
             window.onload = updateChart;
         </script>
+
         <script>
+            // Check the structure of dokterKunjungan
+            console.log(@json($dokterKunjungan)); // This will print the data being passed
+
             const ctx = document.getElementById('dokterChart').getContext('2d');
             const dokterKunjungan = @json($dokterKunjungan);
-    
-            const labels = dokterKunjungan.map(d => d.dokter.nama); // Ambil nama dokter
-            const data = dokterKunjungan.map(d => d.total); // Ambil total kunjungan
-    
+
+            // Ensure that the data is correctly structured before using it
+            const labels = dokterKunjungan.map(d => d.dokter ? d.dokter.nama : 'Unknown Doctor'); // Ensure 'dokter' exists
+            const data = dokterKunjungan.map(d => d.total); // Ensure 'total' exists
+
+            // Log the labels and data
+            console.log('Labels:', labels);
+            console.log('Data:', data);
+
             const chart = new Chart(ctx, {
                 type: 'pie', // Tipe chart lingkaran
                 data: {
@@ -581,5 +590,7 @@
                 }
             });
         </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </div>
 @endsection

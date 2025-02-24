@@ -1,6 +1,4 @@
 @extends('layouts.sidebar')
-<!-- Link CSS Bootstrap -->
-{{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> --}}
 
 <style>
     .tabs {
@@ -27,8 +25,8 @@
 
     .tab-content {
         display: none;
-        padding: 15px;
-        border: 1px solid #ddd;
+        /* padding: 15px; */
+        /* border: 1px solid #ddd; */
         margin-top: -1px;
     }
 
@@ -38,7 +36,7 @@
 
     .content-list {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
         /* Grid responsif */
         gap: 15px;
         /* max-width: 1200px; */
@@ -85,28 +83,9 @@
     }
 </style>
 @section('side')
-    <div class="m-3">
-        {{-- @if (auth()->user()->unreadNotifications->count())
-    <div class="alert alert-info">
-        Anda memiliki {{ auth()->user()->unreadNotifications->count() }} notifikasi baru!
-        <a href="{{ route('notifikasi.index') }}">Lihat Notifikasi</a>
-    </div>
-    @endif --}}
-        {{-- 
-        @if (session('success'))
-            <script>
-                Swal.fire('Success', '{{ session('success') }}', 'success');
-            </script>
-        @endif --}}
-        {{-- <div class="header">
-            <input type="text" placeholder="Search"><i class="fa-solid fa-magnifying-glass" style="margin-left: -100px"></i>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button><i class="fas fa-sign-out-alt"></i> Keluar</button>
-            </form>
-        </div> --}}
+    <div class="mr-3 ml-3">
         <div class="d-flex m-2 a-center">
-            <div class="d-flex j-between w-100 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Kunjungan</h2>
                 <div class="btn"></div>
                 <button type="button" class="btn-add" id="btnOpenAddModal">
@@ -114,19 +93,40 @@
                 </button>
             </div>
         </div>
-
+        <hr class="mr-3 ml-3">
         <div class="content-table m-2 d-flex col">
             <form method="GET" action="{{ route('kunjungan.index') }}" class="d-flex w-100 gap-2">
-                <input type="text" class="search-container w-75 h4" name="search_pasien" placeholder="Cari Nama Pasien"
-                    value="{{ request('search_pasien') }}" class="">
-                <div class="filter-form d-flex">
-                    <input type="text" class="search-container h4" style="width: 200px" name="search_dokter"
-                        placeholder="Cari Nama Dokter" value="{{ request('search_dokter') }}" class="">
-                    <input type="date" class="search-container h4" style="width: 200px" name="search_tanggal"
-                        placeholder="Cari Nama atau No HP" value="{{ request('search_tanggal') }}" class=""
-                        onchange="this.form.submit()">
-                    <button type="submit" class="btn-filter">Cari</button>
+                <div class="d-flex w-100 col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Cari Pasien</label>
+                    <input type="text" class="search-container w-100 h4" name="search_pasien"
+                        placeholder="Cari Nama Pasien" value="{{ request('search_pasien') }}" class="">
                 </div>
+                <div class="filter-form d-flex w-100 col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Cari Dokter</label>
+                    <input type="text" class="search-container h4 w-100" name="search_dokter"
+                        placeholder="Cari Nama Dokter" value="{{ request('search_dokter') }}" class="">
+                    {{-- <button type="submit" class="btn-filter">Cari</button> --}}
+                </div>
+                <div class="filter-form d-flex  col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Dari</label>
+                    <input type="date" class="search-container h4" name="search_tanggal_start"
+                        value="{{ request('search_tanggal_start') }}" onchange="this.form.submit()">
+                </div>
+                <div class="filter-form d-flex  col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Sampai</label>
+                    <input type="date" class="search-container h4 w-" name="search_tanggal_end"
+                        value="{{ request('search_tanggal_end') }}" onchange="this.form.submit()">
+                </div>
+                <div class="filter-form d-flex  col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for=""></label>
+                    <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                </div>
+
                 <style>
                     .invisible-btn {
                         opacity: 0;
@@ -143,363 +143,340 @@
                     <button class="tab-button" data-tab="done-list">Selesai</button>
                 </div>
 
-                <div class="content-table-table tab-content " style="margin: 0;" id="done-table">
-                    <table>
-                        <thead class="h4 f-bolder">
-                            <tr>
-                                <th>Pasien</th>
-                                <th>Dokter</th>
-                                <th>Keluhan</th>
-                                <th>Tanggal Kunjungan</th>
-                                {{-- @if (auth()->user()->hasRole('admin')) --}}
-                                <th>Aksi</th>
-                                {{-- @endif --}}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($kunjungans as $kunjungan)
+                <div class="tab-content" style="margin: 0;" id="done-table">
+                    <div class="content-table-table ">
+                        <table>
+                            <thead class="h4 f-bolder">
                                 <tr>
-                                    <td>{{ $kunjungan->pasien->nama }}</td>
-                                    <td>{{ $kunjungan->dokter->nama ?? 'Edit untuk menambahkan dokter' }}</td>
-                                    <td>{{ $kunjungan->keluhan }}</td>
-                                    <td class="truncate-tb">{{ $kunjungan->tanggal_kunjungan }}</td>
+                                    <th>Pasien</th>
+                                    <th>Dokter</th>
+                                    <th>Keluhan</th>
+                                    <th>Tanggal Kunjungan</th>
+                                    {{-- @if (auth()->user()->hasRole('admin')) --}}
+                                    <th>Aksi</th>
+                                    {{-- @endif --}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($kunjungans->isEmpty())
+                                    <tr>
+                                        <td colspan="5" class="" style="text-align: center;">Tidak ada Data</td>
+                                    </tr>
+                                @else
+                                    @foreach ($kunjungans as $kunjungan)
+                                        <tr>
+                                            <td>{{ $kunjungan->pasien->nama }}</td>
+                                            <td>{{ $kunjungan->dokter->nama ?? 'Edit untuk menambahkan dokter' }}</td>
+                                            <td>{{ $kunjungan->keluhan }}</td>
+                                            <td class="truncate-tb">{{ $kunjungan->tanggal_kunjungan }}</td>
 
-                                    <td class="action-icons">
-                                        <button type="button" style="border: none; outline: none; background: transparent;"
-                                            onclick="btnOpenDetailModal({{ $kunjungan->id }})">
-                                            <i class="fas fa-eye h3 mr-1 main-color pointer"></i>
-                                        </button>
-
-                                        <script>
-                                            function btnOpenDetailModal(kunjunganId) {
-                                                var modal = document.getElementById('detailModal' + kunjunganId);
-                                                var modalInstance = new bootstrap.Modal(modal);
-                                                modalInstance.show();
-                                            }
-                                        </script>
-                                        {{-- @if ($kunjungan->rekamMedis()->doesntExist() && !$kunjungan->dokter_id) --}}
-                                        @if (auth()->user()->hasRole('admin'))
-                                            @if ($kunjungan->rekamMedis()->doesntExist())
+                                            <td class="action-icons">
                                                 <button type="button"
                                                     style="border: none; outline: none; background: transparent;"
-                                                    onclick="btnOpenEditModal({{ $kunjungan->id }})">
-                                                    <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
+                                                    onclick="btnOpenDetailModal({{ $kunjungan->id }})">
+                                                    <i class="fa-regular fa-eye h3 mr-1 main-color pointer"></i>
                                                 </button>
-                                            @endif
-                                        @endif
+
+                                                <script>
+                                                    function btnOpenDetailModal(kunjunganId) {
+                                                        var modal = document.getElementById('detailModal' + kunjunganId);
+                                                        var modalInstance = new bootstrap.Modal(modal);
+                                                        modalInstance.show();
+                                                    }
+                                                </script>
+                                                {{-- @if ($kunjungan->rekamMedis()->doesntExist() && !$kunjungan->dokter_id) --}}
+                                                {{-- @if (auth()->user()->hasRole('admin'))
+                                                    @if ($kunjungan->rekamMedis()->doesntExist())
+                                                        <button type="button"
+                                                            style="border: none; outline: none; background: transparent;"
+                                                            onclick="btnOpenEditModal({{ $kunjungan->id }})">
+                                                            <i class="fas fa-edit edit h3 mr-1 main-color pointer"></i>
+                                                        </button>
+                                                    @endif
+                                                @endif --}}
 
 
-                                        @if ($kunjungan->rekamMedis()->doesntExist() && $kunjungan->dokter_id)
-                                            <button type="button"
-                                                style="border: none; outline: none; background: transparent;"
-                                                onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
-                                                <i class="fas fa-plus-circle add h3 mr-1 main-color pointer"></i>
-                                            </button>
-                                        @endif
+                                                @if ($kunjungan->rekamMedis()->doesntExist() && $kunjungan->dokter_id)
+                                                    <button type="button"
+                                                        style="border: none; outline: none; background: transparent;"
+                                                        onclick="btnOpenAddRekamMedisModal({{ $kunjungan->id }})">
+                                                        <i
+                                                            class="fa-regular fa-notes-medical h3 mr-1 main-color pointer"></i>
+                                                    </button>
+                                                @endif
 
-                                        <script>
-                                            function btnOpenAddRekamMedisModal(kunjunganId) {
-                                                document.getElementById('kunjungan_id').value = kunjunganId; // Set kunjungan_id in the form
-                                                document.getElementById('myModalAddRekamMedis').style.display = "block"; // Show modal
-                                            }
+                                                <script>
+                                                    function btnOpenAddRekamMedisModal(kunjunganId) {
+                                                        document.getElementById('kunjungan_id').value = kunjunganId; // Set kunjungan_id in the form
+                                                        document.getElementById('myModalAddRekamMedis').style.display = "block"; // Show modal
+                                                    }
 
-                                            function closeAddRekamMedisModal() {
-                                                document.getElementById('myModalAddRekamMedis').style.display = "none"; // Hide modal
-                                            }
-                                        </script>
+                                                    function closeAddRekamMedisModal() {
+                                                        document.getElementById('myModalAddRekamMedis').style.display = "none"; // Hide modal
+                                                    }
+                                                </script>
 
-                                        {{-- iki modal tambah rekammedis --}}
-                                        <div class="modal animate__fadeIn" id="myModalAddRekamMedis">
-                                            <div class="modal-content animate__animated animate__zoomIn">
-                                                <h2 class="h2 f-bolder">Tambah Rekam Medis</h2>
-                                                <form id="addRekamMedisForm"
-                                                    action="{{ route('rekam_medis.store', $kunjungan->id) }}"
-                                                    method="POST" enctype="multipart/form-data">
+                                                {{-- iki modal tambah rekammedis --}}
+                                                <div class="modal animate__fadeIn" id="myModalAddRekamMedis">
+                                                    <div class="modal-content animate__animated animate__zoomIn">
+                                                        <h2 class="h2 f-bolder">Tambah Rekam Medis</h2>
+                                                        <form id="addRekamMedisForm"
+                                                            action="{{ route('rekam_medis.store', $kunjungan->id) }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <input type="hidden" name="kunjungan_id" id="kunjungan_id">
+
+                                                            <div class="my-2">
+                                                                <label for="diagnosa" class="h4 f-bolder">Diagnosa</label>
+                                                                <div class="my-1">
+                                                                    <input type="text"
+                                                                        class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                        id="diagnosa" name="diagnosa" required>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Tindakan -->
+                                                            <div class="my-2">
+                                                                <label for="tindakan" class="h4 f-bolder">Tindakan</label>
+                                                                <div class="my-1">
+                                                                    <input type="text"
+                                                                        class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                        id="tindakan" name="tindakan" required>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Resep -->
+                                                            <div class="my-2">
+                                                                <label for="deskripsi" class="h4 f-bolder">Resep</label>
+                                                                <div class="my-1">
+                                                                    <textarea class="form h4 f-normal px-2 w-100 border-radius-1" id="deskripsi" name="deskripsi" rows="4"
+                                                                        required></textarea>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Obat -->
+                                                            <div class="my-2">
+                                                                <label for="obat_id" class="h4 f-bolder">Obat</label>
+                                                                <div class="my-1">
+                                                                    <select name="obat_id[]" id="obat_id"
+                                                                        class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                        multiple>
+                                                                        @foreach ($obats as $obat)
+                                                                            <option value="{{ $obat->id }}"
+                                                                                data-stok="{{ $obat->jumlah }}">
+                                                                                {{ $obat->obat }} (Stok:
+                                                                                {{ $obat->jumlah }})
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Jumlah Obat -->
+                                                            <div id="medication-quantity-section" class="my-2"></div>
+
+                                                            <!-- Peralatan -->
+                                                            <div class="my-2">
+                                                                <label for="peralatan_id"
+                                                                    class="h4 f-bolder">Peralatan</label>
+                                                                <div class="my-1">
+                                                                    <select name="peralatan_id[]" id="peralatan_id"
+                                                                        class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                        multiple>
+                                                                        @foreach ($peralatans as $peralatan)
+                                                                            <option value="{{ $peralatan->id }}">
+                                                                                {{ $peralatan->nama_peralatan }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Gambar -->
+                                                            <div class="my-2">
+                                                                <label for="images" class="h4 f-bolder">Gambar</label>
+                                                                <div class="my-1">
+                                                                    <input type="file"
+                                                                        class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                                        id="images" name="images[]" multiple>
+                                                                </div>
+                                                            </div>
+
+                                                            <button type="button" class=" btn-close red-hover"
+                                                                onclick="closeAddRekamMedisModal()">Batal</button>
+                                                            <button type="submit" class=" btn-add">Simpan</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+
+                                                <form id="reject-form-{{ $kunjungan->id }}"
+                                                    action="{{ route('kunjungan.reject', $kunjungan->id) }}"
+                                                    method="POST" style="display: none;">
                                                     @csrf
-                                                    <input type="hidden" name="kunjungan_id" id="kunjungan_id">
-
-                                                    <div class="my-2">
-                                                        <label for="diagnosa" class="h4 f-bolder">Diagnosa</label>
-                                                        <div class="my-1">
-                                                            <input type="text"
-                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                id="diagnosa" name="diagnosa" required>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Tindakan -->
-                                                    <div class="my-2">
-                                                        <label for="tindakan" class="h4 f-bolder">Tindakan</label>
-                                                        <div class="my-1">
-                                                            <input type="text"
-                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                id="tindakan" name="tindakan" required>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Resep -->
-                                                    <div class="my-2">
-                                                        <label for="deskripsi" class="h4 f-bolder">Resep</label>
-                                                        <div class="my-1">
-                                                            <textarea class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="deskripsi" name="deskripsi" required></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Obat -->
-                                                    <div class="my-2">
-                                                        <label for="obat_id" class="h4 f-bolder">Obat</label>
-                                                        <div class="my-1">
-                                                            <select name="obat_id[]" id="obat_id"
-                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                multiple>
-                                                                @foreach ($obats as $obat)
-                                                                    <option value="{{ $obat->id }}"
-                                                                        data-stok="{{ $obat->jumlah }}">
-                                                                        {{ $obat->obat }} (Stok:
-                                                                        {{ $obat->jumlah }})
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Jumlah Obat -->
-                                                    <div id="medication-quantity-section" class="my-2"></div>
-
-                                                    <!-- Peralatan -->
-                                                    <div class="my-2">
-                                                        <label for="peralatan_id" class="h4 f-bolder">Peralatan</label>
-                                                        <div class="my-1">
-                                                            <select name="peralatan_id[]" id="peralatan_id"
-                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                multiple>
-                                                                @foreach ($peralatans as $peralatan)
-                                                                    <option value="{{ $peralatan->id }}">
-                                                                        {{ $peralatan->nama_peralatan }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Gambar -->
-                                                    <div class="my-2">
-                                                        <label for="images" class="h4 f-bolder">Gambar</label>
-                                                        <div class="my-1">
-                                                            <input type="file"
-                                                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                                                id="images" name="images[]" multiple>
-                                                        </div>
-                                                    </div>
-
-                                                    <button type="button" class="px-2 py-1 btn-close red-hover"
-                                                        onclick="closeAddRekamMedisModal()">Batal</button>
-                                                    <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
+                                                    @method('PATCH')
+                                                    <!-- Menggunakan PATCH karena kita hanya memperbarui status -->
                                                 </form>
-                                            </div>
-                                        </div>
+                                                <button type="button"
+                                                    style="background: transparent; outline: none; border: none"
+                                                    onclick="confirmReject({{ $kunjungan->id }})">
+                                                    <i class="fa-regular fa-ban delete h3 mr-1 red pointer"></i>
+                                                </button>
 
-                                        <form id="delete-form-{{ $kunjungan->id }}"
-                                            action="{{ route('kunjungan.destroy', $kunjungan->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                        <button type="submit"
-                                            style="background: transparent; outline: none; border: none"
-                                            onclick="confirmDelete({{ $kunjungan->id }})">
-                                            <i class="fas fa-trash delete h3 mr-1 red pointer"></i>
-                                        </button>
-                                        <script>
-                                            function confirmDelete(id) {
-                                                Swal.fire({
-                                                    title: 'Apakah Anda yakin?',
-                                                    text: "Data ini akan dihapus secara permanen!",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Ya, hapus!',
-                                                    cancelButtonText: 'Batal'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        // Submit form hapus
-                                                        document.getElementById('delete-form-' + id).submit();
+                                                <script>
+                                                    function confirmReject(id) {
+                                                        Swal.fire({
+                                                            title: 'Tolak Kunjungan ini?',
+                                                            text: "Data kunjungan akan di kembalikan ke pasien.",
+                                                            icon: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#3085d6',
+                                                            cancelButtonColor: '#d33',
+                                                            confirmButtonText: 'Ya, tolak!',
+                                                            cancelButtonText: 'Batal'
+                                                        }).then((result) => {
+                                                            if (result.isConfirmed) {
+                                                                // Submit form to reject kunjungan
+                                                                document.getElementById('reject-form-' + id).submit();
+                                                            }
+                                                        });
                                                     }
-                                                });
-                                            }
-                                        </script>
+                                                </script>
 
-                                    </td>
-                                    {{-- @endif --}}
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="content-table-table tab-content " style="margin: 0;" id="pending">
-                    <table>
-                        <thead class="h4 f-bolder">
-                            <tr>
-                                <th>Pasien</th>
-                                <th>Dokter</th>
-                                <th>Keluhan</th>
-                                <th>Tanggal Kunjungan</th>
-                                <th>Status</th>
-                                {{-- @if (auth()->user()->hasRole('admin')) --}}
-                                <th>Aksi</th>
-                                {{-- @endif --}}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pendingkunjungans as $kunjungan)
-                                <tr>
-                                    <td>{{ $kunjungan->pasien->nama }}</td>
-                                    <td>{{ $kunjungan->dokter->nama ?? 'Edit untuk menambahkan dokter' }}</td>
-                                    <td>{{ $kunjungan->keluhan }}</td>
-                                    <td class="truncate-tb">{{ $kunjungan->tanggal_kunjungan }}</td>
-                                    <td>Menunggu pembayaran</td>
-                                    <td class="action-icons">
-                                        <a href="{{ route('pendingdetails', $kunjungan->id) }}"><i
-                                                class="fas fa-eye h3 mr-1 main-color pointer"></i></a>
-                                        {{-- <button type="button"
-                                            style="border: none; outline: none; background: transparent;"
-                                            onclick="btnOpenpendingDetailModal({{ $kunjungan->id }})">
-                                            <i class="fas fa-eye h3 mr-1 main-color pointer"></i>
-                                        </button> --}}
-
-                                        {{-- <script>
-                                            function btnOpenpendingDetailModal(kunjunganId) {
-                                                var modal = document.getElementById('pendingdetailModal' + kunjunganId);
-                                                var modalInstance = new bootstrap.Modal(modal);
-                                                modalInstance.show();
-                                            }
-                                        </script> --}}
-                                        {{-- @if ($kunjungan->rekamMedis()->doesntExist() && !$kunjungan->dokter_id) --}}
-
-                                        {{-- <form id="delete-form-{{ $kunjungan->id }}"
-                                            action="{{ route('kunjungan.destroy', $kunjungan->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                        <button type="submit"
-                                            style="background: transparent; outline: none; border: none"
-                                            onclick="confirmDelete({{ $kunjungan->id }})">
-                                            <i class="fa-solid fa-clock-rotate-left h3 mr-1 red pointer"></i>
-                                        </button> --}}
-                                        {{-- <script>
-                                            function confirmDelete(id) {
-                                                Swal.fire({
-                                                    title: 'Apakah Anda yakin?',
-                                                    text: "Data ini akan dihapus secara permanen!",
-                                                    icon: 'warning',
-                                                    showCancelButton: true,
-                                                    confirmButtonColor: '#3085d6',
-                                                    cancelButtonColor: '#d33',
-                                                    confirmButtonText: 'Ya, hapus!',
-                                                    cancelButtonText: 'Batal'
-                                                }).then((result) => {
-                                                    if (result.isConfirmed) {
-                                                        // Submit form hapus
-                                                        document.getElementById('delete-form-' + id).submit();
-                                                    }
-                                                });
-                                            }
-                                        </script> --}}
-
-                                        {{-- <form action="{{ route('kunjungan.updateStatus', $kunjungan->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit">Tandai Selesai</button>
-                                        </form> --}}
-
-                                        <form id="delete-form-{{ $kunjungan->id }}"
-                                            action="{{ route('kunjungan.updateStatus', $kunjungan->id) }}" method="POST"
-                                            style="display: none;">
-                                            @csrf
-                                        </form>
-                                        @if (auth()->user()->hasRole('admin'))
-                                            <button type="submit"
-                                                style="background: transparent; outline: none; border: none"
-                                                onclick="confirmDelete({{ $kunjungan->id }})">
-                                                {{-- <i class="fa-solid fa-check-double"></i> --}}
-                                                <i class="fa-solid fa-check-double h3 mr-1 red pointer"></i>
-                                            </button>
-                                            <script>
-                                                function confirmDelete(id) {
-                                                    Swal.fire({
-                                                        title: 'Apakah Anda yakin?',
-                                                        text: "Tandai pembayaran selesai?",
-                                                        icon: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#3085d6',
-                                                        cancelButtonColor: '#d33',
-                                                        confirmButtonText: 'Ya, Selesaikan!',
-                                                        cancelButtonText: 'Batal'
-                                                    }).then((result) => {
-                                                        if (result.isConfirmed) {
-                                                            // Submit form hapus
-                                                            document.getElementById('delete-form-' + id).submit();
-                                                        }
-                                                    });
-                                                }
-                                            </script>
-                                        @endif
-                                    </td>
-                                    {{-- @endif --}}
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="content-table-table tab-content" style="margin: 0;" id="done-list">
-                    <div class="content-list">
-                        @foreach ($donekunjungans as $kunjungan)
-                            <div class="list-item">
-                                <!-- Atas -->
-                                <div class="top">
-                                    <strong>Pasien :</strong> <span>{{ $kunjungan->pasien->nama }}</span>
-                                </div>
-                                <div class="top">
-                                    <strong>Keluhan :</strong> <span class="truncate">{{ $kunjungan->keluhan }}</span>
-                                </div>
-
-                                <!-- Bawah -->
-                                <div class="bottom">
-                                    <strong>Dokter :</strong>
-                                    <span>{{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}</span>
-                                </div>
-                                <div class="bottom">
-                                    <strong>Tanggal :</strong> <span>{{ $kunjungan->tanggal_kunjungan }}</span>
-                                </div>
-
-                                <div class="separator"></div>
-
-                                <!-- Tombol -->
-                                {{-- <a href="javascript:void(0)" class="btn-add" onclick="btnOpenDetailModal({{ $kunjungan->id }})">
-                                    <i class="fas fa-eye"></i> Lihat Detail
-                                </a> --}}
-                                <a href="{{ route('kunjhistoryshow', $kunjungan->id) }}" class="btn-add"
-                                    style="width: max-content">
-                                    <i class="fas fa-eye"></i> Lihat Detail
-                                </a>
-                            </div>
-                        @endforeach
+                                            </td>
+                                            {{-- @endif --}}
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
-
-                    <script>
-                        function btnOpenDetailModal(kunjunganId) {
-                            var modal = document.getElementById('detailModal' + kunjunganId);
-                            var modalInstance = new bootstrap.Modal(modal);
-                            modalInstance.show();
-                        }
-                    </script>
+                    <div class="pagination-container">
+                        {{ $kunjungans->links('vendor.pagination.custom') }}
+                    </div>
                 </div>
 
+                <div class="tab-content" style="margin: 0;" id="pending">
+                    <div class="content-table-table ">
+                        <table>
+                            <thead class="h4 f-bolder">
+                                <tr>
+                                    <th>Pasien</th>
+                                    <th>Dokter</th>
+                                    <th>Keluhan</th>
+                                    <th>Tanggal Kunjungan</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($pendingkunjungans->isEmpty())
+                                    <td colspan="5" class="text-center" style="text-align: center;">Tidak ada Data
+                                    </td>
+                                @else
+                                    @foreach ($pendingkunjungans as $kunjungan)
+                                        <tr>
+                                            <td>{{ $kunjungan->pasien->nama }}</td>
+                                            <td>{{ $kunjungan->dokter->nama ?? 'Edit untuk menambahkan dokter' }}</td>
+                                            <td>{{ $kunjungan->keluhan }}</td>
+                                            <td class="truncate-tb">{{ $kunjungan->tanggal_kunjungan }}</td>
+                                            <td>Menunggu pembayaran</td>
+                                            <td class="action-icons">
+                                                <a href="{{ route('pendingdetails', $kunjungan->id) }}"><i
+                                                        class="fa-regular fa-eye h3 mr-1 main-color pointer"></i></a>
+                                                {{-- <form id="delete-form-{{ $kunjungan->id }}"
+                                                    action="{{ route('kunjungan.updateStatus', $kunjungan->id) }}"
+                                                    method="POST" style="display: none;">
+                                                    @csrf
+                                                </form>
+                                                @if (auth()->user()->hasRole('admin'))
+                                                    <button type="submit"
+                                                        style="background: transparent; outline: none; border: none"
+                                                        onclick="confirmTransaction({{ $kunjungan->id }})">
+                                                        <i class="fa-regular fa-badge-check h3 mr-1 success pointer"></i>
+                                                    </button>
+                                                    <script>
+                                                        function confirmTransaction(id) {
+                                                            Swal.fire({
+                                                                title: 'Apakah Anda yakin?',
+                                                                text: "Tandai pembayaran selesai?",
+                                                                icon: 'warning',
+                                                                showCancelButton: true,
+                                                                confirmButtonColor: '#3085d6',
+                                                                cancelButtonColor: '#d33',
+                                                                confirmButtonText: 'Ya, Selesaikan!',
+                                                                cancelButtonText: 'Batal'
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    document.getElementById('delete-form-' + id).submit();
+                                                                }
+                                                            });
+                                                        }
+                                                    </script>
+                                                @endif --}}
+                                            </td>
+                                            {{-- @endif --}}
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-container">
+                        {{ $pendingkunjungans->links('vendor.pagination.custom') }}
+                    </div>
+                </div>
+
+                <div class="tab-content" style="margin: 0;" id="done-list">
+                    <div class="content-table-table">
+                        <div class="content-list">
+                            @foreach ($donekunjungans as $kunjungan)
+                                <div class="list-item">
+                                    <!-- Atas -->
+                                    <div class="top">
+                                        <strong>Pasien :</strong> <span>{{ $kunjungan->pasien->nama }}</span>
+                                    </div>
+                                    <div class="top">
+                                        <strong>Keluhan :</strong> <span class="truncate">{{ $kunjungan->keluhan }}</span>
+                                    </div>
+
+                                    <!-- Bawah -->
+                                    <div class="bottom">
+                                        <strong>Dokter :</strong>
+                                        <span>{{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}</span>
+                                    </div>
+                                    <div class="bottom">
+                                        <strong>Tanggal :</strong> <span>{{ $kunjungan->tanggal_kunjungan }}</span>
+                                    </div>
+
+                                    <div class="separator"></div>
+
+                                    <!-- Tombol -->
+                                    {{-- <a href="javascript:void(0)" class="btn-add" onclick="btnOpenDetailModal({{ $kunjungan->id }})">
+                                        <i class="fas fa-eye"></i> Lihat Detail
+                                    </a> --}}
+                                    <a href="{{ route('kunjhistoryshow', $kunjungan->id) }}" class="btn-add"
+                                        style="width: max-content">
+                                        <i class="fas fa-eye"></i> Lihat Detail
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <script>
+                            function btnOpenDetailModal(kunjunganId) {
+                                var modal = document.getElementById('detailModal' + kunjunganId);
+                                var modalInstance = new bootstrap.Modal(modal);
+                                modalInstance.show();
+                            }
+                        </script>
+                    </div>
+                    <div class="pagination-container">
+                        {{ $donekunjungans->links('vendor.pagination.custom') }}
+                    </div>
+                </div>
+
+                {{-- acc atau tambah dokter --}}
                 @foreach ($kunjungans as $kunjungan)
-                    {{-- iki detail modal undone --}}
                     <div class="modal" id="detailModal{{ $kunjungan->id }}" tabindex="-1"
                         aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
                         <div class="modal-dialog">
@@ -512,40 +489,140 @@
                                         Detail Kunjungan dan Rekam Medis
                                     </h2>
                                 </div>
-                                <div class="modal-body">
-                                    <p class="h4 my-2"><strong>Pasien:</strong><br>
-                                        {{ $kunjungan->pasien->nama }}
-                                    </p>
-                                    <p class="h4 my-2"><strong>Keluhan:</strong><br>
-                                        {{ $kunjungan->keluhan }}</p>
-                                    <p class="h4 my-1"><strong>Dokter:</strong>
-                                        {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
-                                    </p>
-                                    <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
-                                        {{ $kunjungan->tanggal_kunjungan }}</p>
-                                    <hr class="my-2">
+                                <form action="{{ route('kunjungan.update', $kunjungan->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
 
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="px-2 py-1 btn-close red-hover"
-                                        data-bs-dismiss="modal">Tutup</button>
-                                    {{-- @if ($kunjungan->rekamMedis()->exists())
-                                        <a href="{{ route('rekam_medis.nota', $kunjungan->rekamMedis->id) }}" class="btn-cek-nota">
-                                            Cek Nota
-                                            <i class="fa-solid fa-print"></i>
-                                        </a>
-                                    @endif --}}
-                                </div>
+                                    <div class="modal-body">
+                                        <p class="h4 my-2"><strong>Pasien:</strong><br>
+                                            {{ $kunjungan->pasien->nama }}
+                                        </p>
+                                        <p class="h4 my-2"><strong>Keluhan:</strong><br>
+                                            {{ $kunjungan->keluhan }}</p>
+                                        {{-- <p class="h4 my-1"><strong>Dokter:</strong>
+                                            {{ $kunjungan->dokter->nama ?? 'Belum ditentukan' }}
+                                        </p> --}}
+                                        <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
+                                            {{ $kunjungan->tanggal_kunjungan }}</p>
+                                        <hr class="my-2">
+
+                                        {{-- <div class="my-2"> --}}
+                                        {{-- <label for="pasien" class="h4 f-bolder">Pasien</label> --}}
+                                        {{-- <div class="my-1"> --}}
+                                        {{-- <select disabled name="pasien_id" id="pasien_id"
+                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                                                    <option value="{{ $kunjungan->pasien_id }}" selected>
+                                                        {{ $kunjungan->pasien->nama }}
+                                                    </option>
+                                                    @foreach ($pasiens as $pas)
+                                                        @if ($pas->id !== $kunjungan->pasien_id)
+                                                            <option value="{{ $pas->id }}"
+                                                                {{ $kunjungan->pasien_id == $pas->id ? 'selected' : '' }}>
+                                                                {{ $pas->nama }}
+                                                            </option>
+                                                        @endif
+                                                    @endforeach
+                                                </select> --}}
+                                        <input type="hidden" name="pasien_id" value="{{ $kunjungan->pasien_id }}">
+                                        {{-- </div> --}}
+                                        {{-- </div> --}}
+                                        @if (auth()->user()->hasRole('admin'))
+                                        <div class="my-2">
+                                            <label for="dokter" class="h4 f-bolder">Dokter</label>
+                                            <div class="my-1">
+                                                <select name="dokter_id" id="dokter_id" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                                                    <!-- Opsi default Pilih Dokter -->
+                                                    <option value="" {{ empty($kunjungan->dokter_id) ? 'selected' : '' }}>Pilih Dokter</option>
+                                    
+                                                    <!-- Looping daftar dokter, memisahkan yang memiliki jadwal dan tidak -->
+                                                    @php
+                                                        // Pisahkan dokter yang memiliki jadwal dan yang tidak
+                                                        $doktersWithSchedule = [];
+                                                        $doktersWithoutSchedule = [];
+                                                        
+                                                        foreach ($dokters as $dok) {
+                                                            $hariKunjungan = \Carbon\Carbon::parse($kunjungan->tanggal)->format('l'); // Format hari
+                                    
+                                                            // Mengecek apakah dokter memiliki jadwal pada hari tersebut
+                                                            $hasSchedule = $dok->jadwals->where('hari', $hariKunjungan)->isNotEmpty();
+                                                            
+                                                            if ($hasSchedule) {
+                                                                $doktersWithSchedule[] = $dok;
+                                                            } else {
+                                                                $doktersWithoutSchedule[] = $dok;
+                                                            }
+                                                        }
+                                                    @endphp
+                                    
+                                                    <!-- Tampilkan dokter yang memiliki jadwal terlebih dahulu -->
+                                                    @foreach ($doktersWithSchedule as $dok)
+                                                        <option value="{{ $dok->id }}"
+                                                            {{ isset($kunjungan->dokter_id) && $kunjungan->dokter_id == $dok->id ? 'selected' : '' }}>
+                                                            {{ $dok->nama }} - {{ $dok->spesialis }}
+                                                        </option>
+                                                    @endforeach
+                                    
+                                                    <!-- Tampilkan dokter yang tidak memiliki jadwal di bawah -->
+                                                    @foreach ($doktersWithoutSchedule as $dok)
+                                                        <option value="{{ $dok->id }}"
+                                                            {{ isset($kunjungan->dokter_id) && $kunjungan->dokter_id == $dok->id ? 'selected' : '' }} disabled>
+                                                            {{ $dok->nama }} - {{ $dok->spesialis }} (Tidak Ada Jadwal)
+                                                        </option>
+                                                    @endforeach
+                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @else
+                                        {{-- Jika pengguna bukan admin, dokter_id otomatis mengikuti dokter yang sedang login --}}
+                                        <input type="hidden" name="dokter_id" value="{{ auth()->user()->dokter->id }}">
+                                        <div class="my-2">
+                                            <label class="h4 f-bolder">Dokter</label>
+                                            <p class="h4 f-normal mt-1">{{ auth()->user()->dokter->nama }}</p>
+                                        </div>
+                                    @endif
+                                    
+
+                                        <div class="my-2">
+                                            {{-- <label for="keluhan" class="h4 f-bolder">Keluhan</label> --}}
+                                            <div class="my-1">
+                                                <input type="hidden"
+                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="keluhan"
+                                                    name="keluhan" value="{{ $kunjungan->keluhan }}">
+                                            </div>
+                                            @error('keluhan')
+                                                <p style="color: red">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+
+                                        <div class="my-2">
+                                            {{-- <label for="tanggal_kunjungan" class="h4 f-bolder">Tanggal Kunjungan</label> --}}
+                                            <div class="my-1">
+                                                <input type="hidden"
+                                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                    id="tanggal_kunjungan" name="tanggal_kunjungan"
+                                                    value="{{ $kunjungan->tanggal_kunjungan }}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class=" btn-close red-hover"
+                                            data-bs-dismiss="modal">Tutup</button>
+                                        @if (auth()->user()->hasRole('admin'))
+                                            <button type="submit" class="btn-add">
+                                                {{ isset($kunjungan->dokter_id) ? 'Update' : 'Terima' }}
+                                            </button>
+                                        @endif
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
 
-                    {{-- iki detail modal pending --}}
                     <div class="modal" id="pendingdetailModal{{ $kunjungan->id }}" tabindex="-1"
                         aria-labelledby="detailModalLabel{{ $kunjungan->id }}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modaldetail-content p-2 shadow-none animate__animated animate__zoomIn">
-                                <!-- Hapus shadow -->
                                 <div class="modal-header d-flex t-center a-center">
                                     <span class="square"
                                         style="width: 25px; height: 25px; background: #ccc; margin-right: 10px;"></span>
@@ -568,21 +645,14 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                                    <button type="button" class=" btn-close red-hover"
                                         data-bs-dismiss="modal">Tutup</button>
-                                    {{-- @if ($kunjungan->rekamMedis()->exists())
-                                        <a href="{{ route('rekam_medis.nota', $rekamMedis->id) }}" class="btn-cek-nota">
-                                            Cek Nota
-                                            <i class="fa-solid fa-print"></i>
-                                        </a>
-                                    @endif --}}
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-            {{-- <a style="text-align: right;" href="{{ route('kunjhistory') }}">riwayat kunjungan</a> --}}
         </div>
 
         <script>
@@ -592,30 +662,24 @@
                 let defaultTab = "done-table"; // Default tab
                 let savedTab = localStorage.getItem("activeTab");
 
-                // Aktifkan tab yang tersimpan di localStorage atau default tab
                 let activeTab = savedTab ? savedTab : defaultTab;
                 document.querySelector(`[data-tab='${activeTab}']`).classList.add("active");
                 document.getElementById(activeTab).classList.add("active");
 
-                // Event listener untuk berpindah tab
                 tabButtons.forEach(button => {
                     button.addEventListener("click", function() {
                         let selectedTab = this.dataset.tab;
 
-                        // Hapus semua active
                         tabButtons.forEach(btn => btn.classList.remove("active"));
                         tabContents.forEach(content => content.classList.remove("active"));
 
-                        // Tambahkan active ke tab yang diklik
                         this.classList.add("active");
                         document.getElementById(selectedTab).classList.add("active");
 
-                        // Simpan tab yang aktif ke localStorage
                         localStorage.setItem("activeTab", selectedTab);
                     });
                 });
 
-                // Search functionality
                 document.getElementById("searchInput").addEventListener("keyup", function() {
                     let value = this.value.toLowerCase();
                     let activeTab = document.querySelector(".tab-content.active").id;
@@ -648,13 +712,10 @@
         </script>
         <script>
             function showContent(id) {
-                // Sembunyikan semua konten
                 document.querySelectorAll('.content').forEach((el) => el.classList.remove('active'));
 
-                // Tampilkan yang dipilih
                 document.getElementById(id).classList.add('active');
 
-                // Update tab aktif
                 document.querySelectorAll('.tab').forEach((el) => el.classList.remove('active'));
                 event.currentTarget.classList.add('active');
             }
@@ -670,7 +731,6 @@
                     var stok = obat.getAttribute('data-stok');
                     var obatId = obat.value;
 
-                    // Create input fields for each selected medication
                     var inputGroup = document.createElement('div');
                     inputGroup.classList.add('mb-3', 'row');
 
@@ -684,7 +744,7 @@
 
                     var input = document.createElement('input');
                     input.type = 'number';
-                    input.name = 'jumlah_obat[]'; // Ensure this is an array
+                    input.name = 'jumlah_obat[]';
                     input.classList.add('form', 'h4', 'f-normal', 'px-2', 'w-100', 'h-3', 'border-radius-1');
                     input.placeholder = 'Jumlah';
                     input.min = 1;
@@ -698,7 +758,6 @@
             });
         </script>
 
-        {{-- iki modal tambah kunjungan --}}
         <div class="modal animate__fadeIn" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 @if (auth()->user()->hasRole('admin'))
@@ -763,9 +822,9 @@
                         @enderror
                     </div>
 
-                    <button type="button" class="px-2 py-1 btn-close red-hover"
+                    <button type="button" class=" btn-close red-hover"
                         onclick="btnCloseAddKunjunganModal()">Batal</button>
-                    <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
+                    <button type="submit" class=" btn-add">Simpan</button>
                 </form>
             </div>
         </div>
@@ -827,8 +886,7 @@
                             @endif
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="px-2 py-1 btn-close red-hover"
-                                data-bs-dismiss="modal">Tutup</button>
+                            <button type="button" class=" btn-close red-hover" data-bs-dismiss="modal">Tutup</button>
                             @if ($kunjungan->rekamMedis()->exists())
                                 <a href="{{ route('rekam_medis.nota', $rekamMedis->id) }}" class="btn-cek-nota">
                                     Cek Nota
@@ -919,9 +977,9 @@
                             </div>
                         </div>
 
-                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                        <button type="button" class=" btn-close red-hover"
                             onclick="closeEditModal({{ $kunjungan->id }})">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add">Simpan</button>
+                        <button type="submit" class=" btn-add">Simpan</button>
                     </form>
                 </div>
             </div>

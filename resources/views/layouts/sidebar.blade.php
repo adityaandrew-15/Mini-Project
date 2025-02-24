@@ -52,7 +52,7 @@
                         icon: 'success',
                         title: '{{ session('success') }}',
                         showConfirmButton: false,
-                        timer: 7000
+                        timer: 4000
                     });
                 @endif
             });
@@ -74,7 +74,7 @@
                         </ul>
                     `,
                     showConfirmButton: false,
-                    timer: 10000
+                    timer: 4000
                 });
             @endif
         });
@@ -100,22 +100,20 @@
                     <li>
                         <div class="gap-li"></div>
                     </li>
-                    @if (auth()->user()->hasRole('admin'))
-                        <li>
+                    <li>
+                        @if (auth()->user()->hasRole('admin'))
                             <a href="{{ route('admin-home') }}"
                                 class="{{ request()->routeIs('admin-home') ? 'active' : '' }}">
                                 <i class="fa-brands fa-squarespace"></i>
-                                {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
                                 <span>Dashboard</span>
                             </a>
-                    @endif
+                        @endif
                     </li>
                     <li>
                         @if (auth()->user()->hasRole('dokter'))
                             <a href="{{ route('home-dokter') }}"
                                 class="{{ request()->routeIs('home-dokter') ? 'active' : '' }}">
                                 <i class="fa-brands fa-squarespace"></i>
-                                {{-- <img src="{{ asset('asset/img/dashboard2.svg') }}" width="25px" height="25px" alt=""> --}}
                                 <span>Dashboard</span>
                             </a>
                         @endif
@@ -126,7 +124,6 @@
                         <li>
                             <a href="{{ route('dokter.index') }}"
                                 class="{{ request()->routeIs('dokter.index') ? 'active' : '' }}">
-                                {{-- <i class="fa fa-user-md"></i> --}}
                                 <i class="fa-regular fa-user-doctor"></i>
                                 <span>Dokter</span>
                             </a>
@@ -136,8 +133,6 @@
                         <li>
                             <a href="{{ route('obat.index') }}"
                                 class="{{ request()->routeIs('obat.index') ? 'active' : '' }}">
-                                {{-- <i class="fa fa-pills"></i> --}}
-                                {{-- <i class="fa-light fa-capsules"></i> --}}
                                 <i class="fa-regular fa-capsules"></i>
                                 <span>Obat</span>
                             </a>
@@ -152,18 +147,9 @@
                             <span>Pasien</span>
                         </a>
                     </li>
-                    {{-- <li>
-                    <a href="{{ route('resep.index') }}"
-                        class="{{ request()->routeIs('resep.index') ? 'active' : '' }}">
-                        <i class="fa fa-notes-medical"></i>
-                        <span>Diagnosis</span>
-                    </a>
-                </li> --}}
-
                     <li>
                         <a href="{{ route('kunjungan.index') }}"
                             class="{{ request()->routeIs('kunjungan.index') ? 'active' : '' }}">
-                            {{-- <i class="fa fa-calendar-check"></i> --}}
                             <i class="fa-regular fa-notes-medical"></i>
                             <span>Kunjungan</span>
                         </a>
@@ -175,7 +161,6 @@
                     <li>
                         <a href="{{ route('jadwal_praktek.index') }}"
                             class="{{ request()->routeIs('jadwal_praktek.index') ? 'active' : '' }}">
-                            {{-- <i class="fa fa-calendar-day"></i> --}}
                             <i class="fa-regular fa-calendars"></i>
                             <span>Jadwal Praktek</span>
                         </a>
@@ -185,7 +170,6 @@
                         <li>
                             <a href="{{ route('peralatan.index') }}"
                                 class="{{ request()->routeIs('peralatan.index') ? 'active' : '' }}">
-                                {{-- <i class="bi bi-tools"></i> --}}
                                 <i class="fa-regular fa-screwdriver-wrench"></i>
                                 <span>peralatan</span>
                             </a>
@@ -195,8 +179,6 @@
                         <li>
                             <a href="{{ route('history.index') }}"
                                 class="{{ request()->routeIs('history') ? 'active' : '' }}">
-                                {{-- <i class="fa-solid fa-clock-rotate-left"></i> --}}
-                                {{-- <i class="fa-regular fa-clock-rotate-left"></i> --}}
                                 <i class="fa-regular fa-clock-rotate-left"></i>
                                 <span>riwayat</span>
                             </a>
