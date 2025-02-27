@@ -2,25 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\JadwalPraktek;
 use App\Models\Dokter;
+use App\Models\JadwalPraktek;
 use Illuminate\Http\Request;
 
 class JadwalPraktekController extends Controller
 {
     public function index(Request $request)
     {
-        if(auth()->user()->hasRole('admin|dokter')){
+        if (auth()->user()->hasRole('admin|dokter')) {
             $layout = 'layouts.sidebar';
             $content = 'side';
-        }else{
+        } else {
             $layout = 'layouts.app';
             $content = 'content';
         }
+
         $dokters = Dokter::all();
 
         // Pencarian
         $search = $request->input('search');
+        $searchHari = $request->input('search_hari');
         $startTime = $request->input('start_time');
         $endTime = $request->input('end_time');
 
@@ -28,22 +30,31 @@ class JadwalPraktekController extends Controller
             ->when($search, function ($query, $search) {
                 $query->whereHas('dokter', function ($query) use ($search) {
                     $query->where('nama', 'like', "%{$search}%");
-                })->orWhere('hari', 'like', "%{$search}%");
-            }) 
-            ->when($startTime, function ($query, $startTime) {
-                $query->where('jam_mulai', '>=', $startTime);
+                });
             })
-            ->when($endTime, function ($query, $endTime) {
-                $query->where('jam_selesai', '<=', $endTime);
+            ->when($searchHari, function ($query, $searchHari) {
+                $query->where('hari', 'like', "%{$searchHari}%");
+            })
+            ->when($startTime && $endTime, function ($query) use ($startTime, $endTime) {
+                // Filter jadwal berdasarkan rentang waktu
+                $query->where(function ($query) use ($startTime, $endTime) {
+                    $query
+                        ->whereTime('jam_mulai', '>=', $startTime)
+                        ->whereTime('jam_selesai', '<=', $endTime);
+                });
+            })
+            ->when($startTime && !$endTime, function ($query) use ($startTime) {
+                // Jika hanya memilih start_time, filter berdasarkan jam mulai saja
+                $query->whereTime('jam_mulai', '>=', $startTime);
+            })
+            ->when(!$startTime && $endTime, function ($query) use ($endTime) {
+                // Jika hanya memilih end_time, filter berdasarkan jam selesai saja
+                $query->whereTime('jam_selesai', '<=', $endTime);
             })
             ->paginate(10);
 
-        return view('jadwal_praktek.index', compact('dokters', 'jadwalPrakteks','layout','content'));
+        return view('jadwal_praktek.index', compact('dokters', 'jadwalPrakteks', 'layout', 'content'));
     }
-
-
-
-
 
     public function create()
     {
@@ -55,10 +66,29 @@ class JadwalPraktekController extends Controller
     {
         $request->validate([
             'dokter_id' => 'required|exists:dokters,id',
-            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu',
+            'hari' => 'required|string|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
         ]);
+
+        // Cek apakah jadwal bentrok
+        $conflict = JadwalPraktek::where('dokter_id', $request->dokter_id)
+            ->where('hari', $request->hari)
+            ->where(function ($query) use ($request) {
+                $query
+                    ->whereBetween('jam_mulai', [$request->jam_mulai, $request->jam_selesai])
+                    ->orWhereBetween('jam_selesai', [$request->jam_mulai, $request->jam_selesai])
+                    ->orWhere(function ($query) use ($request) {
+                        $query
+                            ->where('jam_mulai', '<=', $request->jam_mulai)
+                            ->where('jam_selesai', '>=', $request->jam_selesai);
+                    });
+            })
+            ->exists();
+
+        if ($conflict) {
+            return redirect()->back()->withErrors(['error' => 'Jadwal pada waktu ini sudah ada.'])->withInput();
+        }
 
         JadwalPraktek::create($request->all());
         return redirect()->route('jadwal_praktek.index')->with('success', 'Jadwal praktek berhasil ditambahkan.');
@@ -83,6 +113,26 @@ class JadwalPraktekController extends Controller
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
         ]);
+
+        // Cek apakah jadwal bentrok kecuali dengan dirinya sendiri
+        $conflict = JadwalPraktek::where('dokter_id', $request->dokter_id)
+            ->where('hari', $request->hari)
+            ->where('id', '!=', $jadwalPraktek->id)
+            ->where(function ($query) use ($request) {
+                $query
+                    ->whereBetween('jam_mulai', [$request->jam_mulai, $request->jam_selesai])
+                    ->orWhereBetween('jam_selesai', [$request->jam_mulai, $request->jam_selesai])
+                    ->orWhere(function ($query) use ($request) {
+                        $query
+                            ->where('jam_mulai', '<=', $request->jam_mulai)
+                            ->where('jam_selesai', '>=', $request->jam_selesai);
+                    });
+            })
+            ->exists();
+
+        if ($conflict) {
+            return redirect()->back()->withErrors(['error' => 'Jadwal bentrok dengan jadwal lain untuk dokter ini.'])->withInput();
+        }
 
         $jadwalPraktek->update($request->all());
         return redirect()->route('jadwal_praktek.index')->with('success', 'Jadwal praktek berhasil diperbarui.');

@@ -1,30 +1,70 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
-        @if (session('success'))
-            <script>
-                Swal.fire('Success', '{{ session('success') }}', 'success');
-            </script>
-        @endif
-
+    <div class="ml-3 mr-3">
         <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Dokter</h2>
                 <div class="btn"></div>
                 @if (auth()->user()->hasRole('admin'))
-                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                         Tambah Dokter
                     </button>
                 @endif
             </div>
-            <h2>Dokter aktif: {{DB::table('dokters')->count()}}</h2>
         </div>
+        <hr class="mr-3 ml-3">
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('dokter.index') }}">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                    value="{{ request('search') }}" class="form-control">
+            <form method="GET" action="{{ route('dokter.index') }}" class="d-flex w-100 gap-2">
+                <div class="d-flex w-100 col mr-1">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Nama
+                        Dokter</label>
+                    <input type="text" class="search-container w-100 h4" name="search"
+                        placeholder="Cari Nama atau No HP" value="{{ request('search') }}" class="form-control">
+                </div>
+                <div class="d-flex w-100 col mr-1">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Spesialis</label>
+                    <input type="text" class="search-container w-100 h4" name="spesialis" placeholder="Cari Spesialis"
+                        value="{{ request('spesialis') }}" class="form-control">
+                </div>
+                <div class="filter-form d-flex col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for=""></label>
+                    <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                </div>
             </form>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const searchInput = document.querySelector("input[name='search']");
+                    const spesialisInput = document.querySelector("input[name='spesialis']");
+                    const tableRows = document.querySelectorAll("tbody tr");
+
+                    function filterTable() {
+                        const searchText = searchInput.value.toLowerCase();
+                        const spesialisText = spesialisInput.value.toLowerCase();
+
+                        tableRows.forEach(row => {
+                            const nama = row.children[1].textContent.toLowerCase();
+                            const spesialis = row.children[2].textContent.toLowerCase();
+                            const noHp = row.children[3].textContent.toLowerCase();
+
+                            const matchSearch = nama.includes(searchText) || noHp.includes(searchText);
+                            const matchSpesialis = spesialis.includes(spesialisText);
+
+                            if (matchSearch && matchSpesialis) {
+                                row.style.display = "table-row";
+                            } else {
+                                row.style.display = "none";
+                            }
+                        });
+                    }
+
+                    searchInput.addEventListener("keyup", filterTable);
+                    spesialisInput.addEventListener("keyup", filterTable);
+                });
+            </script>
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>
@@ -45,7 +85,7 @@
                                     <td>
                                         @if ($dokter->image)
                                             <img class="table-img" src="{{ asset('storage/' . $dokter->image) }}"
-                                                height="100px" width="80px" alt="gambar">
+                                                height="100px" width="100px" alt="gambar">
                                         @else
                                             <img class="table-img" src="{{ asset('asset/img/dokter.png') }}" alt="">
                                         @endif
@@ -97,6 +137,9 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination-container">
+                    {{ $dokters->links('vendor.pagination.custom') }}
+                </div>
             </div>
         </div>
 
@@ -104,7 +147,6 @@
             <div class="modal animate__fadeIn" id="myModalEdit{{ $dokter->id }}">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Edit Dokter</h2>
-                    <button type="button" class="btn-close" onclick="closeEditModal({{ $dokter->id }})"></button>
                     <form action="{{ route('dokter.update', $dokter->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -119,8 +161,7 @@
                             <label for="spesialis" class="h4 f-bolder">Spesialis</label>
                             <div class="my-1">
                                 <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
-                                    id="spesialis{{ $dokter->id }}" name="spesialis"
-                                    value="{{ $dokter->spesialis }}">
+                                    id="spesialis{{ $dokter->id }}" name="spesialis" value="{{ $dokter->spesialis }}">
                             </div>
                         </div>
                         <div class="my-2">
@@ -133,17 +174,17 @@
                         <div class="my-2">
                             <label for="image" class="h4 f-bolder">Image</label>
                             <div class="my-1">
-                                <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="imageEdit{{ $dokter->id }}"
-                                    name="image">
+                                <input type="file" class="h4 f-bolder px-2 w-100 h-3"
+                                    id="imageEdit{{ $dokter->id }}" name="image">
                             </div>
                             @if ($dokter->image)
-                                <img src="{{ asset('storage/dokters/' . $dokter->image) }}" class="mt-2" width="100">
+                                <img src="{{ asset('storage/' . $dokter->image) }}" class="mt-2" width="100">
                             @endif
                         </div>
 
-                        <button type="button" class="px-2 py-1 btn-close red-hover"
+                        <button type="button" class="btn-close red-hover"
                             onclick="closeEditModal({{ $dokter->id }})">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -152,7 +193,6 @@
         <div class="modal animate__animated" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 <h2 class="h2 f-bolder">Tambah Dokter</h2>
-                <button type="button" class="btn-close"></button>
                 <form action="{{ route('dokter.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="my-2">
@@ -214,9 +254,8 @@
                         </div>
                     </div>
 
-                    <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
-                    <button type="submit" id="btnCloseAddModal"
-                        class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                    <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
+                    <button type="submit" id="btnCloseAddModal" class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>

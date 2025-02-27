@@ -1,29 +1,83 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
-        @if (session('success'))
-            <script>
-                Swal.fire('Success', '{{ session('success') }}', 'success');
-            </script>
-        @endif
-
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+    <div class="ml-3 mr-3">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Obat</h2>
                 <div class="btn"></div>
                 @if (auth()->user()->hasRole('admin'))
-                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                         Tambah Obat
                     </button>
                 @endif
             </div>
         </div>
+        <hr class="mr-3 ml-3">
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('resep.index') }}">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                    value="{{ request('search') }}" class="form-control">
-            </form>
+            <div class="d-flex">
+                <div class="d-flex col mr-1 w-100">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Nama
+                        Obat</label>
+                    <input class="search-container w-100 h4" type="text" id="searchInput"
+                        class="search-container w-100
+                        h4"" class="h4" placeholder="Cari obat..."
+                        class="form-control h4">
+                </div>
+                <div class="d-flex col mr-1 w-100">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                        Minimal</label>
+                    <input class="search-container w-100 h4" type="number" id="priceMin" class="h4"
+                        placeholder="Harga minimum" class="form-control">
+                </div>
+                <div class="d-flex col mr-1 w-100">
+                    <label for=""
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                        Maksimal</label>
+                    <input type="number" class="search-container w-100 h4" id="priceMax" class="h4"
+                        placeholder="Harga maksimum" class="form-control">
+                </div>
+                <div class="filter-form d-flex  col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for=""></label>
+                    <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    let searchInput = document.getElementById("searchInput");
+                    let priceMin = document.getElementById("priceMin");
+                    let priceMax = document.getElementById("priceMax");
+                    let tableRows = document.querySelectorAll("tbody tr");
+
+                    function filterTable() {
+                        let query = searchInput.value.toLowerCase();
+                        let minPrice = parseFloat(priceMin.value) || 0;
+                        let maxPrice = parseFloat(priceMax.value) || Infinity;
+
+                        tableRows.forEach(row => {
+                            let obatName = row.children[0].textContent.toLowerCase();
+                            let price = parseFloat(row.children[2].textContent.replace("Rp.", "")) || 0;
+
+                            let matchesSearch = obatName.includes(query);
+                            let matchesPrice = price >= minPrice && price <= maxPrice;
+
+                            if (matchesSearch && matchesPrice) {
+                                row.style.display = "";
+                            } else {
+                                row.style.display = "none";
+                            }
+                        });
+                    }
+
+                    searchInput.addEventListener("input", filterTable);
+                    priceMin.addEventListener("input", filterTable);
+                    priceMax.addEventListener("input", filterTable);
+                });
+            </script>
+
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>
@@ -81,8 +135,6 @@
                                 <div class="modal animate__fadeIn" id="myModalEdit{{ $obt->id }}">
                                     <div class="modal-content animate__animated animate__zoomIn">
                                         <h2 class="h2 f-bolder">Edit Obat</h2>
-                                        <button type="button" class="btn-close"
-                                            onclick="closeEditModal({{ $obt->id }})"></button>
                                         <form action="{{ route('obat.update', $obt->id) }}" method="POST">
                                             @csrf
                                             @method('put')
@@ -95,7 +147,7 @@
                                                 </div>
                                                 @error('obat')
                                                     <script>
-                                                        Swal.fire('Error', '{{ $message }}', 'error');
+                                                        < p style = "color: red" > {{ $message }} < /p>
                                                     </script>
                                                 @enderror
                                             </div>
@@ -108,7 +160,7 @@
                                                 </div>
                                                 @error('jumlah')
                                                     <script>
-                                                        Swal.fire('Error', '{{ $message }}', 'error');
+                                                        < p style = "color: red" > {{ $message }} < /p>
                                                     </script>
                                                 @enderror
                                             </div>
@@ -121,14 +173,13 @@
                                                 </div>
                                                 @error('harga')
                                                     <script>
-                                                        Swal.fire('Error', '{{ $message }}', 'error');
+                                                        < p style = "color: red" > {{ $message }} < /p>
                                                     </script>
                                                 @enderror
                                             </div>
-                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                            <button type="button" class="btn-close red-hover"
                                                 onclick="closeEditModal({{ $obt->id }})">Batal</button>
-                                            <button type="submit"
-                                                class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                            <button type="submit" class="btn-add main-color-hover">Simpan</button>
                                         </form>
                                     </div>
                                 </div>
@@ -136,12 +187,14 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination-container">
+                    {{ $obats->links('vendor.pagination.custom') }}
+                </div>
             </div>
         </div>
         <div class="modal animate__animated" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 <h2 class="h2 f-bolder">Tambah Obat</h2>
-                <button type="button" class="btn-close"></button>
                 <form action="{{ route('obat.store') }}" method="POST">
                     @csrf
                     <div class="my-2">
@@ -152,7 +205,7 @@
                         </div>
                         @error('obat')
                             <script>
-                                Swal.fire('Error', '{{ $message }}', 'error');
+                                < p style = "color: red" > {{ $message }} < /p>
                             </script>
                         @enderror
                     </div>
@@ -164,7 +217,7 @@
                         </div>
                         @error('jumlah')
                             <script>
-                                Swal.fire('Error', '{{ $message }}', 'error');
+                                < p style = "color: red" > {{ $message }} < /p>
                             </script>
                         @enderror
                     </div>
@@ -176,14 +229,13 @@
                         </div>
                         @error('harga')
                             <script>
-                                Swal.fire('Error', '{{ $message }}', 'error');
+                                < p style = "color: red" > {{ $message }} < /p>
                             </script>
                         @enderror
                     </div>
 
-                    <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
-                    <button type="submit" id="btnCloseAddModal"
-                        class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                    <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
+                    <button type="submit" id="btnCloseAddModal" class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>
@@ -228,6 +280,36 @@
                     }
                 });
             }
+
+            document.addEventListener("DOMContentLoaded", function() {
+                let searchInput = document.getElementById("searchInput");
+                let priceMin = document.getElementById("priceMin");
+                let priceMax = document.getElementById("priceMax");
+                let tableBody = document.querySelector("tbody");
+
+                searchInput.addEventListener("input", filterTable);
+                priceMin.addEventListener("input", filterTable);
+                priceMax.addEventListener("input", filterTable);
+
+                function filterTable() {
+                    let query = searchInput.value.toLowerCase();
+                    let minPrice = parseFloat(priceMin.value) || 0;
+                    let maxPrice = parseFloat(priceMax.value) || Infinity;
+
+                    let rows = tableBody.querySelectorAll("tr");
+
+                    rows.forEach(row => {
+                        let obatName = row.children[0].textContent.toLowerCase();
+                        let price = parseFloat(row.children[2].textContent.replace("Rp.", "").replace(",",
+                            "")) || 0;
+
+                        let matchesSearch = obatName.includes(query);
+                        let matchesPrice = price >= minPrice && price <= maxPrice;
+
+                        row.style.display = (matchesSearch && matchesPrice) ? "" : "none";
+                    });
+                }
+            });
         </script>
     </div>
 @endsection

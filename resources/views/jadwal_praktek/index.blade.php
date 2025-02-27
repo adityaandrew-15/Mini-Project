@@ -1,38 +1,80 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
-        @if (session('success'))
-            <script>
-                Swal.fire('Success', '{{ session('success') }}', 'success');
-            </script>
-        @endif
-        {{-- <div class="row">
-            <div class="col">
-                <label for="start_time" class="form-label">Jam Mulai</label>
-                <input type="time" name="start_time" id="start_time" class="form-control"
-                    value="{{ request('start_time') }}">
-            </div>
-            <div class="col">
-                <label for="end_time" class="form-label">Jam Selesai</label>
-                <input type="time" name="end_time" id="end_time" class="form-control" value="{{ request('end_time') }}">
-            </div>
-        </div> --}}
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+    <div class="ml-3 mr-3">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Jadwal Praktik</h2>
-                <div class="btn"></div>
-                <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
-                    Tambah Jadwal Praktik
-                </button>
+                {{-- <div class="btn"></div> --}}
+                @if (auth()->user()->hasRole('admin'))
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
+                        Tambah Jadwal Praktik
+                    </button>
+                @endif
             </div>
         </div>
-
+        <hr class="mr-3 ml-3">
         <div class="content-table m-2 d-flex col">
-            <form method="GET" action="{{ route('jadwal_praktek.index') }}">
-                <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                    value="{{ request('search') }}" class="form-control">
+            <form method="GET" style="align-items: center;" action="{{ route('jadwal_praktek.index') }}"
+                class="d-flex w-100 gap-2">
+                <div class="d-flex w-100 col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Cari Nama Dokter</label>
+                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Cari Nama Dokter"
+                        value="{{ request('search') }}">
+                </div>
+
+                <div class="d-flex w-100 col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Cari Hari</label>
+                    <select class="search-container w-100 h4" name="search_hari" onchange="this.form.submit()">
+                        <option value="">Pilih Hari</option>
+                        <option value="Senin" {{ request('search_hari') == 'Monday' ? 'selected' : '' }}>Senin</option>
+                        <option value="Selasa" {{ request('search_hari') == 'Tuesday' ? 'selected' : '' }}>Selasa</option>
+                        <option value="Rabu" {{ request('search_hari') == 'Wednesday' ? 'selected' : '' }}>Rabu</option>
+                        <option value="Kamis" {{ request('search_hari') == 'Thursday' ? 'selected' : '' }}>Kamis</option>
+                        <option value="Jumat" {{ request('search_hari') == 'Friday' ? 'selected' : '' }}>Jumat</option>
+                        <option value="Sabtu" {{ request('search_hari') == 'Saturday' ? 'selected' : '' }}>Sabtu</option>
+                        <option value="Minggu" {{ request('search_hari') == 'Sunday' ? 'selected' : '' }}>Minggu</option>
+                    </select>
+                </div>
+
+                <div class="d-flex col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Jam Mulai</label>
+                    <input type="time" class="search-container w-100 h4" name="start_time"
+                        value="{{ request('start_time') }}" onchange="this.form.submit()">
+                </div>
+
+                <div class="d-flex col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for="">Jam Selesai</label>
+                    <input type="time" class="search-container w-100 h4" name="end_time"
+                        value="{{ request('end_time') }}" onchange="this.form.submit()">
+                </div>
+
+                <button type="submit" class="invisible-btn">Cari</button>
+
+                <a href="{{ route('jadwal_praktek.index') }}" style="height: 50%; align-items: center;"
+                    class="btn-add">Clear</a>
+
+                <style>
+                    .invisible-btn {
+                        opacity: 0;
+                        position: absolute;
+                        pointer-events: none;
+                    }
+                </style>
             </form>
+
+            <style>
+                .invisible-btn {
+                    opacity: 0;
+                    position: absolute;
+                    pointer-events: none;
+                }
+            </style>
+
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>
@@ -51,7 +93,21 @@
                             @foreach ($jadwalPrakteks as $jadwal)
                                 <tr>
                                     <td>{{ $jadwal->dokter->nama }}</td>
-                                    <td>{{ $jadwal->hari }}</td>
+                                    @php
+                                        $days = [
+                                            'Monday' => 'Senin',
+                                            'Tuesday' => 'Selasa',
+                                            'Wednesday' => 'Rabu',
+                                            'Thursday' => 'Kamis',
+                                            'Friday' => 'Jumat',
+                                            'Saturday' => 'Sabtu',
+                                            'Sunday' => 'Minggu',
+                                        ];
+                                        $hariIndo = $days[$jadwal->hari] ?? $jadwal->hari; // Default to English if not found
+                                    @endphp
+
+                                    <td>{{ $hariIndo }}</td>
+
                                     <td>{{ $jadwal->jam_mulai }}</td>
                                     <td>{{ $jadwal->jam_selesai }}</td>
 
@@ -105,7 +161,6 @@
             <div class="modal animate__fadeIn" id="myModalEdit{{ $jadwal->id }}">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Edit Jadwal Praktek</h2>
-                    <button type="button" class="btn-close" onclick="closeEditModalJadwal()"></button>
                     <form action="{{ route('jadwal_praktek.update', $jadwal->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
@@ -113,7 +168,8 @@
                         <div class="my-2">
                             <label for="dokter" class="h4 f-bolder">Dokter</label>
                             <div class="my-1">
-                                <select class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="dokter" name="dokter_id">
+                                <select class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="dokter"
+                                    name="dokter_id">
                                     @foreach ($dokters as $dokter)
                                         <option value="{{ $dokter->id }}"
                                             {{ $dokter->id == $jadwal->dokter_id ? 'selected' : '' }}>
@@ -126,7 +182,8 @@
                         <div class="my-2">
                             <label for="hari" class="h4 f-bolder">Hari</label>
                             <div class="my-1">
-                                <select id="hari" name="hari" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                                <select id="hari" name="hari"
+                                    class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
                                     <option value="Senin" {{ $jadwal->hari == 'Senin' ? 'selected' : '' }}>Senin</option>
                                     <option value="Selasa" {{ $jadwal->hari == 'Selasa' ? 'selected' : '' }}>Selasa
                                     </option>
@@ -140,21 +197,20 @@
                         <div class="my-2">
                             <label for="jam_mulai" class="h4 f-bolder">Jam Mulai</label>
                             <div class="my-1">
-                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="jam_mulai" name="jam_mulai"
-                                    value="{{ $jadwal->jam_mulai }}">
+                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                    id="jam_mulai" name="jam_mulai" value="{{ $jadwal->jam_mulai }}">
                             </div>
                         </div>
                         <div class="my-2">
                             <label for="jam_selesai" class="h4 f-bolder">Jam Selesai</label>
                             <div class="my-1">
-                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="jam_selesai" name="jam_selesai"
-                                    value="{{ $jadwal->jam_selesai }}">
+                                <input type="time" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                    id="jam_selesai" name="jam_selesai" value="{{ $jadwal->jam_selesai }}">
                             </div>
                         </div>
 
-                        <button type="button" class="px-2 py-1 btn-close red-hover"
-                            onclick="closeEditModal()">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="button" class="btn-close red-hover" onclick="closeEditModal()">Batal</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -169,7 +225,8 @@
                     <div class="my-2">
                         <label for="dokter_id" class="h4 f-bolder">Dokter</label>
                         <div class="my-1">
-                            <select name="dokter_id" id="dokter_id" class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
+                            <select name="dokter_id" id="dokter_id"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1">
                                 @foreach ($dokters as $dokter)
                                     <option value="{{ $dokter->id }}">{{ $dokter->nama }}</option>
                                 @endforeach
@@ -179,37 +236,40 @@
                     <div class="my-2">
                         <label for="hari" class="h4 f-bolder">Hari</label>
                         <div class="my-1">
-                            <select name="hari" id="hari" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
+                            <select name="hari" id="hari" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                required>
                                 <option value="">Pilih Hari</option>
-                                <option value="Senin">Senin</option>
-                                <option value="Selasa">Selasa</option>
-                                <option value="Rabu">Rabu</option>
-                                <option value="Kamis">Kamis</option>
-                                <option value="Jumat">Jumat</option>
-                                <option value="Sabtu">Sabtu</option>
+                                <option value="Monday">Senin</option>
+                                <option value="Tuesday">Selasa</option>
+                                <option value="Wednesday">Rabu</option>
+                                <option value="Thursday">Kamis</option>
+                                <option value="Friday">Jumat</option>
+                                <option value="Saturday">Sabtu</option>
                             </select>
                         </div>
                     </div>
                     <div class="my-2">
                         <label for="jam_mulai" class="h4 f-bolder">Jam Mulai</label>
                         <div class="my-1">
-                            <input type="time" id="jam_mulai" name="jam_mulai" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
+                            <input type="time" id="jam_mulai" name="jam_mulai"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
                         </div>
                     </div>
                     <div class="my-2">
                         <label for="jam_selesai" class="h4 f-bolder">Jam Selesai</label>
                         <div class="my-1">
-                            <input type="time" id="jam_selesai" name="jam_selesai" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
+                            <input type="time" id="jam_selesai" name="jam_selesai"
+                                class="form h4 f-normal px-2 w-100 h-3 border-radius-1" required>
                         </div>
                     </div>
-                    
+
                     <div class="my-2">
-                        <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                        <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </div>
                 </form>
             </div>
-        </div>        
+        </div>
 
         <script>
             function btnOpenEditModal(id) {

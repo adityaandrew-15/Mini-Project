@@ -11,10 +11,8 @@ class RekamMedisImage extends Model
 
     protected $fillable = ['rekam_medis_id', 'image_path'];
 
-
     public function rekamMedis()
-{
-    return $this->belongsTo(RekamMedis::class);
-}
-
+    {
+        return $this->belongsTo(RekamMedis::class);
+    }
 }

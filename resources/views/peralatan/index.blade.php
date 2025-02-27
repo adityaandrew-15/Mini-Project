@@ -1,99 +1,112 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <!DOCTYPE html>
-    <html lang="en">
+    {{-- <!DOCTYPE html> --}}
+    {{-- <html lang="en"> --}}
 
-    <head>
+    {{-- <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Pasien</title>
-    </head>
+    </head> --}}
 
     <body>
-
-        <div class="m-3">
-            @if (session('success'))
-                <script>
-                    Swal.fire('Success', '{{ session('success') }}', 'success');
-                </script>
-            @endif
-
-            <div class="d-flex j-between m-2 a-center">
-                <div class="d-flex a-center">
+        <div class="ml-3 mr-3">
+            <div class="d-flex m-2 a-center">
+                <div class="d-flex j-between w-100 a-center mx-2">
                     <h2 class="h2 f-bolder mr-4">Peralatan Medis</h2>
                     <div class="btn"></div>
-                    <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                    <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                         Tambah peralatan
                     </button>
                 </div>
             </div>
-
-            <!-- Search Form -->
-            {{-- <div class="row mb-3">
-                <div class="col-md-6">
-                    <form action="{{ route('peralatan.index') }}" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="search" class="form-control" placeholder="Cari peralatan..."
-                                value="{{ request('search') }}">
-                            <button class="btn btn-outline-secondary" type="submit">Cari</button>
-                            @if (request('search'))
-                                <a href="{{ route('peralatan.index') }}" class="btn btn-outline-danger">Clear</a>
-                            @endif
-                        </div>
-                    </form>
-                </div>
-            </div> --}}
-
-            <!-- Add Modal -->
-            <div class="modal animate__animated" id="myModalAdd" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+            <hr class="mr-3 ml-3">
+            <div class="modal animate__animated" id="myModalAdd" tabindex="-1" aria-labelledby="addModalLabel"
+                aria-hidden="true">
                 <div class="modal-content animate__animated animate__zoomIn">
                     <h2 class="h2 f-bolder">Tambah Peralatan</h2>
-                    {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
                     <form action="{{ route('peralatan.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="my-2">
                             <label for="nama_peralatan" class="h4 f-bolder">Nama Peralatan</label>
                             <div class="my-1">
-                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="nama_peralatan" name="nama_peralatan" value="{{ old('nama_peralatan') }}" required>
+                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                    id="nama_peralatan" name="nama_peralatan" value="{{ old('nama_peralatan') }}" required>
                             </div>
                             @error('nama_peralatan')
                                 <p style="color: red">{{ $message }}</p>
                             @enderror
                         </div>
-            
+
                         <div class="my-2">
                             <label for="harga" class="h4 f-bolder">Harga</label>
                             <div class="my-1">
-                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga" name="harga" value="{{ old('harga') }}" required>
+                                <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga"
+                                    name="harga" value="{{ old('harga') }}" required>
                             </div>
                             @error('harga')
                                 <p style="color: red">{{ $message }}</p>
                             @enderror
                         </div>
-            
+
                         <div class="my-2">
                             <label for="gambar" class="h4 f-bolder">Image</label>
                             <div class="my-1">
                                 <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
                             </div>
                         </div>
-            
-                        <button type="button" class="px-2 py-1 btn-close red-hover" id="btnCloseAddModal">Batal</button>
-                        <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+
+                        <button type="button" class="btn-close red-hover" id="btnCloseAddModal">Batal</button>
+                        <button type="submit" class="btn-add main-color-hover">Simpan</button>
                     </form>
                 </div>
             </div>
-            
-
-            <!-- Table -->
             <div class="content-table m-2 d-flex col">
-                <form action="{{ route('peralatan.index') }}" method="GET">
-                    <input type="text" class="search-container w-100 h4" name="search" placeholder="Search"
-                        value="{{ request('search') }}" class="">
+                <form action="{{ route('peralatan.index') }}" method="GET" class="d-flex w-100 gap-2">
+                    <div class="d-flex col mr-1 w-100">
+                        <label for=""
+                            style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Cari
+                            Nama
+                            Peralatan</label>
+                        <input type="text" class="search-container h4" name="search" placeholder="Cari Nama Peralatan"
+                            value="{{ request('search') }}" class="form-control">
+                    </div>
+
+                    <div class="d-flex col mr-1">
+                        <label for=""
+                            style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                            Minimal</label>
+                        <input type="number" class="search-container h4" name="min_price" placeholder="Harga Minimal"
+                            value="{{ request('min_price') }}" class="form-control">
+                    </div>
+
+                    <div class="d-flex col mr-1">
+                        <label for=""
+                            style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;">Harga
+                            Maksimal</label>
+                        <input type="number" class="search-container h4" name="max_price" placeholder="Harga Maksimal"
+                            value="{{ request('max_price') }}" class="form-control">
+                    </div>
+
+                    <div class="d-flex col mr-1">
+                        <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                            for=""></label>
+                        <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                    </div>
                 </form>
+
+                <style>
+                    .invisible-btn {
+                        opacity: 0;
+                        position: absolute;
+                        pointer-events: none;
+                    }
+                </style>
+                </form>
+
                 <div class="outer-table">
                     <div class="content-table-table">
                         <table>
@@ -111,16 +124,15 @@
                                         <td>{{ $per->nama_peralatan }}</td>
                                         <td>
                                             @if ($per->gambar)
-                                                <img class="table-img"
-                                                    src="{{ asset('storage/peralatan/' . $per->gambar) }}" height="100px"
-                                                    width="80px" alt="gambar">
+                                                <img src="{{ asset('storage/peralatan/' . $per->gambar) }}" height="100"
+                                                    width="80" alt="gambar">
                                             @else
                                                 <img class="table-img" src="{{ asset('asset/img/peralatan.png') }}"
                                                     alt="gambar default">
                                             @endif
                                         </td>
 
-                                        <td>{{ $per->harga }}</td>
+                                        <td>Rp. {{ $per->harga }}</td>
                                         <td class="action-icons">
 
                                             <button type="button"
@@ -165,49 +177,58 @@
                                     <div class="modal animate__fadeIn" id="myModalEdit{{ $per->id }}">
                                         <div class="modal-content animate__animated animate__zoomIn">
                                             <h2 class="h2 f-bolder">Edit Peralatan</h2>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            <form action="{{ route('peralatan.update', $per->id) }}" method="POST" enctype="multipart/form-data">
+                                            <form action="{{ route('peralatan.update', $per->id) }}" method="POST"
+                                                enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="my-2">
                                                     <label for="nama_peralatan" class="h4 f-bolder">Nama Peralatan</label>
                                                     <div class="my-1">
-                                                        <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="nama_peralatan" name="nama_peralatan" value="{{ $per->nama_peralatan }}" required>
+                                                        <input type="text"
+                                                            class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                            id="nama_peralatan" name="nama_peralatan"
+                                                            value="{{ $per->nama_peralatan }}" required>
                                                     </div>
                                                 </div>
                                                 @error('nama_peralatan')
                                                     <p style="color: red">{{ $message }}</p>
                                                 @enderror
-                                    
+
                                                 <div class="my-2">
                                                     <label for="harga" class="h4 f-bolder">Harga</label>
                                                     <div class="my-1">
-                                                        <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="harga" name="harga" value="{{ $per->harga }}" required>
+                                                        <input type="text"
+                                                            class="form h4 f-normal px-2 w-100 h-3 border-radius-1"
+                                                            id="harga" name="harga" value="{{ $per->harga }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                                 @error('harga')
                                                     <p style="color: red">{{ $message }}</p>
                                                 @enderror
-                                    
+
                                                 <div class="my-2">
                                                     <label for="gambar" class="h4 f-bolder">Image</label>
                                                     <div class="my-1">
-                                                        <input type="file" class="h4 f-bolder px-2 w-100 h-3" id="gambar" name="gambar">
+                                                        <input type="file" class="h4 f-bolder px-2 w-100 h-3"
+                                                            id="gambar" name="gambar">
                                                     </div>
                                                     @if ($per->gambar)
                                                         <div class="mt-2">
                                                             <p>Gambar Lama:</p>
-                                                            <img src="{{ asset('storage/peralatan/' . $per->gambar) }}" class="mt-2" width="500">
+                                                            <img src="{{ asset('storage/peralatan/' . $per->gambar) }}"
+                                                                class="mt-2" width="500">
                                                         </div>
                                                     @endif
                                                 </div>
-                                    
-                                                <button type="button" class="px-2 py-1 btn-close red-hover" onclick="closeEditModal({{ $per->id }})">Batal</button>
-                                                <button type="submit" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+
+                                                <button type="button" class="btn-close red-hover"
+                                                    onclick="closeEditModal({{ $per->id }})">Batal</button>
+                                                <button type="submit" class="btn-add main-color-hover">Simpan</button>
                                             </form>
                                         </div>
                                     </div>
-                                    
+
 
                                     <!-- Detail Modal for Visit and Medical Record Input -->
                                 @endforeach

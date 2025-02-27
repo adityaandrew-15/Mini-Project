@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('rekam_medis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kunjungan_id')->constrained('kunjungans')->onDelete('restrict');
+            $table->foreignId('kunjungan_id')->constrained('kunjungans')->onDelete('cascade');
             $table->unsignedBigInteger('pasien_id'); // Menambah kolom pasien_id
 
             $table->foreign('pasien_id')->references('id')->on('pasiens')->onDelete('cascade'); // Perbaiki nama tabel 'pasiens' di sini

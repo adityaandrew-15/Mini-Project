@@ -1,4 +1,60 @@
 :root {
+    --default-font: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --heading-font: "Raleway", sans-serif;
+    --nav-font: "Poppins", sans-serif;
+}
+
+/* Global Colors */
+:root {
+    --background-color: #ffffff;
+    --default-color: #444444;
+    --heading-color: #555555;
+    --accent-color: #3F78BC;
+    /* Warna biru yang menggantikan aksen sebelumnya */
+    --surface-color: #ffffff;
+    --contrast-color: #ffffff;
+}
+
+/* Nav Menu Colors */
+:root {
+    --nav-color: #444444;
+    --nav-hover-color: #3F78BC;
+    /* Warna hover sesuai warna aksen baru */
+    --nav-mobile-background-color: #ffffff;
+    --nav-dropdown-background-color: #ffffff;
+    --nav-dropdown-color: #444444;
+    --nav-dropdown-hover-color: #3F78BC;
+}
+
+/* Color Presets */
+.light-background {
+    --background-color: #f7fcfc;
+    --surface-color: #ffffff;
+}
+
+.dark-background {
+    --background-color: #060606;
+    --default-color: #ffffff;
+    --heading-color: #ffffff;
+    --surface-color: #252525;
+    --contrast-color: #ffffff;
+}
+
+.accent-background {
+    --background-color: #3F78BC;
+    /* Sesuai warna aksen baru */
+    --default-color: #ffffff;
+    --heading-color: #ffffff;
+    --surface-color: #5F8ACD;
+    /* Sedikit lebih terang agar harmonis */
+}
+
+/* Smooth scroll */
+:root {
+    scroll-behavior: smooth;
+}
+
+:root {
     --main-color: #103F91;
     --animate-duration: 400ms;
     --animate-delay: 0.2s;
@@ -11,7 +67,8 @@
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    /* font-family: 'Open Sans', sans-serif; */
+    font-family: var(--default-font);
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -31,6 +88,10 @@ body {
 
 .red-hover:hover {
     background: #d3304e;
+}
+
+.success {
+    color: #38ff1e;
 }
 
 .bg-red {
@@ -102,15 +163,15 @@ body {
 }
 
 .h1 {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
 }
 
 .h2 {
-    font-size: 2rem;
+    font-size: 1.7rem;
 }
 
 .h3 {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
 }
 
 .h4 {
@@ -118,36 +179,37 @@ body {
 }
 
 .h5 {
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 .h6 {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
 }
 
 .p1 {
-    font-size: 4rem;
+    font-size: 2.2rem;
 }
 
 .p2 {
-    font-size: 2rem;
-}
-
-.p3 {
-    font-size: 1.6rem;
-}
-
-.p4 {
     font-size: 1.2rem;
 }
 
-.p5 {
+.p3 {
     font-size: 1rem;
 }
 
-.p6 {
+.p4 {
     font-size: 0.8rem;
 }
+
+.p5 {
+    font-size: 0.7rem;
+}
+
+.p6 {
+    font-size: 0.6rem;
+}
+
 
 .i1 {
     font-size: 10rem;
@@ -173,11 +235,22 @@ body {
     font-size: 0.8rem;
 }
 
+.truncate-tb {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+}
+
+.hr-sparator {
+    margin: 1rem 0 1rem 0;
+}
+
 .btn {
     all: unset;
 }
 
-.btn-add {
+a.btn-add {
     border: none;
     background: var(--main-color);
     color: white;
@@ -185,6 +258,52 @@ body {
     border-radius: 10px;
     font-size: 1.2rem;
     font-weight: 800;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+button.btn-add {
+    border: none;
+    background: var(--main-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 12px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+a.btn-close {
+    border: none;
+    background: #FF3C5F;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+button.btn-close {
+    border: none;
+    background: #FF3C5F;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 12px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-add:hover {
+    background: var(--nav-hover-color);
 }
 
 .btn-close {
@@ -195,15 +314,176 @@ body {
     border-radius: 10px;
     font-size: 1.2rem;
     font-weight: 800;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    margin: 5px;
 }
+
+.btn-close:hover {
+    background: #da3250;
+}
+
+.btn-filter {
+    border: none;
+    background: var(--main-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 1rem;
+    width: 100px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin: 0 0.2rem 0 0.2rem;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.btn-cek-nota {
+    border: none;
+    background: var(--main-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 10px;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-cek-nota i {
+    margin-left: 8px;
+}
+
+.btn-cek-nota:hover {
+    background-color: var(--nav-hover-color);
+}
+
+
+.btn-filter a {
+    text-decoration: none;
+    text-align: center;
+    position: relative;
+    top: 17px;
+    color: white;
+    font-weight: 600;
+}
+
+.btn-filter:hover {
+    background: var(--nav-hover-color);
+}
+
+.btn-search {
+    padding: 15px 20px;
+    position: relative;
+    top: 22px;
+    border: none;
+    background: var(--main-color);
+    color: white;
+    border-radius: 20px;
+}
+
+textarea {
+    width: 100%; /* Lebar penuh (100%) */
+    height: 450px; /* Tinggi 150px */
+    padding: 10px; /* Ruang di dalam textarea */
+    font-size: 16px; /* Ukuran font */
+    font-family: Arial, sans-serif; /* Jenis font */
+    border: 2px solid #ccc; /* Border abu-abu */
+    border-radius: 8px; /* Sudut membulat */
+    box-sizing: border-box; /* Menyesuaikan padding dengan lebar dan tinggi */
+    resize: vertical; /* Memungkinkan perubahan ukuran secara vertikal */
+    transition: all 0.3s ease; /* Transisi halus pada perubahan */
+}
+
+.pagination-wrapper {
+    text-align: end;
+    margin: 20px 20px;
+}
+
+.pagination {
+    display: inline-block;
+    height: 35px;
+    /* margin-top: 35px; */
+    padding: 0 12px;
+    border-radius: 18px;
+    background-color: #eee;
+
+    @media only screen and (max-width: 1199px) {
+        height: 25px;
+        margin-top: 25px;
+        padding: 0 5px;
+        border-radius: 12px;
+    }
+}
+
+.page-numbers {
+    display: inline-block;
+    padding: 0 12px;
+    transition: 400ms ease;
+    color: #595959;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    line-height: 35px;
+    text-decoration: none;
+
+    &.current,
+    &:hover {
+        background-color: var(--accent-color);
+        color: #fff;
+    }
+
+    &.prev:hover,
+    &.next:hover {
+        background-color: transparent;
+        color: var(--accent-color);
+    }
+
+    &.disabled {
+        color: #ccc;
+        pointer-events: none;
+    }
+
+    @media only screen and (max-width: 1199px) {
+        padding: 0 8px;
+        font-size: 10px;
+        line-height: 25px;
+    }
+}
+
 
 #fileInput {
     display: none;
 }
 
+.input-group {
+    display: flex;
+}
+
+.search-container a {
+    text-decoration: none;
+}
+
+.filter-search-container {
+    width: 75%;
+}
+
+.clear-btn {
+    background-color: var(--main-color);
+    border-radius: 1.6rem;
+    padding: 0.8rem 2rem;
+    color: #fff;
+    text-decoration: node;
+}
+
+.clear-btn:hover {
+    background-color: #0e5d6e;
+}
+
 /* Kustomisasi tombol */
 .btn-custom {
-    background-color: #0e7b94; /* Warna tombol */
+    background-color: #0e7b94;
+    /* Warna tombol */
     color: white;
     padding: 10px 20px;
     border: none;
@@ -224,6 +504,7 @@ body {
     overflow: auto;
     background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.4);
+    word-wrap: break-word;
 }
 
 .modal-content {
@@ -236,8 +517,22 @@ body {
     max-width: 800px;
 }
 
-.form, form:focus {
+.modaldetail-content {
+    background-color: #fefefe;
+    margin: 10px auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 1rem;
+    width: 1200px;
+}
+
+.form,
+form:focus {
     border: 1px solid #aaa;
+}
+
+textarea {
+    height: 300px;
 }
 
 .modal-add {
@@ -734,21 +1029,21 @@ body {
 
 .sidebar {
     text-align: center;
-    width: 300px;
+    width: 270px;
     height: 100vh;
-    background-color: #0e7b94;
+    background-color: var(--main-color);
     color: white;
     position: fixed;
     left: 0;
     top: 0;
-    border-radius: 0 15px 15px 0;
+    border-radius: 0 20px 20px 0;
     padding-top: 20px;
     transition: width 0.5s cubic-bezier(0.25, 1.5, 0.5, 1);
     z-index: 999;
 }
 
 .sidebar.collapsed {
-    width: 100px;
+    width: 90px;
 }
 
 .sidebar.collapsed ul li a {
@@ -763,8 +1058,8 @@ body {
 }
 
 .sidebar ul li {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 3px;
+    margin-bottom: 3px;
     position: relative;
 }
 
@@ -776,23 +1071,35 @@ body {
     flex-direction: row;
     align-items: center;
     padding: 1rem 1.5rem;
-    font-size: 16px;
+    font-size: 12px;
     cursor: pointer;
     margin: 0 2rem;
+    transition: background-color 0.2s ease;
+    border-radius: 2rem;
 }
 
+.sidebar ul li a.active {
+    background: white;
+    color: var(--nav-dropdown-hover-color);
+    border-radius: 2rem;
+    /* padding: 10px 15px; */
+    /* display: block; */
+}
+
+
 .sidebar ul li a i {
-    font-size: 1.5rem;
-    /* margin-right: 1rem; */
+    font-size: 1.2rem;
 }
 
 .sidebar ul li a:hover {
-    background-color: #0c6e8272;
+    /* background-color: #0c6e8272; */
+    background: white;
+    color: var(--nav-dropdown-hover-color);
     border-radius: 2rem;
 }
 
 .sidebar ul li a span {
-    font-size: 1rem;
+    font-size: 14px;
     font-weight: 800;
     margin-left: 1rem;
 }
@@ -800,7 +1107,7 @@ body {
 .photo-profile-sidebar {
     width: 50px;
     height: 50px;
-    border: 1px solid #000;
+    /* border: 0.1px solid #adadad; */
     border-radius: 50%;
 }
 
@@ -822,7 +1129,7 @@ body {
     position: absolute;
     right: -15;
     top: 2.7rem;
-    border: 1px solid black;
+    border: 0.5px solid rgb(75, 75, 75);
 }
 
 .btn-toggle-sidebar i {
@@ -849,12 +1156,12 @@ body {
 
 .wrapper-container {
     flex: 1;
-    margin-left: 18rem;
+    margin-left: 14rem;
     transition: margin-left 0.3s;
 }
 
 .wrapper-container.expanded {
-    margin-left: 6rem;
+    margin-left: 4rem;
 }
 
 /* .header {
@@ -878,9 +1185,10 @@ body {
 
 .table-img {
     width: 50px;
-    height: auto;
+    height: 50px;
     border: 1px solid #aaa;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .header-collumn {
@@ -894,18 +1202,23 @@ body {
     width: 100%;
     height: 60px;
     margin: 1.5rem 0;
-    border-radius: 1.2rem;
+    border-radius: 1px;
 }
 
 .search-container {
     display: flex;
     align-items: center;
-    height: 60px;
+    height: 45px;
     border: 2px solid #ccc;
-    border-radius: 1.5rem;
+    border-radius: 14px;
     padding: 5px 10px;
     background-color: #fff;
-    margin-top: 1rem;
+    margin: 0 0.2rem 0 0.2rem;
+}
+
+.search-container:focus {
+    outline: none;
+    border: 1px solid #000000;
 }
 
 .search-container .fa-magnifying-glass {
@@ -942,14 +1255,17 @@ body {
 .content-table-table {
     margin: 1rem;
     width: auto;
-    overflow: hidden;
+    height: 700px;
+    max-height: 700px;
+    /* overflow: hidden; */
+    overflow-y: auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     font-weight: 500;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 table th {
@@ -957,11 +1273,17 @@ table th {
     color: #fff;
     text-align: left;
     padding: 1.2rem 1rem;
+    position: sticky;
+    top: 0;
 }
 
 table td {
-    padding: 1.5rem 1rem;
+    padding: 1.2rem 1rem;
     color: #474747;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 table tr:last-child td {
@@ -974,4 +1296,3 @@ table tr:hover td {
 
 
 @media screen and (max-width: 1366px) {}
-

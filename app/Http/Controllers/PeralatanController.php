@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Peralatan;
+use App\Models\History;
+use Illuminate\Http\Request;
 
 class PeralatanController extends Controller
 {
@@ -11,31 +12,40 @@ class PeralatanController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-{
-    if (auth()->user()->hasRole('admin')) {
-        $layout = 'layouts.sidebar';
-        $content = 'side';
-    } else {
-        $layout = 'layouts.app';
-        $content = 'content';
+    {
+        if (auth()->user()->hasRole('admin')) {
+            $layout = 'layouts.sidebar';
+            $content = 'side';
+        } else {
+            $layout = 'layouts.app';
+            $content = 'content';
+        }
+
+        // Ambil nilai pencarian dari input
+        $search = $request->input('search');
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+
+        // Query pencarian berdasarkan nama peralatan
+        $query = Peralatan::query();
+
+        if ($search) {
+            $query->where('nama_peralatan', 'like', '%' . $search . '%');
+        }
+
+        // Filter harga jika ada
+        if ($minPrice) {
+            $query->where('harga', '>=', $minPrice);
+        }
+        if ($maxPrice) {
+            $query->where('harga', '<=', $maxPrice);
+        }
+
+        // Ambil data peralatan yang sudah difilter
+        $peralatan = $query->get();
+
+        return view('peralatan.index', compact('peralatan', 'content', 'layout'));
     }
-
-    // Ambil nilai pencarian dari input
-    $search = $request->input('search');
-
-    // Jika ada pencarian, lakukan pencarian pada nama_peralatan
-    if ($search) {
-        $peralatan = Peralatan::where('nama_peralatan', 'like', '%' . $search . '%')->get();
-    } else {
-        // Jika tidak ada pencarian, ambil semua data peralatan
-        $peralatan = Peralatan::all();
-    }
-
-    return view('peralatan.index', compact('peralatan', 'content', 'layout'));
-}
-
-
-    
 
     /**
      * Show the form for creating a new resource.
@@ -53,8 +63,8 @@ class PeralatanController extends Controller
     // Validate the input
     $validated = $request->validate([
         'nama_peralatan' => 'required|string|max:255',
-        'harga' => 'required|integer|min:0',
-        'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Add validation for gambar
+        'harga' => 'required|integer|min:1',
+        'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Add validation for gambar
     ]);
 
     // Handle image upload if provided
@@ -65,14 +75,27 @@ class PeralatanController extends Controller
         $data['gambar'] = $gambarName;
     } else {
         // If no image is provided, you can set a default image or leave it null
-        $data['gambar'] = null; // or 'default_image.jpg' if you want a default image
+        $data['gambar'] = null;  // or 'default_image.jpg' if you want a default image
     }
 
     // Create the Peralatan entry
-    Peralatan::create($data);
+    $peralatan = Peralatan::create($data);
+
+    // Log the action in history
+    History::create([
+        'type' => 'equipment',
+        'action' => 'added',
+        'reference_id' => $peralatan->id,
+        'details' => [
+            'name' => $peralatan->nama_peralatan,
+            'price' => $peralatan->harga,
+            'image' => $peralatan->gambar,
+        ],
+    ]);
 
     return redirect()->route('peralatan.index')->with('success', 'Peralatan berhasil ditambahkan!');
 }
+
 
     /**
      * Display the specified resource.
@@ -94,33 +117,32 @@ class PeralatanController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Peralatan $peralatan)
-{
-    // Validasi input
-    $validated = $request->validate([
-        'nama_peralatan' => 'required|string|max:255',
-        'harga' => 'required|integer|min:0',
-        'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi gambar (opsional)
-    ]);
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'nama_peralatan' => 'required|string|max:255',
+            'harga' => 'required|integer|min:1',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validasi gambar (opsional)
+        ]);
 
-    // Jika ada gambar baru yang diupload
-    if ($request->hasFile('gambar')) {
-        // Hapus gambar lama jika ada
-        if ($peralatan->gambar) {
-            unlink(public_path('storage/peralatan/' . $peralatan->gambar));
+        // Jika ada gambar baru yang diupload
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada
+            if ($peralatan->gambar) {
+                unlink(public_path('storage/peralatan/' . $peralatan->gambar));
+            }
+
+            // Proses upload gambar baru
+            $gambarName = time() . '.' . $request->gambar->extension();
+            $request->gambar->move(public_path('storage/peralatan'), $gambarName);
+            $validated['gambar'] = $gambarName;  // Tambahkan gambar baru ke data
         }
 
-        // Proses upload gambar baru
-        $gambarName = time() . '.' . $request->gambar->extension();
-        $request->gambar->move(public_path('storage/peralatan'), $gambarName);
-        $validated['gambar'] = $gambarName; // Tambahkan gambar baru ke data
+        // Perbarui data peralatan
+        $peralatan->update($validated);
+
+        return redirect()->route('peralatan.index')->with('success', 'Peralatan berhasil diperbarui!');
     }
-
-    // Perbarui data peralatan
-    $peralatan->update($validated);
-
-    return redirect()->route('peralatan.index')->with('success', 'Peralatan berhasil diperbarui!');
-}
-
 
     /**
      * Remove the specified resource from storage.

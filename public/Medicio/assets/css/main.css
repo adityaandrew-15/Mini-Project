@@ -12,33 +12,34 @@
 --------------------------------------------------------------*/
 /* Fonts */
 :root {
-  --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --heading-font: "Raleway",  sans-serif;
-  --nav-font: "Poppins",  sans-serif;
+  --default-font: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --heading-font: "Raleway", sans-serif;
+  --nav-font: "Poppins", sans-serif;
 }
 
-/* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
-:root { 
-  --background-color: #ffffff; /* Background color for the entire website, including individual sections */
-  --default-color: #444444; /* Default color used for the majority of the text content across the entire website */
-  --heading-color: #555555; /* Color for headings, subheadings and title throughout the website */
-  --accent-color: #3fbbc0; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
-  --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
-  --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
-}
-
-/* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
+/* Global Colors */
 :root {
-  --nav-color: #444444;  /* The default color of the main navmenu links */
-  --nav-hover-color: #3fbbc0; /* Applied to main navmenu links when they are hovered over or active */
-  --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
-  --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
-  --nav-dropdown-color: #444444; /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #3fbbc0; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  --background-color: #ffffff;
+  --default-color: #444444;
+  --heading-color: #555555;
+  --accent-color: #3F78BC;
+  /* Warna biru yang menggantikan aksen sebelumnya */
+  --surface-color: #ffffff;
+  --contrast-color: #ffffff;
 }
 
-/* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
+/* Nav Menu Colors */
+:root {
+  --nav-color: #444444;
+  --nav-hover-color: #3F78BC;
+  /* Warna hover sesuai warna aksen baru */
+  --nav-mobile-background-color: #ffffff;
+  --nav-dropdown-background-color: #ffffff;
+  --nav-dropdown-color: #444444;
+  --nav-dropdown-hover-color: #3F78BC;
+}
 
+/* Color Presets */
 .light-background {
   --background-color: #f7fcfc;
   --surface-color: #ffffff;
@@ -53,10 +54,12 @@
 }
 
 .accent-background {
-  --background-color: #3fbbc0;
+  --background-color: #3F78BC;
+  /* Sesuai warna aksen baru */
   --default-color: #ffffff;
   --heading-color: #ffffff;
-  --surface-color: #65c9cd;
+  --surface-color: #5F8ACD;
+  /* Sedikit lebih terang agar harmonis */
 }
 
 /* Smooth scroll */
@@ -96,6 +99,21 @@ h6 {
 
 /* Pulsating Play Button
 ------------------------------*/
+
+.btn-custom {
+  background: var(--accent-color);
+  border: 0;
+  padding: 10px 35px;
+  color: #fff;
+  transition: 0.4s;
+  border-radius: 4px;
+}
+
+.btn-custom:hover {
+  color: white;
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
 .pulsating-play-btn {
   width: 94px;
   height: 94px;
@@ -276,8 +294,25 @@ h6 {
   transition: 0.3s;
 }
 
+.cta-btn,
+.cta-btn:focus {
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  font-size: 14px;
+  padding: 8px 20px;
+  border-radius: 4px;
+  transition: 0.3s;
+  border: none;
+}
+
 .header .cta-btn:hover,
 .header .cta-btn:focus:hover {
+  color: var(--contrast-color);
+  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+}
+
+.cta-btn:hover,
+.cta-btn:focus:hover {
   color: var(--contrast-color);
   background: color-mix(in srgb, var(--accent-color), transparent 15%);
 }
@@ -986,21 +1021,22 @@ section,
 .featured-services .service-item {
   background-color: var(--surface-color);
   box-shadow: 0px 0 25px 0 rgba(0, 0, 0, 0.1);
-  padding: 50px 30px;
+  /* padding: 50px 30px; */
+  padding: 20px 15px;
   transition: all 0.3s ease-in-out;
   height: 100%;
   position: relative;
   z-index: 1;
 }
 
-.featured-services .service-item:before {
+/* .featured-services .service-item:before {
   content: "";
   position: absolute;
   background: var(--accent-color);
   inset: 100% 0 0 0;
   transition: all 0.3s;
   z-index: -1;
-}
+} */
 
 .featured-services .service-item .icon {
   margin-bottom: 10px;
@@ -1030,17 +1066,17 @@ section,
   transition: ease-in-out 0.3s;
 }
 
-.featured-services .service-item:hover h4 a,
+/* .featured-services .service-item:hover h4 a,
 .featured-services .service-item:hover .icon i,
 .featured-services .service-item:hover p {
   color: var(--contrast-color);
-}
+} */
 
-.featured-services .service-item:hover:before {
+/* .featured-services .service-item:hover:before {
   background: var(--accent-color);
   inset: 0;
   border-radius: 0px;
-}
+} */
 
 /*--------------------------------------------------------------
 # Call To Action Section
@@ -1150,9 +1186,11 @@ section,
   font-family: var(--heading-font);
   font-size: 16px;
 }
+
 .row.gy-4 {
   display: flex;
-  justify-content: space-between; /* Menyebar elemen dengan jarak seimbang */
+  justify-content: space-between;
+  /* Menyebar elemen dengan jarak seimbang */
   flex-wrap: wrap;
 }
 
@@ -1321,6 +1359,7 @@ section,
   box-shadow: none;
   font-size: 14px;
   padding: 10px !important;
+  width: 100%;
 }
 
 .appointment .php-email-form input:focus,
@@ -1575,6 +1614,60 @@ section,
 .doctors .team-member:hover .social {
   opacity: 1;
   bottom: 15px;
+}
+
+.pagination-wrapper {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.pagination {
+  display: inline-block;
+  height: 35px;
+  padding: 0 12px;
+  border-radius: 18px;
+  background-color: #eee;
+
+  @media only screen and (max-width: 1199px) {
+    height: 25px;
+    margin-top: 25px;
+    padding: 0 5px;
+    border-radius: 12px;
+  }
+}
+
+.page-numbers {
+  display: inline-block;
+  padding: 0 12px;
+  transition: 400ms ease;
+  color: #595959;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  line-height: 35px;
+  text-decoration: none;
+
+  &.current,
+  &:hover {
+    background-color: var(--accent-color);
+    color: #fff;
+  }
+
+  &.prev:hover,
+  &.next:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+  }
+
+  &.disabled {
+    color: #ccc;
+    pointer-events: none;
+  }
+
+  @media only screen and (max-width: 1199px) {
+    padding: 0 8px;
+    font-size: 10px;
+    line-height: 25px;
+  }
 }
 
 /*--------------------------------------------------------------

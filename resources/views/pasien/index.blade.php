@@ -1,27 +1,20 @@
 @extends('layouts.sidebar')
 <style></style>
 @section('side')
-    <div class="m-3">
-        @if (session('success'))
-            <script>
-                Swal.fire('Success', '{{ session('success') }}', 'success');
-            </script>
-        @endif
-
-        <div class="d-flex j-between m-2 a-center">
-            <div class="d-flex a-center">
+    <div class="ml-3 mr-3">
+        <div class="d-flex m-2 a-center">
+            <div class="d-flex j-between w-100 a-center mx-2">
                 <h2 class="h2 f-bolder mr-4">Data Pasien</h2>
                 <div class="btn"></div>
-                <button type="button" class="btn-add main-color-hover py-1 px-2" id="btnOpenAddModal">
+                <button type="button" class="btn-add main-color-hover" id="btnOpenAddModal">
                     Tambah Pasien
                 </button>
             </div>
         </div>
-
+        <hr class="mr-3 ml-3">
         <div class="modal animate__animated" id="myModalAdd">
             <div class="modal-content animate__animated animate__zoomIn">
                 <h2 class="h2 f-bolder">Tambah Pasien</h2>
-                <button type="button" class="btn-close"></button>
                 <form action="{{ route('pasien.store') }}" method="POST">
                     @csrf
                     <div class="my-2">
@@ -39,7 +32,7 @@
                         <label for="alamat" class="h4 f-bolder">Alamat</label>
                         <div class="my-1">
                             <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="alamat"
-                                name="alamat" value="{{ old('alamat') }}" required>
+                                name="alamat" value="{{ old('alamat') }}">
                         </div>
                         @error('alamat')
                             <p style="color: red">{{ $message }}</p>
@@ -50,7 +43,7 @@
                         <label for="no_hp" class="h4 f-bolder">No HP</label>
                         <div class="my-1">
                             <input type="text" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="no_hp"
-                                name="no_hp" value="{{ old('no_hp') }}" required>
+                                name="no_hp" value="{{ old('no_hp') }}">
                         </div>
                         @error('no_hp')
                             <p style="color: red">{{ $message }}</p>
@@ -61,29 +54,33 @@
                         <label for="tanggal_lahir" class="h4 f-bolder">Tanggal Lahir</label>
                         <div class="my-1">
                             <input type="date" class="form h4 f-normal px-2 w-100 h-3 border-radius-1" id="tanggal_lahir"
-                                name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" required>
+                                name="tanggal_lahir" value="{{ old('tanggal_lahir') }}">
                         </div>
                         @error('tanggal_lahir')
                             <p style="color: red">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <button type="button" id="btnCloseAddModal" class="px-2 py-1 btn-close red-hover">Batal</button>
-                    <button type="submit" id="btnCloseAddModal" class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                    <button type="button" id="btnCloseAddModal" class="btn-close red-hover">Batal</button>
+                    <button type="submit" id="btnCloseAddModal" class="btn-add main-color-hover">Simpan</button>
                 </form>
             </div>
         </div>
 
         <div class="content-table m-2 d-flex col">
-            <form action="{{ route('pasien.index') }}" method="GET">
-                <div class="input-group">
-                    <input type="text" name="search" class="search-container w-100 h4" placeholder="Cari pasien..."
-                        value="{{ request('search') }}">
-                    @if (request('search'))
-                        <a href="{{ route('pasien.index') }}" class="btn btn-outline-danger">Clear</a>
-                    @endif
+            <div class="filter-form d-flex">
+                <div class="d-flex col mr-1 w-100">
+                    <label for="searchPasien"
+                        style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        class="label-text">Nama Pasien</label>
+                    <input type="text" id="searchPasien" class="search-container w-100 h4" placeholder="Cari pasien...">
                 </div>
-            </form>
+                <div class="filter-form d-flex  col mr-1">
+                    <label style="position: relative; left: 20px; bottom: 10px; font-size: 16px; font-weight: 600;"
+                        for=""></label>
+                    <button type="submit" class="btn-search"><i class="fa-regular fa-magnifying-glass"></i></button>
+                </div>
+            </div>
             <div class="outer-table">
                 <div class="content-table-table">
                     <table>
@@ -154,8 +151,6 @@
                                 <div class="modal animate__fadeIn" id="myModalEdit{{ $pasien->id }}">
                                     <div class="modal-content animate__animated animate__zoomIn">
                                         <h2 class="h2 f-bolder">Edit Pasien</h2>
-                                        <button type="button" class="btn-close"
-                                            onclick="closeEditModal({{ $pasien->id }})"></button>
                                         <form action="{{ route('pasien.update', $pasien->id) }}" method="POST">
                                             @csrf
                                             @method('PUT')
@@ -230,10 +225,9 @@
                                                 </div>
                                             </div>
 
-                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                            <button type="button" class="btn-close red-hover"
                                                 onclick="closeEditModal({{ $pasien->id }})">Batal</button>
-                                            <button type="submit"
-                                                class="px-2 py-1 btn-add main-color-hover">Simpan</button>
+                                            <button type="submit" class="btn-add main-color-hover">Simpan</button>
                                         </form>
                                     </div>
                                 </div>
@@ -242,7 +236,6 @@
                                 <div class="modal animate__fadeIn" id="myModalDetail{{ $pasien->id }}">
                                     <div class="modal-content animate__animated animate__zoomIn">
                                         <h2 class="h2 f-bolder">Detail Pasien: {{ $pasien->nama }}</h2>
-                                        <button type="button" class="btn-close" onclick="closeEditModal()"></button>
                                         <div class="modal-body">
                                             <p class="h4 my-1"><strong>Nama:</strong> {{ $pasien->nama }}</p>
                                             <p class="h4 my-1"><strong>Alamat:</strong> {{ $pasien->alamat ?: 'kosong' }}
@@ -251,34 +244,8 @@
                                             </p>
                                             <p class="h4 my-1"><strong>Tanggal Lahir:</strong>
                                                 {{ $pasien->tanggal_lahir ?: 'kosong' }}</p>
-                                            <hr>
-                                            <h2 class="h2 f-bolder mb-1">Kunjungan</h2>
-                                            @if ($pasien->kunjungan->isEmpty())
-                                                <p class="h4 my-1">Tidak ada kunjungan yang tercatat.</p>
-                                            @else
-                                                @foreach ($pasien->kunjungan as $kunjungan)
-                                                    <p class="h4 my-1"><strong>Tanggal Kunjungan:</strong>
-                                                        {{ $kunjungan->tanggal_kunjungan ?? 'kosong' }}</p>
-                                                    <hr>
-                                                @endforeach
-                                            @endif
-
-                                            <h2 class="h2 f-bolder mb-1">Rekam Medis</h2>
-                                            @if ($pasien->rekamMedis->isEmpty())
-                                                <p class="h4 my-1">Tidak ada rekam medis yang tercatat.</p>
-                                            @else
-                                                @foreach ($pasien->rekamMedis as $rekamMedis)
-                                                    <p class="h4 my-1"><strong>Tanggal Rekam Medis:</strong>
-                                                        {{ $rekamMedis->created_at ?? 'kosong' }}</p>
-                                                    <p class="h4 my-1"><strong>Diagnosa:</strong>
-                                                        {{ $rekamMedis->diagnosa ?? 'kosong' }}</p>
-                                                    <p class="h4 my-1"><strong>Tindakan:</strong>
-                                                        {{ $rekamMedis->tindakan ?? 'kosong' }}</p>
-                                                    <hr>
-                                                @endforeach
-                                            @endif
-
-                                            <button type="button" class="px-2 py-1 btn-close red-hover"
+                                            <hr class="my-1">
+                                            <button type="button" class="btn-close"
                                                 onclick="closeDetailModal({{ $pasien->id }})">Close</button>
                                         </div>
                                     </div>
@@ -286,10 +253,11 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="pagination-container">
+                    {{ $pasiens->links('vendor.pagination.custom') }}
+                </div>
             </div>
         </div>
-
-        {{ $pasiens->links() }}
     </div>
 
     <script>
@@ -380,6 +348,27 @@
                 }
             });
         }
-    </script>
 
+        document.addEventListener("DOMContentLoaded", function() {
+            let searchInput = document.getElementById("searchPasien");
+            let clearButton = document.getElementById("clearSearch");
+            let tableBody = document.querySelector("tbody");
+
+            searchInput.addEventListener("input", filterTable);
+            clearButton.addEventListener("click", function() {
+                searchInput.value = "";
+                filterTable();
+            });
+
+            function filterTable() {
+                let query = searchInput.value.toLowerCase();
+                let rows = tableBody.querySelectorAll("tr");
+
+                rows.forEach(row => {
+                    let pasienName = row.children[0].textContent.toLowerCase();
+                    row.style.display = pasienName.includes(query) ? "" : "none";
+                });
+            }
+        });
+    </script>
 @endsection
